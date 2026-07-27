@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
-import { fbEventOnce, META_CONTENT, takeLeadContentName } from "@/lib/tracking/fpixel";
+import type { ProductId } from "@/config/products";
+import { fbEventOnce, META_CATEGORIES, takeLeadContentName } from "@/lib/tracking/fpixel";
 import { pushDataLayerEventOnce } from "@/lib/tracking/gtm";
 
 type LeadConversionTrackerProps = {
-  /** Id du pôle (ex. "xr360") : suffixe les clés de dédup et ajoute le
-      paramètre `product` aux events. Sans prop : clés historiques du
-      funnel VR (un visiteur peut convertir sur deux funnels dans la même
-      session, chaque pôle garde sa propre dédup). */
-  product?: string;
+  /** Id du pôle (ex. "xr360") : suffixe les clés de dédup, ajoute le
+      paramètre `product` aux events et choisit la catégorie Meta du pôle.
+      Sans prop : clés et libellés historiques du funnel VR (un visiteur
+      peut convertir sur deux funnels dans la même session, chaque pôle
+      garde sa propre dédup). */
+  product?: ProductId;
 };
 
 /**
@@ -31,7 +33,7 @@ export function LeadConversionTracker({ product }: LeadConversionTrackerProps) {
 
     const contentName = takeLeadContentName();
     fbEventOnce(`lead${suffix}`, "Lead", {
-      content_category: META_CONTENT.lead,
+      content_category: META_CATEGORIES[product ?? "vr"].lead,
       ...(contentName !== null && { content_name: contentName }),
     });
   }, [product]);

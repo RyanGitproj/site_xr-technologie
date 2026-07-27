@@ -1,3 +1,4 @@
+import type { ProductId } from "@/config/products";
 import { getConsentChoice } from "./consent";
 
 declare global {
@@ -15,6 +16,17 @@ export const META_CONTENT = {
   offre: "Offre XR VR Discovery",
   lead: "Lead XR VR Discovery",
 } as const;
+
+/**
+ * Catégories par pôle pour les trackers multi-pôles (ViewContentTracker,
+ * LeadConversionTracker). `vr` = les libellés historiques du funnel VR :
+ * les campagnes déjà configurées ne voient aucun changement.
+ */
+export const META_CATEGORIES: Record<ProductId, { view: string; lead: string }> = {
+  vr: { view: META_CONTENT.offre, lead: META_CONTENT.lead },
+  xr360: { view: "Offre XR 360", lead: "Lead XR 360" },
+  lidar: { view: "Offre XR LiDAR", lead: "Lead XR LiDAR" },
+};
 
 type PendingMetaEvent = {
   name: string;

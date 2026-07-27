@@ -1,3 +1,4 @@
+import { ViewContentTracker } from "@/components/tracking/ViewContentTracker";
 import { FooterLidar } from "@/products/lidar/layout/FooterLidar";
 import { HeaderLidar } from "@/products/lidar/layout/HeaderLidar";
 import { ApplicationsLidar } from "@/products/lidar/sections/ApplicationsLidar";
@@ -17,6 +18,7 @@ import { ZoneLidar } from "@/products/lidar/sections/ZoneLidar";
 export default function LidarPage() {
   return (
     <>
+      <ViewContentTracker product="lidar" />
       <HeaderLidar />
       <main id="contenu">
         <HeroLidar />

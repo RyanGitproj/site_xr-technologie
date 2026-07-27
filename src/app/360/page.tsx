@@ -1,3 +1,4 @@
+import { ViewContentTracker } from "@/components/tracking/ViewContentTracker";
 import { Footer360 } from "@/products/xr360/layout/Footer360";
 import { Header360 } from "@/products/xr360/layout/Header360";
 import { Benefits360 } from "@/products/xr360/sections/Benefits360";
@@ -16,6 +17,7 @@ import { Services360 } from "@/products/xr360/sections/Services360";
 export default function Xr360Page() {
   return (
     <>
+      <ViewContentTracker product="xr360" />
       <Header360 />
       <main id="contenu">
         <Hero360 />

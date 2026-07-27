@@ -1,0 +1,43 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.grid {
+  max-width: 60rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+.card {
+  height: 100%;
+  display: grid;
+  gap: 0.6rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  justify-items: start;
+}
+
+.icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--color-accent);
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.cardBody {
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+}

@@ -4,8 +4,8 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { submitLead } from "@/products/vr/actions/submitLead";
-import { StepIndicator } from "@/products/vr/forms/StepIndicator";
-import { PhoneField, RadioCardGroup, TextField } from "@/products/vr/forms/fields";
+import { StepIndicator } from "@/components/forms/StepIndicator";
+import { PhoneField, RadioCardGroup, TextField } from "@/components/forms/fields";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { offersSection } from "@/products/vr/config/content";
 import {
@@ -25,7 +25,7 @@ import { stashLeadContentName } from "@/lib/tracking/fpixel";
 import { pushDataLayerEventOnce } from "@/lib/tracking/gtm";
 import { leadSchema, type Lead } from "@/products/vr/lib/lead";
 import { cx } from "@/lib/cx";
-import styles from "./LeadForm.module.css";
+import styles from "@/components/forms/formShell.module.css";
 
 function toOptions<V extends string>(labels: Record<V, string>): { value: V; label: string }[] {
   return (Object.keys(labels) as V[]).map((value) => ({ value, label: labels[value] }));

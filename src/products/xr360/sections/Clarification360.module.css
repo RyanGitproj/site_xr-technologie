@@ -1,0 +1,54 @@
+.section {
+  position: relative;
+  padding: calc(var(--section-pad-y) / 2) clamp(1.25rem, 4vw, 3rem);
+}
+
+.inner {
+  max-width: 56rem;
+  margin-inline: auto;
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-accent);
+  margin-top: 0.2rem;
+}
+
+.text {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.body {
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+}
+
+.bridge {
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+}
+
+.bridgeLink {
+  color: var(--pole-accent);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.bridgeUpcoming {
+  opacity: 0.8;
+}

@@ -76,6 +76,61 @@ export function RadioCardGroup({
   );
 }
 
+type CheckboxCardGroupProps = {
+  legend: string;
+  options: readonly Option[];
+  registration: UseFormRegisterReturn;
+  error?: string;
+  /** Précision sous la légende (ex. « plusieurs choix possibles »). */
+  hint?: string;
+  columns?: 2 | 3;
+};
+
+/** Question à choix MULTIPLES en cards (checkboxes natives) : même langage
+    visuel que RadioCardGroup (.radio est un utilitaire visually-hidden,
+    l'état coché est stylé par classe, pas par type d'input). RHF renvoie
+    un tableau de valeurs (même name partagé). */
+export function CheckboxCardGroup({
+  legend,
+  options,
+  registration,
+  error,
+  hint,
+  columns = 2,
+}: CheckboxCardGroupProps) {
+  const errorId = `${registration.name}-error`;
+  return (
+    <fieldset aria-describedby={error !== undefined ? errorId : undefined}>
+      <legend className={styles.legend}>{legend}</legend>
+      {hint !== undefined && <p className={styles.hint}>{hint}</p>}
+      <div className={cx(styles.grid, columns === 3 && styles.grid3)}>
+        {options.map((option) => {
+          const Icon = option.icon;
+          return (
+            <label key={option.value} data-offer-accent={option.accent} className={styles.option}>
+              <input
+                type="checkbox"
+                value={option.value}
+                {...registration}
+                className={styles.radio}
+              />
+              <span className={cx(styles.card, Icon !== undefined && styles.cardWithIcon)}>
+                {Icon !== undefined && <Icon aria-hidden="true" className={styles.cardIcon} />}
+                {option.label}
+              </span>
+            </label>
+          );
+        })}
+      </div>
+      {error !== undefined && (
+        <p id={errorId} role="alert" className={styles.error}>
+          {error}
+        </p>
+      )}
+    </fieldset>
+  );
+}
+
 type TextFieldProps = {
   label: string;
   registration: UseFormRegisterReturn;
@@ -119,6 +174,51 @@ export function TextField({
         aria-describedby={error !== undefined ? errorId : undefined}
         {...registration}
         className={styles.input}
+      />
+      {error !== undefined && (
+        <p id={errorId} role="alert" className={styles.error}>
+          {error}
+        </p>
+      )}
+    </label>
+  );
+}
+
+type TextAreaFieldProps = {
+  label: string;
+  registration: UseFormRegisterReturn;
+  error?: string;
+  required?: boolean;
+  placeholder?: string;
+  rows?: number;
+  className?: string;
+};
+
+/** Zone de texte libre (brief projet), même langage que TextField. */
+export function TextAreaField({
+  label,
+  registration,
+  error,
+  required = false,
+  placeholder,
+  rows = 4,
+  className,
+}: TextAreaFieldProps) {
+  const errorId = `${registration.name}-error`;
+  return (
+    <label className={cx(styles.field, className)}>
+      <span className={styles.fieldLabel}>
+        {label}
+        {required && <RequiredMark />}
+      </span>
+      <textarea
+        rows={rows}
+        placeholder={placeholder}
+        aria-required={required || undefined}
+        aria-invalid={error !== undefined || undefined}
+        aria-describedby={error !== undefined ? errorId : undefined}
+        {...registration}
+        className={cx(styles.input, styles.textarea)}
       />
       {error !== undefined && (
         <p id={errorId} role="alert" className={styles.error}>

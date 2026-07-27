@@ -1,0 +1,121 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  padding: calc(var(--header-h) + 2.5rem) clamp(1.25rem, 4vw, 3rem) var(--section-pad-y);
+  overflow: hidden;
+}
+
+/* Anneau panoramique : l'objet signature du pôle, en touche à droite. */
+.ringField {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  right: -12%;
+  top: 50%;
+  translate: 0 -50%;
+  width: min(56vw, 40rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+  background: conic-gradient(
+    from 200deg,
+    var(--color-accent) 0 52deg,
+    transparent 52deg 360deg
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+}
+
+.ringInner {
+  position: absolute;
+  right: -4%;
+  top: 50%;
+  translate: 0 -50%;
+  width: min(40vw, 28rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.inner {
+  position: relative;
+  max-width: 72rem;
+  margin-inline: auto;
+  width: 100%;
+  display: grid;
+  gap: clamp(1.25rem, 3svh, 2rem);
+}
+
+.kicker {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 5.5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  display: grid;
+  gap: 0.25rem;
+  max-width: 20ch;
+}
+
+.titleAccent {
+  color: var(--color-accent);
+}
+
+.subtitle {
+  max-width: 40rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--color-ink-muted);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.baseline {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-tight);
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+  background: var(--glass-fill);
+}
+
+.chipIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-accent);
+}

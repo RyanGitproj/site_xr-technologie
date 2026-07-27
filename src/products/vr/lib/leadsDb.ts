@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { AttributionColumns } from "@/lib/leads/attributionColumns";
 
 /**
  * Ligne de `public.funnel_xr_discovery_leads`, miroir de
@@ -19,23 +20,7 @@ export type LeadRow = {
   participants: number | null;
   entreprise: string | null;
   fonction: string | null;
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-  utm_content: string | null;
-  utm_term: string | null;
-  referrer: string | null;
-  gclid: string | null;
-  fbclid: string | null;
-  ad_id: string | null;
-  ad_name: string | null;
-  adset_id: string | null;
-  adset_name: string | null;
-  campaign_id: string | null;
-  campaign_name: string | null;
-  platform: string | null;
-  is_organic: boolean;
-};
+} & AttributionColumns;
 
 /** Insert du lead. false = refus/erreur (loggé ici, jamais de throw vers l'UI). */
 export async function insertLead(supabase: SupabaseClient, row: LeadRow): Promise<boolean> {

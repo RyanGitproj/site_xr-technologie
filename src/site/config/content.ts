@@ -51,7 +51,7 @@ export const poleShowcase: Record<ProductId, PoleHighlight> = {
       "Visite virtuelle interactive, parcours fluide",
       "Diffusion web, mobile, tablette et casque VR",
     ],
-    cta: null,
+    cta: "Découvrir XR 360",
   },
   lidar: {
     hook: "Votre site existe. Rendez-le exploitable.",

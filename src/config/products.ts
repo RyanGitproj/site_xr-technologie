@@ -37,7 +37,7 @@ export const PRODUCTS: readonly Product[] = [
     descriptor: "Visite virtuelle & valorisation immersive",
     baseline: "Montrer. Visiter. Valoriser.",
     route: "/360",
-    status: "upcoming",
+    status: "live",
   },
   {
     id: "lidar",

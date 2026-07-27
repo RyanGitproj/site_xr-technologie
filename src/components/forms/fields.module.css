@@ -4,6 +4,18 @@
   font-weight: 500;
 }
 
+/* Précision sous la légende (choix multiples, champ facultatif). */
+.hint {
+  margin-top: 0.25rem;
+  font-size: 0.8125rem;
+  color: var(--color-ink-muted);
+}
+
+.textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
 .grid {
   margin-top: 0.5rem;
   display: grid;

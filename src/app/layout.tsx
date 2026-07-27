@@ -38,7 +38,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SmoothScroll />
           {children}
         </MotionProvider>
-        <CookieConsent gtmId={gtmId} />
+        {/* Le consentement est un objet transverse du SITE : thème neutre
+            sur toutes les pages (jamais les couleurs d'un pôle, la charte
+            interdit le mélange de codes). */}
+        <div data-theme="site">
+          <CookieConsent gtmId={gtmId} />
+        </div>
       </body>
     </html>
   );

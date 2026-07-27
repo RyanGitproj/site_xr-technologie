@@ -1,0 +1,15 @@
+/* Coque du pôle 360 : le wrapper porte le thème (data-theme="xr360") et le
+   fond ; tout le sous-arbre bascule sur la palette charte du pôle. */
+
+.theme {
+  position: relative;
+  min-height: 100svh;
+  background: var(--color-bg-deep);
+  color: var(--color-ink);
+  overflow-x: clip;
+}
+
+.aurora {
+  position: fixed;
+  z-index: -1;
+}

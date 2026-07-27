@@ -1,0 +1,49 @@
+.section {
+  position: relative;
+  padding: calc(var(--section-pad-y) / 2) clamp(1.25rem, 4vw, 3rem);
+}
+
+.inner {
+  max-width: 56rem;
+  margin-inline: auto;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.titleIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--color-accent);
+}
+
+.zones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.zone {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-radius: var(--radius-tight);
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+}
+
+.note {
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+  opacity: 0.8;
+}

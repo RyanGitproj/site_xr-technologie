@@ -1,0 +1,45 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.grid {
+  max-width: 72rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.tile {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 16%, transparent);
+  border-radius: var(--radius-tight);
+  align-content: start;
+}
+
+.tileIcon {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: var(--color-accent);
+}
+
+.tileTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.tileBody {
+  color: var(--color-ink-muted);
+  font-size: 0.85rem;
+}

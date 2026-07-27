@@ -1,0 +1,124 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  padding: calc(var(--header-h) + 2.5rem) clamp(1.25rem, 4vw, 3rem) var(--section-pad-y);
+  overflow: hidden;
+}
+
+.decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Réticule de visée : l'objet signature du pôle, en touche à droite. */
+.reticle {
+  position: absolute;
+  right: -6%;
+  top: 50%;
+  translate: 0 -50%;
+  width: min(42vw, 30rem);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: 50%;
+}
+
+.reticle::before,
+.reticle::after {
+  content: "";
+  position: absolute;
+  background: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.reticle::before {
+  left: 50%;
+  top: -10%;
+  width: 1px;
+  height: 120%;
+}
+
+.reticle::after {
+  top: 50%;
+  left: -10%;
+  height: 1px;
+  width: 120%;
+}
+
+.inner {
+  position: relative;
+  max-width: 72rem;
+  margin-inline: auto;
+  width: 100%;
+  display: grid;
+  gap: clamp(1.25rem, 3svh, 2rem);
+}
+
+.kicker {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 5.5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  display: grid;
+  gap: 0.25rem;
+  max-width: 18ch;
+}
+
+.titleAccent {
+  color: var(--color-accent);
+}
+
+.subtitle {
+  max-width: 42rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--color-ink-muted);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.baseline {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-tight);
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+  background: var(--glass-fill);
+}
+
+.chipIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-accent);
+}

@@ -45,7 +45,7 @@ export const PRODUCTS: readonly Product[] = [
     descriptor: "Relevé 3D · Reality capture",
     baseline: "Mesurer. Documenter. Exploiter.",
     route: "/lidar",
-    status: "upcoming",
+    status: "live",
   },
 ] as const;
 

@@ -1,0 +1,120 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.timeline {
+  max-width: 46rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.25rem;
+  padding-bottom: clamp(1.5rem, 3.5svh, 2.5rem);
+}
+
+/* Ligne de visée reliant les étapes (repère technique, pas décoratif). */
+.step::before {
+  content: "";
+  position: absolute;
+  left: 1.1rem;
+  top: 2.4rem;
+  bottom: 0.2rem;
+  width: 1px;
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.step:last-child {
+  padding-bottom: 0;
+}
+
+.step:last-child::before {
+  display: none;
+}
+
+/* Marqueur carré : angles nets, identité LiDAR (pas le cercle du 360). */
+.marker {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: var(--radius-tight);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  display: grid;
+  place-content: center;
+  background: var(--glass-fill);
+}
+
+.number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-accent);
+}
+
+.content {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+  padding-top: 0.2rem;
+}
+
+.icon {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: var(--color-accent);
+}
+
+.stepTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.stepBody {
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+}
+
+.improvements {
+  max-width: 60rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.improvementsTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+.improvementsList {
+  display: grid;
+  gap: 0.6rem 2rem;
+}
+
+@media (min-width: 768px) {
+  .improvementsList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.improvement {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+}
+
+.checkIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  translate: 0 0.15rem;
+  color: var(--color-accent);
+}

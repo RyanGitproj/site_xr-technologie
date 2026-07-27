@@ -1,0 +1,120 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.columns {
+  max-width: 66rem;
+  margin-inline: auto;
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 900px) {
+  .columns {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+}
+
+.col {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+}
+
+.colTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.engagements,
+.whyList {
+  display: grid;
+  gap: 1rem;
+}
+
+.engagement,
+.why {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+}
+
+.checkIcon,
+.whyIcon {
+  width: 1.1rem;
+  height: 1.1rem;
+  translate: 0 0.2rem;
+  color: var(--color-accent);
+}
+
+.engagementTitle {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.engagementBody {
+  color: var(--color-ink-muted);
+  font-size: 0.875rem;
+  margin-top: 0.15rem;
+}
+
+.limitsWrap {
+  max-width: 66rem;
+  margin: var(--stack-gap) auto 0;
+}
+
+/* Limites : encart sobre, liseré ambre discret (avertissement, pas décor).
+   Le texte est LÉGAL : repris fidèlement de la brochure. */
+.limitsPanel {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border-radius: var(--radius-tight);
+}
+
+.limitsTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.limits {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.limit {
+  position: relative;
+  padding-left: 1.1rem;
+  color: var(--color-ink-muted);
+  font-size: 0.9rem;
+}
+
+.limit::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.4rem;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+.adaptNote {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.adaptIcon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  translate: 0 0.15rem;
+  color: var(--color-accent);
+}

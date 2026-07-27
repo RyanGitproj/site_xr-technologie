@@ -1,0 +1,14 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem) calc(var(--section-pad-y) * 1.2);
+}
+
+.inner {
+  max-width: 46rem;
+  margin: var(--stack-gap) auto 0;
+}
+
+.panel {
+  padding: clamp(1.25rem, 3.5vw, 2.25rem);
+  border-radius: var(--radius-tight);
+}

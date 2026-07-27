@@ -61,7 +61,7 @@ export const poleShowcase: Record<ProductId, PoleHighlight> = {
       "Plans 2D, modèles 3D, scan-to-CAD et scan-to-BIM",
       "Interventions Madagascar, océan Indien et au-delà",
     ],
-    cta: null,
+    cta: "Découvrir XR LiDAR",
   },
 } as const;
 

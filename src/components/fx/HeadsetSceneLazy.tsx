@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import type { MotionValue } from "framer-motion";
-import { diveImages } from "@/config/images";
+import { diveImages } from "@/products/vr/config/images";
 import styles from "./HeadsetScene.module.css";
 
 /** Le chunk three.js/R3F n'est téléchargé qu'au montage de ce composant. */

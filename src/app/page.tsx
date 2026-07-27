@@ -1,37 +1,45 @@
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { ArgumentSection } from "@/components/sections/ArgumentSection";
-import { BenefitsSection } from "@/components/sections/BenefitsSection";
-import { DeploymentSection } from "@/components/sections/DeploymentSection";
-import { DiveSection } from "@/components/sections/DiveSection";
-import { FinalCtaSection } from "@/components/sections/FinalCtaSection";
-import { GallerySection } from "@/components/sections/GallerySection";
-import { Hero } from "@/components/sections/Hero";
-import { LeadFormSection } from "@/components/sections/LeadFormSection";
-import { ObjectionsSection } from "@/components/sections/ObjectionsSection";
-import { OffersSection } from "@/components/sections/OffersSection";
-import { ReassuranceBar } from "@/components/sections/ReassuranceBar";
+import Link from "next/link";
+import { GlassPanel } from "@/components/fx/GlassPanel";
+import { PRODUCTS } from "@/config/products";
+import { siteConfig } from "@/config/site";
+import styles from "./home.module.css";
 
-/** Le récit : promesse → confiance → immersion (plongée) → preuve → offre
-    (8 univers) → bénéfices → objections → process → action. */
+/** Accueil PROVISOIRE : liste des pôles (config/products.ts) en attendant la
+    vraie home XR Technologie (TODO.md, phase 3 du chantier multi-produits). */
 export default function HomePage() {
   return (
-    <>
-      <Header />
-      <main id="contenu">
-        <Hero />
-        <ReassuranceBar />
-        <DiveSection />
-        <GallerySection />
-        <OffersSection />
-        <BenefitsSection />
-        <ArgumentSection />
-        <ObjectionsSection />
-        <DeploymentSection />
-        <FinalCtaSection />
-        <LeadFormSection />
-      </main>
-      <Footer />
-    </>
+    <main id="contenu" className={styles.main}>
+      <h1 className={styles.brand}>{siteConfig.name}</h1>
+      <p className={styles.lead}>
+        L&apos;immersion au service de votre projet, depuis {siteConfig.city} : vivez la
+        réalité virtuelle là où vous êtes, faites visiter vos lieux à distance et
+        transformez vos sites en données 3D exploitables.
+      </p>
+      <div className={styles.grid}>
+        {PRODUCTS.map((product) => {
+          const card = (
+            <GlassPanel thin className={styles.card}>
+              <p className={styles.cardBaseline}>{product.baseline}</p>
+              <h2 className={styles.cardName}>{product.name}</h2>
+              <p className={styles.cardDescriptor}>{product.descriptor}</p>
+              <p className={styles.cardAction}>
+                {product.status === "live" ? (
+                  <>Découvrir →</>
+                ) : (
+                  <span className={styles.upcoming}>Bientôt en ligne</span>
+                )}
+              </p>
+            </GlassPanel>
+          );
+          return product.status === "live" ? (
+            <Link key={product.id} href={product.route} className={styles.cardLink}>
+              {card}
+            </Link>
+          ) : (
+            <div key={product.id}>{card}</div>
+          );
+        })}
+      </div>
+    </main>
   );
 }

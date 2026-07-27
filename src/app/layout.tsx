@@ -1,21 +1,10 @@
 import type { Metadata } from "next";
-// Display v3 : Sora (grotesque géométrique). Space Grotesk conservé pour la
-// comparaison /fx-lab tant que le choix n'est pas figé.
-import "@fontsource/sora/latin-500.css";
-import "@fontsource/sora/latin-600.css";
-import "@fontsource/sora/latin-700.css";
-import "@fontsource/sora/latin-800.css";
+// Socle typographique commun aux pôles (charte : Space Grotesk / Inter).
 import "@fontsource/space-grotesk/latin-500.css";
 import "@fontsource/space-grotesk/latin-700.css";
-// Accent titres : Baloo 2 (mots ronds, façon « adventures » de la réf.).
-import "@fontsource/baloo-2/latin-700.css";
-import "@fontsource/baloo-2/latin-800.css";
 import "@fontsource/inter/latin-400.css";
 import "@fontsource/inter/latin-500.css";
 import "./globals.css";
-import { GlowCursor } from "@/components/fx/GlowCursor";
-import { LiquidBackground } from "@/components/fx/LiquidBackground";
-import { LiquidRefractFilter } from "@/components/fx/LiquidRefractFilter";
 import { MotionProvider } from "@/components/fx/MotionProvider";
 import { SmoothScroll } from "@/components/fx/SmoothScroll";
 import { AttributionCapture } from "@/components/tracking/AttributionCapture";
@@ -26,9 +15,9 @@ import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.baseUrl),
-  title: "XR VR Discovery | Animation VR clé en main à Antananarivo",
+  title: "XR Technologie | Expériences immersives, visites virtuelles & relevés 3D à Madagascar",
   description:
-    "XR Technology déplace la VR jusqu'à vous : 10 casques dernière génération, animateurs XR et 8 offres (retail, entreprises, écoles, universités, tourisme, fondations, immobilier, évènementiel). Packs à partir de 750 000 Ar.",
+    "Trois pôles, une même exigence XR : animations VR Meta Quest 3 qui se déplacent jusqu'à vous, visites virtuelles 360 qui font découvrir votre lieu à distance, relevés 3D LiDAR qui transforment votre site en données exploitables.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -45,12 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AttributionCapture />
         <RouteTracker />
         <MetaPixelGate />
-        <LiquidBackground />
-        <LiquidRefractFilter />
         <MotionProvider>
           <SmoothScroll />
           {children}
-          <GlowCursor />
         </MotionProvider>
         <CookieConsent gtmId={gtmId} />
       </body>

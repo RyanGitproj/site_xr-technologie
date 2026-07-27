@@ -1,6 +1,6 @@
 "use client";
 
-import { cookieConsent } from "@/config/content";
+import { cookieConsent } from "@/config/consent";
 import { resetConsentChoice } from "@/lib/tracking/consent";
 
 /**

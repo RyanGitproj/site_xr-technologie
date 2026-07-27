@@ -1,0 +1,65 @@
+.section {
+  composes: shell from "../../../components/ui/section.module.css";
+}
+
+.container {
+  composes: container w3xl from "../../../components/ui/section.module.css";
+}
+
+.list {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.item {
+  /* Angulaire v3 : chanfrein + bord inset (plus de border-radius). */
+  clip-path: polygon(
+    12px 0,
+    calc(100% - 12px) 0,
+    100% 12px,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    12px 100%,
+    0 calc(100% - 12px),
+    0 12px
+  );
+  box-shadow: inset 0 0 0 1px var(--glass-stroke);
+  background: color-mix(in srgb, var(--color-bg-raised) 60%, transparent);
+}
+
+.summary {
+  display: flex;
+  min-height: 2.75rem;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.chevron {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--color-accent);
+  transition: transform var(--dur-fast);
+}
+
+.item[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.answer {
+  padding: 0 1.5rem 1.25rem;
+  line-height: 1.625;
+  color: var(--color-ink-muted);
+}

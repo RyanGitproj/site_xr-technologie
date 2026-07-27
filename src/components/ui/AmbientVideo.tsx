@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
-import type { VideoSlot } from "@/config/images";
+import type { VideoSlot } from "@/lib/images";
 import { cx } from "@/lib/cx";
 import { useReducedMotionPref } from "@/lib/motion/useReducedMotion";
 import styles from "./AmbientVideo.module.css";

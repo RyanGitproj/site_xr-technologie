@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
 import { cx } from "@/lib/cx";
-import type { ImageSlot } from "@/config/images";
+import type { ImageSlot } from "@/lib/images";
 import styles from "./Figure.module.css";
 
 type FigureProps = {

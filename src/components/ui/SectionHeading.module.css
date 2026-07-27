@@ -3,7 +3,7 @@
 }
 
 .kicker {
-  composes: kicker from "../sections/section.module.css";
+  composes: kicker from "./section.module.css";
 }
 
 .title {

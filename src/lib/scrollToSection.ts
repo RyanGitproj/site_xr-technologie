@@ -22,9 +22,3 @@ export function scrollToSection(id: string): void {
   if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
   target.focus({ preventScroll: true });
 }
-
-/** Retour en haut de page (logo), même politique sans hash. */
-export function scrollToTop(): void {
-  if (lenis) lenis.scrollTo(0);
-  else window.scrollTo(0, 0);
-}

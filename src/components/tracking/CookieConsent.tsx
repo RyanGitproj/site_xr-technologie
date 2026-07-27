@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Script from "next/script";
 import { useEffect, useRef } from "react";
-import { cookieConsent } from "@/config/content";
+import { cookieConsent } from "@/config/consent";
 import { saveConsentChoice, useConsentChoice } from "@/lib/tracking/consent";
 import styles from "./CookieConsent.module.css";
 

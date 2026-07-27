@@ -12,9 +12,9 @@
   background-image: linear-gradient(
     100deg,
     var(--holo-1, var(--color-accent-hot)) 0%,
-    var(--holo-2, var(--color-fx-cyan)) 28%,
-    var(--holo-3, var(--color-fx-violet)) 55%,
-    var(--holo-4, var(--color-fx-pink)) 78%,
+    var(--holo-2, var(--color-fx-1)) 28%,
+    var(--holo-3, var(--color-fx-3)) 55%,
+    var(--holo-4, var(--color-fx-4)) 78%,
     var(--holo-1, var(--color-accent-hot)) 100%
   );
   background-size: 220% 100%;

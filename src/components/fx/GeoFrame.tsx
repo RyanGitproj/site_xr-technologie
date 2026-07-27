@@ -141,9 +141,9 @@ export function GeoFrame({
             {/* Couleurs surchargeables par custom properties (--geo-edge-c1/c2/c3,
                 cf. accents d'offre) ; fallbacks = comète de marque. */}
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--geo-edge-c1, var(--color-fx-cyan))" />
+              <stop offset="0%" stopColor="var(--geo-edge-c1, var(--color-fx-1))" />
               <stop offset="52%" stopColor="var(--geo-edge-c2, var(--color-accent))" />
-              <stop offset="100%" stopColor="var(--geo-edge-c3, var(--color-fx-pink))" />
+              <stop offset="100%" stopColor="var(--geo-edge-c3, var(--color-fx-4))" />
             </linearGradient>
           </defs>
           <polygon

@@ -20,9 +20,9 @@
   width: 6rem;
   translate: -50% 0;
   border-radius: var(--radius-pill);
-  background: var(--color-fx-cyan);
+  background: var(--color-fx-1);
   opacity: 0.8;
-  box-shadow: 0 0 18px 5px color-mix(in srgb, var(--color-fx-cyan) 50%, transparent);
+  box-shadow: 0 0 18px 5px color-mix(in srgb, var(--color-fx-1) 50%, transparent);
 }
 
 .float {

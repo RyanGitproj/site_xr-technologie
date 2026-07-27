@@ -92,7 +92,7 @@
 }
 
 .item:nth-child(5n + 4) {
-  --num-color: var(--color-fx-pink);
+  --num-color: var(--color-fx-4);
 }
 
 .item:nth-child(5n + 5) {

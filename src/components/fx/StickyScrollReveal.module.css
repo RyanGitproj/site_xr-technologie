@@ -50,9 +50,9 @@
   transform-origin: top;
   background: linear-gradient(
     180deg,
-    var(--color-fx-cyan),
-    var(--color-fx-violet),
-    var(--color-fx-pink)
+    var(--color-fx-1),
+    var(--color-fx-3),
+    var(--color-fx-4)
   );
 }
 
@@ -65,8 +65,8 @@
   height: 11px;
   translate: 0 -50%;
   border-radius: var(--radius-pill);
-  background: var(--color-fx-pink);
-  box-shadow: 0 0 18px color-mix(in srgb, var(--color-fx-pink) 85%, transparent);
+  background: var(--color-fx-4);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--color-fx-4) 85%, transparent);
 }
 
 .list {
@@ -123,7 +123,7 @@
 
 .list .item:nth-child(5n + 4),
 .reducedList li:nth-child(5n + 4) {
-  --num-color: var(--color-fx-pink);
+  --num-color: var(--color-fx-4);
 }
 
 .list .item:nth-child(5n + 5),

@@ -55,7 +55,7 @@
   border-radius: inherit;
   background: radial-gradient(
     240px circle at var(--mx, 50%) var(--my, 50%),
-    var(--color-fx-cyan),
+    var(--color-fx-1),
     rgba(245, 67, 28, 0.4) 40%,
     rgba(232, 40, 24, 0.18) 58%,
     transparent 72%

@@ -1,3 +1,12 @@
+/* Coque thème « site » : la page est transverse, fond du socle neutre. */
+.shell {
+  position: relative;
+  min-height: 100svh;
+  background: var(--color-bg-deep);
+  color: var(--color-ink);
+  overflow-x: clip;
+}
+
 .main {
   position: relative;
   padding: calc(var(--header-h) + clamp(2rem, 6svh, 4rem)) 1.5rem

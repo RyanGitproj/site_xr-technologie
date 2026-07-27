@@ -24,21 +24,20 @@
   /* Erreurs formulaire : rose gardé DISTINCT de l'orange de marque. */
   --color-danger: #fca5a5;
 
-  /* Palette néon v3, signature « comète » ambre → orange → rouge, + une
-     pointe turquoise rare. NB : les noms --color-fx-cyan/…/pink sont des
-     labels POSITIONNELS de dégradé (valeurs chaudes) ; le renommage propre
-     ambre/flamme/rouge est noté dans TODO.md. */
-  --color-fx-cyan: #ffc24d;
-  --color-fx-indigo: #e85a1c;
-  --color-fx-violet: #f5431c;
-  --color-fx-pink: #e82818;
-  --color-fx-teal: #2fbfa8;
+  /* Comète fx : 4 POSITIONS de dégradé (1 = départ clair → 4 = fin
+     profonde) + une pointe d'étincelle rare. Les valeurs varient par
+     thème ([data-theme] plus bas) : sous VR (:root), ambre → rouge. */
+  --color-fx-1: #ffc24d;
+  --color-fx-2: #e85a1c;
+  --color-fx-3: #f5431c;
+  --color-fx-4: #e82818;
+  --color-fx-spark: #2fbfa8;
 
   /* Second accent FROID (nuance chaud/froid, 20/07/2026). La braise reste
      dominante ; ces teintes cassent la monotonie orange et s'accordent aux
      reflets cyan/magenta des casques sur les photos. Appliquées en touches
      via --section-accent (map [data-mood] ci-dessous), jamais en fond. */
-  --color-accent-cool: #2fbfa8; /* turquoise (= --color-fx-teal) */
+  --color-accent-cool: #2fbfa8; /* turquoise (= --color-fx-spark) */
   --color-accent-cool-2: #c18cff; /* violet */
 
   /* Code couleur des 8 offres (ids = OFFER_IDS de config/offers.ts, test
@@ -151,11 +150,11 @@
   --color-accent: #d9e6f6;
   --color-accent-hot: #ffffff;
   --color-accent-deep: #5d7392;
-  --color-fx-cyan: #ffffff;
-  --color-fx-indigo: #d9e6f6;
-  --color-fx-violet: #9ab5d8;
-  --color-fx-pink: #5d7392;
-  --color-fx-teal: #9ab5d8;
+  --color-fx-1: #ffffff;
+  --color-fx-2: #d9e6f6;
+  --color-fx-3: #9ab5d8;
+  --color-fx-4: #5d7392;
+  --color-fx-spark: #9ab5d8;
   --glass-fill: rgba(10, 18, 32, 0.2);
   --glass-stroke: rgba(217, 230, 246, 0.22);
   --edge-lit: rgba(217, 230, 246, 0.55);
@@ -176,11 +175,11 @@
   --color-accent: #00cfe8;
   --color-accent-hot: #49dff2;
   --color-accent-deep: #1268a8;
-  --color-fx-cyan: #49dff2;
-  --color-fx-indigo: #00cfe8;
-  --color-fx-violet: #00afa5;
-  --color-fx-pink: #1268a8;
-  --color-fx-teal: #00afa5;
+  --color-fx-1: #49dff2;
+  --color-fx-2: #00cfe8;
+  --color-fx-3: #00afa5;
+  --color-fx-4: #1268a8;
+  --color-fx-spark: #00afa5;
   --glass-fill: rgba(10, 26, 44, 0.2);
   --glass-stroke: rgba(0, 207, 232, 0.24);
   --edge-lit: rgba(0, 207, 232, 0.62);
@@ -201,11 +200,11 @@
   --color-accent: #00e5a8;
   --color-accent-hot: #4df2c6;
   --color-accent-deep: #00a8c6;
-  --color-fx-cyan: #4df2c6;
-  --color-fx-indigo: #00e5a8;
-  --color-fx-violet: #00a8c6;
-  --color-fx-pink: #0e7f95;
-  --color-fx-teal: #00a8c6;
+  --color-fx-1: #4df2c6;
+  --color-fx-2: #00e5a8;
+  --color-fx-3: #00a8c6;
+  --color-fx-4: #0e7f95;
+  --color-fx-spark: #00a8c6;
   --glass-fill: rgba(9, 20, 26, 0.2);
   --glass-stroke: rgba(0, 229, 168, 0.24);
   --edge-lit: rgba(0, 229, 168, 0.62);

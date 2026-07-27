@@ -39,8 +39,8 @@
 }
 
 .glowPink {
-  color: var(--color-fx-pink);
-  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--color-fx-pink) 55%, transparent));
+  color: var(--color-fx-4);
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--color-fx-4) 55%, transparent));
 }
 
 /* Vrais froids (turquoise, violet) : les 5 marqueurs lisent enfin comme

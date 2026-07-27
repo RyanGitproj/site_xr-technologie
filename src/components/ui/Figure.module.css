@@ -50,9 +50,9 @@
   background: linear-gradient(
     180deg,
     transparent,
-    color-mix(in srgb, var(--color-fx-cyan) 18%, transparent) 35%,
+    color-mix(in srgb, var(--color-fx-1) 18%, transparent) 35%,
     color-mix(in srgb, var(--color-ink) 26%, transparent) 50%,
-    color-mix(in srgb, var(--color-fx-cyan) 18%, transparent) 65%,
+    color-mix(in srgb, var(--color-fx-1) 18%, transparent) 65%,
     transparent
   );
   opacity: 0;

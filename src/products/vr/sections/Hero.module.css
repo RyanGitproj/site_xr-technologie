@@ -164,7 +164,7 @@
 
 .hudValuePink {
   composes: hudValue;
-  color: var(--color-fx-pink);
+  color: var(--color-fx-4);
 }
 
 @media (min-width: 640px) {

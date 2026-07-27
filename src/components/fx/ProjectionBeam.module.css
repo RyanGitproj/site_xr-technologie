@@ -9,8 +9,8 @@
   opacity: 0.7;
   background: linear-gradient(
     0deg,
-    color-mix(in srgb, var(--color-fx-cyan) 46%, transparent),
-    color-mix(in srgb, var(--color-fx-violet) 16%, transparent) 55%,
+    color-mix(in srgb, var(--color-fx-1) 46%, transparent),
+    color-mix(in srgb, var(--color-fx-3) 16%, transparent) 55%,
     transparent
   );
 }
@@ -21,8 +21,8 @@
   .beam {
     background: linear-gradient(
       0deg,
-      color-mix(in srgb, var(--color-fx-cyan) 60%, transparent),
-      color-mix(in srgb, var(--color-fx-violet) 22%, transparent) 55%,
+      color-mix(in srgb, var(--color-fx-1) 60%, transparent),
+      color-mix(in srgb, var(--color-fx-3) 22%, transparent) 55%,
       transparent
     );
   }

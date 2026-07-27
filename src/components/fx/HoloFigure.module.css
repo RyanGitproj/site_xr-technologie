@@ -82,7 +82,7 @@
     inset: 0;
     background: repeating-linear-gradient(
       0deg,
-      color-mix(in srgb, var(--color-fx-cyan) 14%, transparent) 0 1px,
+      color-mix(in srgb, var(--color-fx-1) 14%, transparent) 0 1px,
       transparent 1px 4px
     );
     mix-blend-mode: screen;

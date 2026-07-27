@@ -21,9 +21,9 @@
   background: conic-gradient(
     from var(--angle),
     transparent 0deg 285deg,
-    var(--color-fx-cyan) 312deg,
-    var(--color-fx-violet) 336deg,
-    var(--color-fx-pink) 350deg,
+    var(--color-fx-1) 312deg,
+    var(--color-fx-3) 336deg,
+    var(--color-fx-4) 350deg,
     transparent 360deg
   );
   -webkit-mask:

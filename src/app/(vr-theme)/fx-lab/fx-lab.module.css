@@ -106,10 +106,10 @@
   border-radius: var(--radius-pill);
   background: linear-gradient(
     90deg,
-    var(--color-fx-cyan),
-    var(--color-fx-indigo),
-    var(--color-fx-violet),
-    var(--color-fx-pink)
+    var(--color-fx-1),
+    var(--color-fx-2),
+    var(--color-fx-3),
+    var(--color-fx-4)
   );
 }
 

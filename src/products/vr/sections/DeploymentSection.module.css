@@ -68,8 +68,8 @@
 }
 
 .huePink {
-  color: var(--color-fx-pink);
-  filter: drop-shadow(0 0 24px color-mix(in srgb, var(--color-fx-pink) 70%, transparent));
+  color: var(--color-fx-4);
+  filter: drop-shadow(0 0 24px color-mix(in srgb, var(--color-fx-4) 70%, transparent));
 }
 
 .stepTitle {

@@ -18,7 +18,7 @@
   font-family: var(--font-display);
   font-size: 10rem;
   line-height: 1;
-  color: color-mix(in srgb, var(--color-fx-pink) 10%, transparent);
+  color: color-mix(in srgb, var(--color-fx-4) 10%, transparent);
   user-select: none;
 }
 

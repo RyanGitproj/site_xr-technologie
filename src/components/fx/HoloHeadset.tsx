@@ -36,9 +36,9 @@ export function HoloHeadset({ className, projector = true }: HoloHeadsetProps) {
         <svg viewBox="0 0 300 180" className={styles.svg}>
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="var(--color-fx-cyan)" />
-              <stop offset="55%" stopColor="var(--color-fx-violet)" />
-              <stop offset="100%" stopColor="var(--color-fx-pink)" />
+              <stop offset="0%" stopColor="var(--color-fx-1)" />
+              <stop offset="55%" stopColor="var(--color-fx-3)" />
+              <stop offset="100%" stopColor="var(--color-fx-4)" />
             </linearGradient>
           </defs>
 
@@ -62,7 +62,7 @@ export function HoloHeadset({ className, projector = true }: HoloHeadsetProps) {
             height="92"
             rx="36"
             fill="none"
-            stroke="var(--color-fx-cyan)"
+            stroke="var(--color-fx-1)"
             strokeWidth="1.5"
             opacity="0.35"
           />
@@ -73,7 +73,7 @@ export function HoloHeadset({ className, projector = true }: HoloHeadsetProps) {
             height="92"
             rx="36"
             fill="none"
-            stroke="var(--color-fx-pink)"
+            stroke="var(--color-fx-4)"
             strokeWidth="1.5"
             opacity="0.35"
           />
@@ -112,7 +112,7 @@ export function HoloHeadset({ className, projector = true }: HoloHeadsetProps) {
             height="42"
             rx="7"
             fill="rgba(255, 194, 77, 0.22)"
-            stroke="var(--color-fx-cyan)"
+            stroke="var(--color-fx-1)"
             strokeWidth="1.5"
           />
           <rect
@@ -122,7 +122,7 @@ export function HoloHeadset({ className, projector = true }: HoloHeadsetProps) {
             height="42"
             rx="7"
             fill="rgba(232, 40, 24, 0.2)"
-            stroke="var(--color-fx-pink)"
+            stroke="var(--color-fx-4)"
             strokeWidth="1.5"
           />
         </svg>

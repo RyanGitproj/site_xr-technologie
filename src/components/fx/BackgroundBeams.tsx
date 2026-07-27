@@ -39,11 +39,11 @@ export function BackgroundBeams({ intensity = "ambient", className }: Background
       >
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--color-fx-cyan)" stopOpacity="0" />
-            <stop offset="32%" stopColor="var(--color-fx-cyan)" />
-            <stop offset="62%" stopColor="var(--color-fx-indigo)" />
-            <stop offset="88%" stopColor="var(--color-fx-violet)" />
-            <stop offset="100%" stopColor="var(--color-fx-pink)" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--color-fx-1)" stopOpacity="0" />
+            <stop offset="32%" stopColor="var(--color-fx-1)" />
+            <stop offset="62%" stopColor="var(--color-fx-2)" />
+            <stop offset="88%" stopColor="var(--color-fx-3)" />
+            <stop offset="100%" stopColor="var(--color-fx-4)" stopOpacity="0" />
           </linearGradient>
         </defs>
         {beams.map((beam, i) => (

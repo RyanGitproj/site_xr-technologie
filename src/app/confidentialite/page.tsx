@@ -1,23 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { GlassPanel } from "@/components/fx/GlassPanel";
-import { Footer } from "@/products/vr/layout/Footer";
-import { Header } from "@/products/vr/layout/Header";
 import { CookiePreferencesLink } from "@/components/tracking/CookiePreferencesLink";
 import { privacyPolicy } from "@/config/consent";
 import { siteConfig } from "@/config/site";
+import { SiteFooter } from "@/site/layout/SiteFooter";
+import { SiteHeader } from "@/site/layout/SiteHeader";
 import styles from "./confidentialite.module.css";
 
 export const metadata: Metadata = {
-  title: "Politique de confidentialité | XR VR Discovery",
+  title: "Politique de confidentialité | XR Technologie",
   description:
-    "Données collectées sur XR VR Discovery, finalités, cookies de mesure et de publicité, et gestion de votre consentement.",
+    "Données collectées sur le site XR Technologie, finalités, cookies de mesure et de publicité, et gestion de votre consentement.",
 };
 
+/** Page transverse du SITE (socle neutre, pas un pôle) : header/footer
+    XR Technologie, thème « site » comme l'accueil. */
 export default function ConfidentialitePage() {
   return (
-    <>
-      <Header />
+    <div data-theme="site" className={styles.shell}>
+      <SiteHeader />
       <main id="contenu" className={styles.main}>
         <GlassPanel className={styles.panel}>
           <p className={styles.updated}>{privacyPolicy.updated}</p>
@@ -55,6 +57,22 @@ export default function ConfidentialitePage() {
             </p>
           </section>
 
+          <section className={styles.section}>
+            <h2 className={styles.heading}>{privacyPolicy.credits.heading}</h2>
+            <p className={styles.paragraph}>
+              {privacyPolicy.credits.body}{" "}
+              <a
+                href={privacyPolicy.credits.licenseHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.mail}
+              >
+                {privacyPolicy.credits.licenseLabel}
+              </a>
+              .
+            </p>
+          </section>
+
           <div className={styles.back}>
             <Link href="/" className={styles.backLink}>
               ← Retour à l&apos;accueil
@@ -62,7 +80,7 @@ export default function ConfidentialitePage() {
           </div>
         </GlassPanel>
       </main>
-      <Footer />
-    </>
+      <SiteFooter />
+    </div>
   );
 }

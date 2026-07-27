@@ -82,4 +82,11 @@ export const privacyPolicy = {
     heading: "Nous contacter",
     body: "Pour exercer vos droits ou poser une question sur cette politique, écrivez-nous à",
   },
+  /** Attribution CC-BY obligatoire (modèle 3D de la scène de plongée VR). */
+  credits: {
+    heading: "Crédits",
+    body: "Modèle 3D « Oculus Quest 3 » par AVILOV (Sketchfab), utilisé sur la page XR VR, sous licence",
+    licenseLabel: "CC-BY 4.0",
+    licenseHref: "https://creativecommons.org/licenses/by/4.0/",
+  },
 } as const;

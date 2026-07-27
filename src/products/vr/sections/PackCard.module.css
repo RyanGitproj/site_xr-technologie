@@ -6,9 +6,9 @@
 /* Arête et halo GeoFrame teintés par l'offre active (cascade du tabpanel) ;
    le stop central mixe avec l'accent de marque, le fil braise demeure. */
 .geo {
-  --geo-edge-c1: var(--offer-accent, var(--color-fx-cyan));
+  --geo-edge-c1: var(--offer-accent, var(--color-fx-1));
   --geo-edge-c2: color-mix(in srgb, var(--offer-accent, var(--color-accent)) 55%, var(--color-accent));
-  --geo-edge-c3: var(--offer-accent, var(--color-fx-pink));
+  --geo-edge-c3: var(--offer-accent, var(--color-fx-4));
   --geo-halo: var(--offer-accent, var(--color-accent));
 
   height: 100%;
@@ -26,7 +26,7 @@
 .panelFeatured {
   box-shadow:
     0 0 60px color-mix(in srgb, var(--offer-accent, var(--color-accent)) 35%, transparent),
-    0 0 100px color-mix(in srgb, var(--offer-accent, var(--color-fx-pink)) 18%, transparent),
+    0 0 100px color-mix(in srgb, var(--offer-accent, var(--color-fx-4)) 18%, transparent),
     inset 0 1px 0 rgba(255, 150, 90, 0.14);
 }
 

@@ -14,14 +14,14 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: var(--radius-pill);
-  background: var(--color-fx-cyan);
-  box-shadow: 0 0 14px 4px color-mix(in srgb, var(--color-fx-cyan) 55%, transparent);
+  background: var(--color-fx-1);
+  box-shadow: 0 0 14px 4px color-mix(in srgb, var(--color-fx-1) 55%, transparent);
 }
 
 .wave {
   position: absolute;
   inset: -0.7rem;
-  border: 1px solid var(--color-fx-cyan);
+  border: 1px solid var(--color-fx-1);
   border-radius: var(--radius-pill);
   opacity: 0;
 }

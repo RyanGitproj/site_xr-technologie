@@ -1,11 +1,13 @@
+import { EnterRise } from "@/components/fx/EnterRise";
 import { GridPulse } from "@/components/fx/GridPulse";
-import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
 import { ShimmerCTA } from "@/components/fx/ShimmerCTA";
 import { heroLidar } from "@/products/lidar/config/content";
 import styles from "./HeroLidar.module.css";
 
 /** Hero LiDAR : le problème (l'approximation) puis la réponse (la donnée),
-    sur trame technique + réticule de visée : le langage de la charte. */
+    sur trame technique + réticule de visée : le langage de la charte.
+    Apparition en EnterRise (CSS pur) : le titre peint au premier paint,
+    sans attendre l'hydration (LCP 3G). */
 export function HeroLidar() {
   return (
     <section className={styles.hero}>
@@ -13,24 +15,24 @@ export function HeroLidar() {
         <GridPulse intensity="ambient" patternId="grid-pulse-lidar-hero" />
         <div className={styles.reticle} />
       </div>
-      <RevealGroup className={styles.inner}>
-        <RevealItem>
+      <div className={styles.inner}>
+        <EnterRise>
           <p className={styles.kicker}>{heroLidar.kicker}</p>
-        </RevealItem>
-        <RevealItem>
+        </EnterRise>
+        <EnterRise delay={0.08}>
           <h1 className={styles.title}>
             <span>{heroLidar.titleLead}</span>
             <span className={styles.titleAccent}>{heroLidar.titleAccent}</span>
           </h1>
-        </RevealItem>
-        <RevealItem>
+        </EnterRise>
+        <EnterRise delay={0.16}>
           <p className={styles.subtitle}>{heroLidar.subtitle}</p>
-        </RevealItem>
-        <RevealItem className={styles.ctaRow}>
+        </EnterRise>
+        <EnterRise delay={0.24} className={styles.ctaRow}>
           <ShimmerCTA scrollTo={heroLidar.ctaTargetId}>{heroLidar.cta}</ShimmerCTA>
           <p className={styles.baseline}>{heroLidar.baseline}</p>
-        </RevealItem>
-        <RevealItem>
+        </EnterRise>
+        <EnterRise delay={0.32}>
           <ul className={styles.chips}>
             {heroLidar.chips.map((chip) => (
               <li key={chip.label} className={styles.chip}>
@@ -39,8 +41,8 @@ export function HeroLidar() {
               </li>
             ))}
           </ul>
-        </RevealItem>
-      </RevealGroup>
+        </EnterRise>
+      </div>
     </section>
   );
 }

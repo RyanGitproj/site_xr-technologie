@@ -35,7 +35,7 @@ describe("catalogue des pôles", () => {
         "--glass-stroke:",
         "--edge-lit:",
         "--glow-soft:",
-        "--color-fx-cyan:",
+        "--color-fx-1:",
       ]) {
         expect(block![1], `${token} manquant dans [data-theme="${product.id}"]`).toContain(token);
       }

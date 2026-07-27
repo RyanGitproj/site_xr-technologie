@@ -237,8 +237,8 @@
   background: linear-gradient(
     135deg,
     var(--color-accent) 0%,
-    var(--color-fx-indigo) 62%,
-    var(--color-fx-pink) 130%
+    var(--color-fx-2) 62%,
+    var(--color-fx-4) 130%
   );
   color: var(--color-bg-deep);
   font-family: var(--font-display);
@@ -325,8 +325,8 @@
   background: linear-gradient(
     90deg,
     transparent,
-    var(--color-fx-cyan) 35%,
-    var(--color-fx-pink) 65%,
+    var(--color-fx-1) 35%,
+    var(--color-fx-4) 65%,
     transparent
   );
   box-shadow:

@@ -4,9 +4,9 @@
  * nuages » de la constellation cessent d'être uniformément orange.
  */
 export const FX_NODE_COLORS = [
-  "var(--color-fx-cyan)",
+  "var(--color-fx-1)",
   "var(--color-accent-cool)",
-  "var(--color-fx-pink)",
+  "var(--color-fx-4)",
   "var(--color-accent-cool-2)",
-  "var(--color-fx-violet)",
+  "var(--color-fx-3)",
 ] as const;

@@ -12,6 +12,7 @@ import { formatAriary } from "@/lib/format/ariary";
 import { chooseOfferPack } from "@/lib/offers/selection";
 import { useReducedMotionPref } from "@/lib/motion/useReducedMotion";
 import { EASE_OUT, fadeReduced, fadeUp, staggerChildren } from "@/lib/motion/variants";
+import { fbEvent, META_CONTENT } from "@/lib/tracking/fpixel";
 import { pushDataLayerEvent } from "@/lib/tracking/gtm";
 import styles from "./OfferExplorer.module.css";
 
@@ -62,6 +63,13 @@ export function OfferExplorer() {
     if (id === activeId) return;
     setActiveId(id);
     pushDataLayerEvent("offer_select", { secteur: id });
+    // Meta ViewContent : la sélection d'offre est le seul « contenu produit »
+    // consulté de cette landing mono-page. cancelDemo() ci-dessus garantit que
+    // la démo auto (qui n'appelle jamais selectOffer) ne le déclenche pas.
+    fbEvent("ViewContent", {
+      content_name: getOffer(id).name,
+      content_category: META_CONTENT.offre,
+    });
   }
 
   /** Tabs avec activation automatique : les flèches déplacent focus ET sélection. */

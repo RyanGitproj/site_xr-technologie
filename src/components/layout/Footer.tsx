@@ -1,5 +1,8 @@
 import Image from "next/image";
+import Link from "next/link";
 import { GridPulse } from "@/components/fx/GridPulse";
+import { WhatsAppFooterLink } from "@/components/layout/WhatsAppFooterLink";
+import { CookiePreferencesLink } from "@/components/tracking/CookiePreferencesLink";
 import { footerContent } from "@/config/content";
 import { logoImage } from "@/config/images";
 import { siteConfig } from "@/config/site";
@@ -42,9 +45,9 @@ export function Footer() {
           <h2 className={styles.colTitle}>{footerContent.contactTitle}</h2>
           <ul className={styles.list}>
             <li>
-              <a href={whatsappHref} className={styles.link}>
+              <WhatsAppFooterLink href={whatsappHref} className={styles.link}>
                 WhatsApp
-              </a>
+              </WhatsAppFooterLink>
             </li>
             <li>
               <a href={`mailto:${siteConfig.contactEmail}`} className={styles.link}>
@@ -55,7 +58,15 @@ export function Footer() {
           </ul>
         </div>
       </div>
-      <p className={styles.mentions}>{footerContent.mentions}</p>
+      <div className={styles.legal}>
+        <p className={styles.mentions}>{footerContent.mentions}</p>
+        <div className={styles.legalLinks}>
+          <Link href="/confidentialite" className={styles.link}>
+            {footerContent.privacyLabel}
+          </Link>
+          <CookiePreferencesLink className={styles.link} />
+        </div>
+      </div>
     </footer>
   );
 }

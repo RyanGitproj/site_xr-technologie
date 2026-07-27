@@ -19,6 +19,9 @@ import { LiquidRefractFilter } from "@/components/fx/LiquidRefractFilter";
 import { MotionProvider } from "@/components/fx/MotionProvider";
 import { SmoothScroll } from "@/components/fx/SmoothScroll";
 import { AttributionCapture } from "@/components/tracking/AttributionCapture";
+import { CookieConsent } from "@/components/tracking/CookieConsent";
+import { MetaPixelGate } from "@/components/tracking/MetaPixelGate";
+import { RouteTracker } from "@/components/tracking/RouteTracker";
 import { siteConfig } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -29,6 +32,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
+
   return (
     <html lang="fr">
       <body>
@@ -38,6 +43,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Aller au contenu
         </a>
         <AttributionCapture />
+        <RouteTracker />
+        <MetaPixelGate />
         <LiquidBackground />
         <LiquidRefractFilter />
         <MotionProvider>
@@ -45,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <GlowCursor />
         </MotionProvider>
+        <CookieConsent gtmId={gtmId} />
       </body>
     </html>
   );

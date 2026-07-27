@@ -1,0 +1,90 @@
+.main {
+  position: relative;
+  padding: calc(var(--header-h) + clamp(2rem, 6svh, 4rem)) 1.5rem
+    clamp(3rem, 8svh, 5rem);
+}
+
+.panel {
+  position: relative;
+  margin-inline: auto;
+  max-width: 44rem;
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+
+.updated {
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.title {
+  margin-top: 0.75rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.intro {
+  margin-top: 1.25rem;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-ink-muted);
+}
+
+.section {
+  margin-top: 2.25rem;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.paragraph {
+  margin-top: 0.75rem;
+  line-height: 1.7;
+  color: var(--color-ink-muted);
+}
+
+.mail {
+  color: var(--color-accent-hot);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.manageButton {
+  margin-top: 1rem;
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-cta);
+  padding: 0.55rem 1.35rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.manageButton:hover {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.back {
+  margin-top: 2.5rem;
+}
+
+.backLink {
+  font-size: 0.875rem;
+  color: var(--color-ink-muted);
+  transition: color var(--dur-fast);
+}
+
+.backLink:hover {
+  color: var(--color-ink);
+}

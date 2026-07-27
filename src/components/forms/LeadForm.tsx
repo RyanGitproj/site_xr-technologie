@@ -21,6 +21,7 @@ import { OFFERS, getOffer } from "@/config/offers";
 import { formatAriary } from "@/lib/format/ariary";
 import { useOfferSelection } from "@/lib/offers/selection";
 import { readAttribution } from "@/lib/tracking/attribution";
+import { stashLeadContentName } from "@/lib/tracking/fpixel";
 import { pushDataLayerEventOnce } from "@/lib/tracking/gtm";
 import { leadSchema, type Lead } from "@/lib/validations/lead";
 import { cx } from "@/lib/cx";
@@ -111,6 +112,11 @@ export function LeadForm() {
 
   function onSubmit(lead: Lead) {
     setServerError(null);
+    // Mémorise le nom du secteur pour enrichir le Lead Meta sur /merci : le
+    // succès redirige côté serveur, sans callback client pour porter la donnée.
+    stashLeadContentName(
+      lead.secteur === "autre" ? SECTEUR_LABELS.autre : getOffer(lead.secteur).name,
+    );
     startTransition(async () => {
       const result = await submitLead(lead, readAttribution());
       if (result !== undefined && !result.ok) setServerError(result.error);

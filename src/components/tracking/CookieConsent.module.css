@@ -1,0 +1,108 @@
+/* Bandeau de consentement : matériau verre iOS 26 composé depuis .glass-panel
+   (les fallbacks prefers-reduced-transparency et no-backdrop en viennent aussi),
+   fixé en bas avec une arête lumineuse fine sur le dessus. On NE redéfinit PAS
+   le background ici : c'est --glass-fill qui densifie le verre, pour laisser les
+   fallbacks de glass-panel.css s'appliquer. */
+.banner {
+  composes: glass-panel from global;
+  /* Fill plus dense que les cards : le bandeau flotte au-dessus du contenu qui
+     défile, la lisibilité prime sur la transparence. */
+  --glass-fill: rgba(18, 9, 7, 0.66);
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 60;
+  border-radius: 0;
+  border-inline: none;
+  border-bottom: none;
+  border-top: 1px solid var(--glass-edge);
+  box-shadow:
+    0 -14px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 var(--edge-lit);
+  padding: clamp(0.9rem, 2.4svh, 1.4rem) clamp(1.25rem, 4vw, 2rem);
+}
+
+.inner {
+  margin-inline: auto;
+  display: flex;
+  max-width: 72rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+@media (min-width: 40rem) {
+  .inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.75rem;
+  }
+}
+
+.text {
+  max-width: 46rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-ink-muted);
+}
+
+.policyLink {
+  color: var(--color-accent-hot);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.policyLink:hover {
+  color: var(--color-ink);
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.75rem;
+}
+
+/* Boutons symétriques (CNIL : refuser doit être aussi accessible qu'accepter) :
+   même taille, même forme (--radius-cta), distingués par le remplissage seul. */
+.refuse,
+.accept {
+  border-radius: var(--radius-cta);
+  padding: 0.6rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.refuse {
+  border: 1px solid var(--glass-stroke);
+  color: var(--color-ink);
+}
+
+.refuse:hover {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.accept {
+  background: var(--color-accent);
+  color: var(--color-bg-deep);
+  box-shadow: var(--glow-soft);
+}
+
+.accept:hover {
+  background: var(--color-accent-hot);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .refuse:hover,
+  .accept:hover {
+    transform: translateY(-1px);
+  }
+}

@@ -46,6 +46,7 @@ import Image from "next/image";
 import { m, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
 import { diveImages, galleryImages } from "@/products/vr/config/images";
+import { PRODUCTS } from "@/config/products";
 import { ANTANANARIVO } from "@/lib/geo/madagascar";
 import { toViewPct } from "@/lib/geo/madagascarView";
 import { cx } from "@/lib/cx";
@@ -186,6 +187,38 @@ export default function FxLabPage() {
           section réelle. GlowCursor et ScrollProgress sont globaux (layout / navbar).
         </p>
       </header>
+
+      <LabSection
+        title="Thèmes des pôles (chantier multi-produits)"
+        note="Chaque pôle pose data-theme sur le wrapper de sa page et le socle (verre, accents, comète fx) suit sa palette de charte. VR = thème par défaut (:root), sans attribut. Règle centrale : aucun mélange de codes entre pôles."
+      >
+        <div className={styles.grid3}>
+          {PRODUCTS.map((product) => (
+            <div
+              key={product.id}
+              className={styles.themeCard}
+              {...(product.id === "vr" ? {} : { "data-theme": product.id })}
+            >
+              <GlassPanel thin className={styles.themePanel}>
+                <p className={styles.themeBaseline}>{product.baseline}</p>
+                <p className={styles.cardTitle}>{product.name}</p>
+                <p className={styles.cardNote}>{product.descriptor}</p>
+                <div className={styles.themeSwatches}>
+                  {["--color-accent", "--color-accent-hot", "--color-accent-deep", "--color-bg-raised", "--color-ink-muted"].map((token) => (
+                    <span
+                      key={token}
+                      title={token}
+                      className={styles.themeSwatch}
+                      style={{ background: `var(${token})` }}
+                    />
+                  ))}
+                </div>
+                <div className={styles.themeComet} />
+              </GlassPanel>
+            </div>
+          ))}
+        </div>
+      </LabSection>
 
       <LabSection
         title="Typographie v3 : display à valider"

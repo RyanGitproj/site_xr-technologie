@@ -1,0 +1,44 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { describe, expect, it } from "vitest";
+import { LIVE_PRODUCTS, PRODUCTS } from "./products";
+
+/** :root de globals.css est le thème du pôle par défaut (voir globals.css). */
+const DEFAULT_THEME_ID = "vr";
+
+describe("catalogue des pôles", () => {
+  it("ids et routes uniques", () => {
+    const ids = PRODUCTS.map((product) => product.id);
+    const routes = PRODUCTS.map((product) => product.route);
+    expect(new Set(ids).size).toBe(PRODUCTS.length);
+    expect(new Set(routes).size).toBe(PRODUCTS.length);
+  });
+
+  it("LIVE_PRODUCTS ne contient que les pôles en ligne", () => {
+    expect(LIVE_PRODUCTS.every((product) => product.status === "live")).toBe(true);
+    expect(LIVE_PRODUCTS.length).toBeGreaterThan(0);
+  });
+
+  it("chaque pôle non-défaut a son bloc [data-theme] complet dans globals.css", () => {
+    const globalsCss = readFileSync(join(__dirname, "..", "app", "globals.css"), "utf8");
+    for (const product of PRODUCTS) {
+      if (product.id === DEFAULT_THEME_ID) continue;
+      const block = new RegExp(`\\[data-theme="${product.id}"\\]\\s*\\{([^}]+)\\}`).exec(
+        globalsCss,
+      );
+      expect(block, `bloc [data-theme="${product.id}"] manquant`).not.toBeNull();
+      // Set minimal pour que le socle (verre, glows, comète) suive le pôle.
+      for (const token of [
+        "--color-bg-deep:",
+        "--color-ink:",
+        "--color-accent:",
+        "--glass-stroke:",
+        "--edge-lit:",
+        "--glow-soft:",
+        "--color-fx-cyan:",
+      ]) {
+        expect(block![1], `${token} manquant dans [data-theme="${product.id}"]`).toContain(token);
+      }
+    }
+  });
+});

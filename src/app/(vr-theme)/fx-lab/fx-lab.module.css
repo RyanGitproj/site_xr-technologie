@@ -48,6 +48,71 @@
   gap: 1.5rem;
 }
 
+/* Vitrine des thèmes par pôle : chaque carte pose data-theme et rend le
+   fond du pôle + une nappe accent derrière le verre (le blur doit avoir
+   quelque chose à flouter). Tokens only : tout vient du bloc de thème. */
+.themeCard {
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem;
+  border-radius: var(--radius-card);
+  background: var(--color-bg-deep);
+  color: var(--color-ink);
+}
+
+.themeCard::before {
+  content: "";
+  position: absolute;
+  inset: -20% -30% auto;
+  height: 90%;
+  background:
+    radial-gradient(50% 60% at 24% 30%, var(--color-accent) 0%, transparent 70%),
+    radial-gradient(40% 50% at 78% 20%, var(--color-accent-deep) 0%, transparent 70%);
+  opacity: 0.35;
+  filter: blur(24px);
+}
+
+.themePanel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+}
+
+.themeBaseline {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-hot);
+}
+
+.themeSwatches {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.themeSwatch {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-tight);
+  border: 1px solid var(--glass-edge);
+}
+
+/* Comète du pôle : les 4 positions fx en dégradé, comme ShimmerCTA. */
+.themeComet {
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    90deg,
+    var(--color-fx-cyan),
+    var(--color-fx-indigo),
+    var(--color-fx-violet),
+    var(--color-fx-pink)
+  );
+}
+
 /* Cadre de démo : hauteur par variante. */
 .demo {
   position: relative;

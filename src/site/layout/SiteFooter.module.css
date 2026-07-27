@@ -1,0 +1,85 @@
+.footer {
+  position: relative;
+  border-top: 1px solid var(--glass-edge);
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem) 2rem;
+}
+
+.grid {
+  max-width: 72rem;
+  margin-inline: auto;
+  display: grid;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.baseline {
+  margin-top: 0.75rem;
+  max-width: 26rem;
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.colTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  margin-bottom: 1rem;
+}
+
+.list {
+  display: grid;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.link {
+  color: var(--color-ink-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--pole-accent, var(--color-ink));
+}
+
+.muted {
+  color: var(--color-ink-muted);
+  opacity: 0.75;
+}
+
+.legal {
+  max-width: 72rem;
+  margin: 2.5rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--glass-edge);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.legalLinks {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.8rem;
+}

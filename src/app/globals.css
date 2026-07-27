@@ -113,6 +113,59 @@
    ne JAMAIS mélanger les codes des pôles (pas d'orange hors VR, pas de
    cyan/vert sous VR). Valeurs à affiner par pôle sur /fx-lab (phases 4-5). */
 
+/* Couleur d'IDENTITÉ de chaque pôle, indépendante du thème courant : pour
+   les surfaces multi-pôles (hero du site, navs, vitrines) qui restent sur
+   le socle neutre et n'empruntent au pôle que sa couleur en touches.
+   Un composant pose data-pole-accent="<id>" et son sous-arbre consomme
+   var(--pole-accent) : même pattern que [data-offer-accent]. */
+:root {
+  --color-pole-vr: #f5661e;
+  --color-pole-xr360: #00cfe8;
+  --color-pole-lidar: #00e5a8;
+}
+
+[data-pole-accent="vr"] {
+  --pole-accent: var(--color-pole-vr);
+}
+
+[data-pole-accent="xr360"] {
+  --pole-accent: var(--color-pole-xr360);
+}
+
+[data-pole-accent="lidar"] {
+  --pole-accent: var(--color-pole-lidar);
+}
+
+/* Socle corporate « site » (accueil, et pages transverses à terme) : bleu
+   nuit acier neutre, accent lumière froide. Les couleurs vives restent la
+   propriété des pôles (touches via --pole-accent, jamais en fond). */
+[data-theme="site"] {
+  --color-bg-deep: #060d18;
+  --color-bg-raised: #0d1a2e;
+  --color-ink: #f2f6fb;
+  --color-ink-muted: #9aacc4;
+  /* Typo déterministe : Sora/Baloo ne sont chargées que par le groupe
+     (vr-theme) ; le socle site s'affiche en Space Grotesk partout. */
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-accent: "Space Grotesk", system-ui, sans-serif;
+  --color-accent: #d9e6f6;
+  --color-accent-hot: #ffffff;
+  --color-accent-deep: #5d7392;
+  --color-fx-cyan: #ffffff;
+  --color-fx-indigo: #d9e6f6;
+  --color-fx-violet: #9ab5d8;
+  --color-fx-pink: #5d7392;
+  --color-fx-teal: #9ab5d8;
+  --glass-fill: rgba(10, 18, 32, 0.2);
+  --glass-stroke: rgba(217, 230, 246, 0.22);
+  --edge-lit: rgba(217, 230, 246, 0.55);
+  --glow-soft: 0 0 40px rgba(154, 181, 216, 0.25);
+  --glow-strong: 0 0 80px rgba(154, 181, 216, 0.38);
+  --fx-aurora-1: rgba(64, 96, 140, 0.5);
+  --fx-aurora-2: rgba(120, 150, 190, 0.32);
+  --fx-aurora-3: rgba(28, 48, 78, 0.45);
+}
+
 /* XR 360, visite virtuelle : cyan/turquoise sur bleu profond, fluide et
    aéré (jamais d'ambiance arcade ni d'orange dominant). */
 [data-theme="xr360"] {
@@ -133,6 +186,9 @@
   --edge-lit: rgba(0, 207, 232, 0.62);
   --glow-soft: 0 0 40px rgba(0, 207, 232, 0.3);
   --glow-strong: 0 0 80px rgba(0, 207, 232, 0.45);
+  --fx-aurora-1: rgba(0, 207, 232, 0.5);
+  --fx-aurora-2: rgba(0, 175, 165, 0.35);
+  --fx-aurora-3: rgba(18, 104, 168, 0.4);
 }
 
 /* XR LiDAR Opérationnel : vert laser/cyan technique sur graphite, précis
@@ -155,6 +211,9 @@
   --edge-lit: rgba(0, 229, 168, 0.62);
   --glow-soft: 0 0 40px rgba(0, 229, 168, 0.3);
   --glow-strong: 0 0 80px rgba(0, 229, 168, 0.45);
+  --fx-aurora-1: rgba(0, 229, 168, 0.4);
+  --fx-aurora-2: rgba(0, 168, 198, 0.3);
+  --fx-aurora-3: rgba(11, 38, 56, 0.5);
 }
 
 /* Accent local d'offre : un composant pose data-offer-accent="<id>" et tout

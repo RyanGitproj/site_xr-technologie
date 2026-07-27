@@ -1,0 +1,246 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.bands {
+  max-width: 72rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: clamp(3rem, 8svh, 6rem);
+}
+
+/* La bande adopte l'accent de SON pôle : tout le sous-arbre (texte accent,
+   trame GridPulse, arête et glow du verre) suit, le fond reste neutre. */
+.band {
+  --color-accent: var(--pole-accent);
+  --color-accent-hot: var(--pole-accent);
+  --glass-stroke: color-mix(in srgb, var(--pole-accent) 24%, transparent);
+  --edge-lit: color-mix(in srgb, var(--pole-accent) 55%, transparent);
+  --glow-soft: 0 0 40px color-mix(in srgb, var(--pole-accent) 24%, transparent);
+  position: relative;
+}
+
+/* Halo discret du pôle derrière sa bande : couleur en touche, jamais en aplat. */
+.band::before {
+  content: "";
+  position: absolute;
+  inset: -10% -20%;
+  background: radial-gradient(
+    45% 60% at var(--halo-x, 78%) 50%,
+    color-mix(in srgb, var(--pole-accent) 14%, transparent),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.bandGrid {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .bandGrid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  /* Alternance éditoriale : une bande sur deux inverse texte et décor. */
+  .band:nth-child(even) {
+    --halo-x: 22%;
+  }
+
+  .band:nth-child(even) .bandGrid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .band:nth-child(even) .bandContent {
+    order: 2;
+  }
+
+  .band:nth-child(even) .bandVisual {
+    order: 1;
+  }
+}
+
+.bandContent {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+}
+
+.baseline {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pole-accent);
+}
+
+.poleName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  line-height: 1.05;
+}
+
+.descriptor {
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+}
+
+.panel {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.hook {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.body {
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+}
+
+.points {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.point {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+}
+
+.point::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 2px;
+  background: var(--pole-accent);
+}
+
+.cta {
+  font-weight: 500;
+  color: var(--pole-accent);
+}
+
+.upcoming {
+  color: var(--color-ink-muted);
+  opacity: 0.8;
+}
+
+/* Zone visuelle : l'objet signature du pôle, en CSS teinté --pole-accent. */
+.bandVisual {
+  position: relative;
+  min-height: clamp(14rem, 30svh, 20rem);
+}
+
+.decor {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--radius-soft);
+}
+
+/* VR : orbe immersif + orbite inclinée. */
+.orbVr {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(58%, 15rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    color-mix(in srgb, var(--pole-accent) 55%, transparent),
+    color-mix(in srgb, var(--pole-accent) 14%, transparent) 55%,
+    transparent 72%
+  );
+}
+
+.orbitVr {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(86%, 22rem);
+  aspect-ratio: 2.2;
+  border: 1px solid color-mix(in srgb, var(--pole-accent) 45%, transparent);
+  border-radius: 50%;
+  rotate: -16deg;
+}
+
+/* 360 : double anneau + arc lumineux (le cercle panoramique de la charte). */
+.ring360 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(64%, 17rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--pole-accent) 40%, transparent);
+  background: conic-gradient(
+    from 210deg,
+    var(--pole-accent) 0 48deg,
+    transparent 48deg 360deg
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+}
+
+.ringInner360 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(46%, 12rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--pole-accent) 45%, transparent);
+}
+
+/* LiDAR : réticule de visée sur la trame GridPulse (teintée par la bande). */
+.reticleLidar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(52%, 13rem);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--pole-accent) 55%, transparent);
+  border-radius: 50%;
+}
+
+.reticleLidar::before,
+.reticleLidar::after {
+  content: "";
+  position: absolute;
+  background: color-mix(in srgb, var(--pole-accent) 65%, transparent);
+}
+
+.reticleLidar::before {
+  left: 50%;
+  top: -12%;
+  width: 1px;
+  height: 124%;
+}
+
+.reticleLidar::after {
+  top: 50%;
+  left: -12%;
+  height: 1px;
+  width: 124%;
+}

@@ -1,45 +1,27 @@
-import Link from "next/link";
-import { GlassPanel } from "@/components/fx/GlassPanel";
-import { PRODUCTS } from "@/config/products";
-import { siteConfig } from "@/config/site";
+import { AuroraField } from "@/components/fx/AuroraField";
+import { SiteFooter } from "@/site/layout/SiteFooter";
+import { SiteHeader } from "@/site/layout/SiteHeader";
+import { AboutSection } from "@/site/sections/AboutSection";
+import { ContactSection } from "@/site/sections/ContactSection";
+import { HomeHero } from "@/site/sections/HomeHero";
+import { PolesShowcase } from "@/site/sections/PolesShowcase";
 import styles from "./home.module.css";
 
-/** Accueil PROVISOIRE : liste des pôles (config/products.ts) en attendant la
-    vraie home XR Technologie (TODO.md, phase 3 du chantier multi-produits). */
+/** Accueil XR Technologie : socle neutre, chaque pôle porte SA couleur dans
+    sa zone (décision DA 27/07). Récit : promesse (3 verbes) → les pôles →
+    qui nous sommes → contact. Navigation libre, funnels dans les pôles. */
 export default function HomePage() {
   return (
-    <main id="contenu" className={styles.main}>
-      <h1 className={styles.brand}>{siteConfig.name}</h1>
-      <p className={styles.lead}>
-        L&apos;immersion au service de votre projet, depuis {siteConfig.city} : vivez la
-        réalité virtuelle là où vous êtes, faites visiter vos lieux à distance et
-        transformez vos sites en données 3D exploitables.
-      </p>
-      <div className={styles.grid}>
-        {PRODUCTS.map((product) => {
-          const card = (
-            <GlassPanel thin className={styles.card}>
-              <p className={styles.cardBaseline}>{product.baseline}</p>
-              <h2 className={styles.cardName}>{product.name}</h2>
-              <p className={styles.cardDescriptor}>{product.descriptor}</p>
-              <p className={styles.cardAction}>
-                {product.status === "live" ? (
-                  <>Découvrir →</>
-                ) : (
-                  <span className={styles.upcoming}>Bientôt en ligne</span>
-                )}
-              </p>
-            </GlassPanel>
-          );
-          return product.status === "live" ? (
-            <Link key={product.id} href={product.route} className={styles.cardLink}>
-              {card}
-            </Link>
-          ) : (
-            <div key={product.id}>{card}</div>
-          );
-        })}
-      </div>
-    </main>
+    <div data-theme="site" className={styles.site}>
+      <AuroraField className={styles.aurora} />
+      <SiteHeader />
+      <main id="contenu">
+        <HomeHero />
+        <PolesShowcase />
+        <AboutSection />
+        <ContactSection />
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

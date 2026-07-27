@@ -1,0 +1,86 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  padding: 0.75rem clamp(1rem, 3vw, 2rem) 0;
+}
+
+.panel {
+  max-width: 72rem;
+  margin-inline: auto;
+  border-radius: var(--radius-cta);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: var(--header-h);
+  padding: 0 clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nav {
+  display: none;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+.navLink {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* Le pôle colore son lien au survol : sa seule présence sur le socle. */
+.navLink:hover,
+.navLink:focus-visible {
+  color: var(--pole-accent, var(--color-ink));
+}
+
+.navUpcoming {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  opacity: 0.7;
+}
+
+.badge {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink-muted);
+}
+
+.mobileActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .nav {
+    display: flex;
+  }
+
+  .mobileActions {
+    display: none;
+  }
+}

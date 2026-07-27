@@ -193,6 +193,26 @@ export default function FxLabPage() {
         note="Chaque pôle pose data-theme sur le wrapper de sa page et le socle (verre, accents, comète fx) suit sa palette de charte. VR = thème par défaut (:root), sans attribut. Règle centrale : aucun mélange de codes entre pôles."
       >
         <div className={styles.grid3}>
+          <div className={styles.themeCard} data-theme="site">
+            <GlassPanel thin className={styles.themePanel}>
+              <p className={styles.themeBaseline}>Trois pôles. Une même exigence XR.</p>
+              <p className={styles.cardTitle}>Socle site (accueil)</p>
+              <p className={styles.cardNote}>
+                Bleu nuit acier neutre : les couleurs vives restent aux pôles.
+              </p>
+              <div className={styles.themeSwatches}>
+                {["--color-accent", "--color-accent-hot", "--color-accent-deep", "--color-bg-raised", "--color-ink-muted"].map((token) => (
+                  <span
+                    key={token}
+                    title={token}
+                    className={styles.themeSwatch}
+                    style={{ background: `var(${token})` }}
+                  />
+                ))}
+              </div>
+              <div className={styles.themeComet} />
+            </GlassPanel>
+          </div>
           {PRODUCTS.map((product) => (
             <div
               key={product.id}

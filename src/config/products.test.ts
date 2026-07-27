@@ -41,4 +41,20 @@ describe("catalogue des pôles", () => {
       }
     }
   });
+
+  it("chaque pôle a sa couleur d'identité et sa map data-pole-accent dans globals.css", () => {
+    const globalsCss = readFileSync(join(__dirname, "..", "app", "globals.css"), "utf8");
+    for (const product of PRODUCTS) {
+      expect(globalsCss).toContain(`--color-pole-${product.id}:`);
+      expect(globalsCss).toContain(`[data-pole-accent="${product.id}"]`);
+    }
+  });
+
+  it("le thème socle « site » (accueil) existe dans globals.css", () => {
+    const globalsCss = readFileSync(join(__dirname, "..", "app", "globals.css"), "utf8");
+    const block = /\[data-theme="site"\]\s*\{([^}]+)\}/.exec(globalsCss);
+    expect(block).not.toBeNull();
+    expect(block![1]).toContain("--color-accent:");
+    expect(block![1]).toContain("--fx-aurora-1:");
+  });
 });

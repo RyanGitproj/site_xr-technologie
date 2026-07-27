@@ -55,7 +55,7 @@
   left: -10%;
   width: 70vw;
   height: 70vw;
-  background: radial-gradient(circle, rgba(245, 102, 30, 0.55), transparent 62%);
+  background: radial-gradient(circle, var(--fx-aurora-1, rgba(245, 102, 30, 0.55)), transparent 62%);
   animation: aurora-drift-1 26s ease-in-out infinite alternate;
 }
 
@@ -64,7 +64,7 @@
   right: -20%;
   width: 55vw;
   height: 55vw;
-  background: radial-gradient(circle, rgba(232, 90, 28, 0.5), transparent 60%);
+  background: radial-gradient(circle, var(--fx-aurora-2, rgba(232, 90, 28, 0.5)), transparent 60%);
   animation: aurora-drift-2 32s ease-in-out infinite alternate;
 }
 
@@ -73,7 +73,7 @@
   left: 20%;
   width: 50vw;
   height: 50vw;
-  background: radial-gradient(circle, rgba(232, 40, 24, 0.35), transparent 65%);
+  background: radial-gradient(circle, var(--fx-aurora-3, rgba(232, 40, 24, 0.35)), transparent 65%);
   animation: aurora-drift-3 38s ease-in-out infinite alternate;
 }
 

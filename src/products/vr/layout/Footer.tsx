@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { GridPulse } from "@/components/fx/GridPulse";
-import { WhatsAppFooterLink } from "@/products/vr/layout/WhatsAppFooterLink";
+import { WhatsAppFooterLink } from "@/components/tracking/WhatsAppFooterLink";
 import { CookiePreferencesLink } from "@/components/tracking/CookiePreferencesLink";
 import { footerContent } from "@/products/vr/config/content";
 import { logoImage } from "@/products/vr/config/images";

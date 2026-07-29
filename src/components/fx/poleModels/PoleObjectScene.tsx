@@ -73,7 +73,10 @@ export default function PoleObjectScene({
         }}
         onCreated={({ gl }) => gl.setClearAlpha(0)}
       >
-        <PerspectiveCamera makeDefault position={[0, 0.3, 4.1]} fov={38} />
+        {/* Recul calculé sur le PLUS ENCOMBRANT des modèles (le scanner sur
+            trépied) : à 4,1 la marge basse tombait à ~0,01 unité et les pieds
+            étaient rognés par le bord du cadre en mobile. */}
+        <PerspectiveCamera makeDefault position={[0, 0.25, 4.75]} fov={38} />
         {/* Accent en RIM discret : l'objet reste métal/verre lisible, la
             couleur du pôle borde les arêtes sans teindre les corps. */}
         <ambientLight intensity={0.65} />

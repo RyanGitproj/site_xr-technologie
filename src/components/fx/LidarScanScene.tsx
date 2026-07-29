@@ -14,11 +14,17 @@ import {
   type Mesh,
   type MeshBasicMaterial,
   type LineSegments,
+  type PerspectiveCamera as PerspectiveCameraImpl,
   type Points,
   type ShaderMaterial,
 } from "three";
 import { ramp } from "@/lib/motion/sceneRamp";
-import { SCANNER_POSITION, buildPointCloud, buildWireframe } from "@/lib/lidar/scanModel";
+import {
+  SCANNER_POSITION,
+  buildPointCloud,
+  buildWireframe,
+  scanFraming,
+} from "@/lib/lidar/scanModel";
 import ScannerModel from "./poleModels/ScannerModel";
 import styles from "./LidarScanScene.module.css";
 
@@ -154,12 +160,24 @@ function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
       mat.opacity = ramp(p, 0.6, 0.78, 0, 0.85);
     }
 
-    /* Orbite caméra (état du callback : jamais mutée en portée de rendu). */
+    /* Orbite caméra (état du callback : jamais mutée en portée de rendu).
+       Le cadrage s'adapte à la FORME du canvas : en portrait le champ
+       horizontal se referme et le scanner sortait du cadre. */
+    const framing = scanFraming(state.size.width / state.size.height, p);
+    const camera = state.camera as PerspectiveCameraImpl;
+    if (Math.abs(camera.fov - framing.fovDeg) > 0.01) {
+      camera.fov = framing.fovDeg;
+      camera.updateProjectionMatrix();
+    }
     const azimut = ramp(p, 0, 1, -40 * DEG, 38 * DEG) + gx * 0.06;
-    const radius = ramp(p, 0, 0.7, 15, 10.5);
+    const radius = ramp(p, 0, 0.7, 15, 10.5) * framing.radiusScale;
     const height = ramp(p, 0, 0.7, 5.2, 3.4) + gy * 0.4;
-    state.camera.position.set(Math.sin(azimut) * radius, height, Math.cos(azimut) * radius);
-    state.camera.lookAt(0, 1.1, 0);
+    camera.position.set(
+      framing.targetX + Math.sin(azimut) * radius,
+      height,
+      Math.cos(azimut) * radius,
+    );
+    camera.lookAt(framing.targetX, framing.targetY, 0);
   });
 
   return (

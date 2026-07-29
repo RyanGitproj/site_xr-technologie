@@ -123,4 +123,12 @@
     padding-bottom: 18svh;
     padding-right: 1.25rem;
   }
+
+  /* Le nuage occupe tout le cadre en portrait : la légende ne se pose plus
+     sur du fond vide, ses plaques deviennent quasi opaques pour rester
+     lisible (fill, jamais de backdrop-filter dans un stage). */
+  .phaseTitle,
+  .phaseBody {
+    background: color-mix(in srgb, var(--color-bg-deep) 94%, transparent);
+  }
 }

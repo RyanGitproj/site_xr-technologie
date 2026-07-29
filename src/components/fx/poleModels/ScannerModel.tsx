@@ -31,7 +31,7 @@ export default function ScannerModel({ accent }: ScannerModelProps) {
   });
 
   return (
-    <group position={[0, 0.28, 0]} scale={1.22}>
+    <group position={[0, 0.28, 0]} scale={1.12}>
       {/* Trépied : 3 jambes évasées depuis le moyeu. */}
       {LEG_ANGLES.map((angle) => (
         <group key={angle} rotation={[0, angle, 0]}>

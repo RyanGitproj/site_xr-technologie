@@ -253,8 +253,10 @@
     height: 1.8rem;
   }
 
+  /* Cadre redressé en portrait : l'invite remonte au tiers haut et le
+     sélecteur reste en pied, la vue garde tout le centre. */
   .hint {
-    top: 52%;
+    top: 30%;
   }
 }
 

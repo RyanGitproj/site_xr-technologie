@@ -62,6 +62,12 @@
   position: relative;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  /* Mobile : un 16/9 ne laisse que ~200 px de haut, où l'invite et le
+     sélecteur de scènes recouvraient la vue. Le cadre se redresse pour que
+     l'on VOIE le lieu, pas ses commandes. */
+  @media (max-width: 560px) {
+    aspect-ratio: 4 / 5;
+  }
   border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--glass-stroke));
   border-radius: var(--radius-card);
   background: var(--color-bg-deep);

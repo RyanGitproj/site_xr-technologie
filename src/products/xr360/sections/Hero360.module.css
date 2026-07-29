@@ -163,6 +163,33 @@
   gap: 0.6rem;
 }
 
+/* Mobile : bande à défilement horizontal avec snap (pattern des portes du
+   hero d'accueil). En s'enroulant sur plusieurs lignes, la rangée décalée
+   retombait sur les libellés de la section suivante. Elle file jusqu'aux
+   bords de l'écran : marges négatives compensées par un padding égal, donc
+   aucun débordement du document. */
+@media (max-width: 767px) {
+  /* Une rangée en nowrap remonte la largeur MINIMALE de la colonne de grille
+     du hero : sans ce min-width, la colonne passait à 403 px sur un écran de
+     390 et rognait le titre. Mesuré, pas supposé. */
+  .chipsRow {
+    min-width: 0;
+  }
+
+  .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    margin-inline: calc(-1 * clamp(1.25rem, 4vw, 3rem));
+    padding: 0 clamp(1.25rem, 4vw, 3rem) 0.25rem;
+  }
+
+  .chip {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+
 .chip {
   display: inline-flex;
   align-items: center;

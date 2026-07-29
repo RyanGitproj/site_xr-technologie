@@ -108,32 +108,71 @@
   color: var(--color-ink-muted);
 }
 
-.actions {
+/* Flux de données 01-05 (ex-section fusionnée) : bande numérotée sous la
+   scène, marqueurs carrés (charte angles nets). */
+.flow {
   max-width: 72rem;
-  margin: 1.75rem auto 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 2rem;
-  justify-content: center;
+  margin: calc(var(--stack-gap) * 0.75) auto 0;
+  display: grid;
+  gap: 1rem;
 }
 
-.action {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+.flowTitle {
   font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.flowSteps {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.flowStep {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  align-content: start;
+  padding: 0.9rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 16%, transparent);
+  border-radius: var(--radius-tight);
+}
+
+.flowNumber {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.flowStepTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.flowNote {
+  font-size: 0.78rem;
+  font-style: italic;
   color: var(--color-ink-muted);
 }
 
-.action::before {
-  content: "";
-  width: 0.55rem;
-  height: 0.55rem;
-  border: 1px solid var(--color-accent);
+@media (min-width: 900px) {
+  .flowSteps {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* Connecteur entre repères. */
+  .flowStep:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 1.35rem;
+    right: -0.75rem;
+    width: 0.75rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  }
 }
 
 /* Comparaison d'avancement : trois états, même cadrage. */

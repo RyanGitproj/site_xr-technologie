@@ -16,6 +16,7 @@
 }
 
 .card {
+  position: relative;
   height: 100%;
   padding: 1.5rem;
   display: grid;
@@ -23,10 +24,52 @@
   align-content: start;
 }
 
+/* Coin accent (restyle refonte, langage PDF) : tick lumineux haut-droit. */
+.card::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 1rem;
+  height: 1rem;
+  border-top: 2px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
+  border-right: 2px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
+  border-top-right-radius: var(--radius-card);
+  pointer-events: none;
+}
+
 /* Offre mise en avant : l'arête du verre passe à l'accent (GlassPanel
    borde avec --glass-edge), sans changer le fond. */
 .cardFeatured {
   --glass-edge: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+/* Composition devices (lot J, PNG alpha) : la panoplie posée en tête de
+   carte sur un halo cyan discret. */
+.visual {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  margin: -0.25rem -0.25rem 0;
+}
+
+.visualHalo {
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  translate: -50% -50%;
+  width: 80%;
+  aspect-ratio: 1.6;
+  border-radius: 50%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--color-accent) 14%, transparent),
+    transparent 70%
+  );
+}
+
+.visualImg {
+  object-fit: contain;
+  padding: 0.4rem;
 }
 
 .offerName {
@@ -103,6 +146,44 @@
   width: 1.05rem;
   height: 1.05rem;
   color: var(--color-accent);
+}
+
+/* Périmètre (ex-Clarification) : note compacte, liseré LiDAR via
+   data-pole-accent (la passerelle porte la couleur du pôle cible). */
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  max-width: 52rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--pole-accent, var(--color-accent)) 30%, var(--glass-stroke));
+  border-left-width: 3px;
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 55%, transparent);
+  font-size: 0.88rem;
+  color: var(--color-ink-muted);
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  translate: 0 0.15rem;
+  color: var(--pole-accent, var(--color-accent));
+}
+
+.noteTitle {
+  color: var(--color-ink);
+}
+
+.noteLink {
+  color: var(--pole-accent, var(--color-accent));
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.noteLink:hover {
+  text-decoration: underline;
 }
 
 @media (min-width: 900px) {

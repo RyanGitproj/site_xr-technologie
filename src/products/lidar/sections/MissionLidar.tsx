@@ -1,11 +1,13 @@
-import { Check } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { missionLidar } from "@/products/lidar/config/content";
 import styles from "./MissionLidar.module.css";
 
-/** La mission en 5 étapes (timeline technique) + ce que la captation
-    améliore concrètement. */
+/** La mission en 5 étapes (timeline technique resserrée) + les engagements
+    avant intervention en accordéon natif (disclosure façon Objections /vr)
+    + les LIMITES LÉGALES, toujours VISIBLES (jamais en accordéon : c'est
+    un engagement, pas un détail), texte fidèle à la brochure. */
 export function MissionLidar() {
   return (
     <section id={missionLidar.id} className={styles.section}>
@@ -24,21 +26,37 @@ export function MissionLidar() {
           </RevealItem>
         ))}
       </RevealGroup>
-      <RevealGroup className={styles.improvements}>
-        <RevealItem>
-          <h3 className={styles.improvementsTitle}>{missionLidar.improvementsTitle}</h3>
-        </RevealItem>
-        <RevealItem>
-          <ul className={styles.improvementsList}>
-            {missionLidar.improvements.map((item) => (
-              <li key={item} className={styles.improvement}>
-                <Check aria-hidden="true" className={styles.checkIcon} />
-                {item}
+
+      {/* Engagements : le détail contractuel se déplie à la demande. */}
+      <div className={styles.engagements}>
+        <details className={styles.details}>
+          <summary className={styles.summary}>
+            {missionLidar.engagementsTitle}
+            <ChevronDown aria-hidden="true" className={styles.chevron} />
+          </summary>
+          <ul className={styles.engagementsList}>
+            {missionLidar.engagements.map((engagement) => (
+              <li key={engagement.title} className={styles.engagement}>
+                <p className={styles.engagementTitle}>{engagement.title}</p>
+                <p className={styles.engagementBody}>{engagement.body}</p>
               </li>
             ))}
           </ul>
-        </RevealItem>
-      </RevealGroup>
+        </details>
+      </div>
+
+      {/* LÉGAL : bloc visible, texte fidèle, ancre du renvoi du CTA final. */}
+      <div id={missionLidar.limitsId} className={styles.limits}>
+        <h3 className={styles.limitsTitle}>{missionLidar.limitsTitle}</h3>
+        <ul className={styles.limitsList}>
+          {missionLidar.limits.map((limit) => (
+            <li key={limit} className={styles.limit}>
+              {limit}
+            </li>
+          ))}
+        </ul>
+        <p className={styles.adaptNote}>{missionLidar.adaptNote}</p>
+      </div>
     </section>
   );
 }

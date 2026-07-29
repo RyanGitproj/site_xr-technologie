@@ -2,11 +2,8 @@ import {
   Building2,
   Camera,
   Clapperboard,
-  GraduationCap,
   Globe,
   Headset,
-  Hotel,
-  Landmark,
   Layers,
   Link2,
   Mail,
@@ -20,10 +17,8 @@ import {
   Share2,
   ShieldCheck,
   Smartphone,
-  Store,
   Tablet,
   Users,
-  UtensilsCrossed,
   Video,
   type LucideIcon,
 } from "lucide-react";
@@ -42,9 +37,9 @@ import type { Brief } from "@/products/xr360/lib/brief";
 
 /* Navigation interne par scrollTo (aucune ancre d'URL) : id = id de section. */
 export const nav360 = [
-  { label: "Atouts", id: "atouts" },
+  { label: "Démo", id: "demo" },
   { label: "Prestations", id: "prestations" },
-  { label: "Lieux", id: "lieux" },
+  { label: "Série", id: "serie" },
   { label: "Déroulement", id: "deroulement" },
   { label: "Offres", id: "offres" },
 ] as const;
@@ -79,106 +74,133 @@ export type IconItem = {
   body: string;
 };
 
+/** Bande atouts (respiration façon /vr) : les bénéfices se LISENT d'un coup
+    d'œil, la preuve se VIT dans la fenêtre 360 juste en dessous. */
 export const benefits360 = {
   id: "atouts",
-  kicker: "Montrer. Visiter. Valoriser.",
-  title: "Ce que la visite change pour vous",
+  ariaLabel: "Atouts XR 360",
   items: [
-    {
-      icon: Globe,
-      title: "Faire découvrir à distance",
-      body: "Vos prospects, clients et partenaires explorent votre établissement sans se déplacer : la première visite a déjà eu lieu.",
-    },
-    {
-      icon: Layers,
-      title: "Faciliter la projection",
-      body: "Volumes, organisation des espaces, ambiance : le visiteur comprend le lieu et s'y projette au lieu de l'imaginer.",
-    },
-    {
-      icon: Building2,
-      title: "Valoriser votre établissement",
-      body: "Hôtel, bien immobilier, restaurant ou locaux : votre lieu se présente avec un support moderne et immersif.",
-    },
-    {
-      icon: Share2,
-      title: "Partager facilement",
-      body: "La visite s'intègre à votre communication digitale et se diffuse auprès de votre public sur tous les supports.",
-    },
-  ] satisfies readonly IconItem[],
-} as const;
-
-export const services360 = {
-  id: "prestations",
-  kicker: "Nos prestations XR 360",
-  title: "Un lieu réel, une expérience immersive",
-  subtitle:
-    "XR 360 ne se limite pas à prendre des photos : nous créons une visite qui permet à votre public de comprendre, d'explorer et de se projeter.",
-  items: [
-    {
-      icon: Camera,
-      title: "Captation photo 360°",
-      body: "Des vues panoramiques haute qualité pour observer chaque espace dans toutes les directions.",
-    },
-    {
-      icon: Video,
-      title: "Captation vidéo 360°",
-      body: "Des séquences immersives qui donnent la sensation d'être présent dans l'environnement filmé.",
-    },
-    {
-      icon: Plane,
-      title: "Film FPV au drone",
-      body: "Un survol dynamique du lieu au drone DJI Avata : le format spectaculaire qui complète la visite.",
-    },
-    {
-      icon: MapPin,
-      title: "Création de visite virtuelle",
-      body: "Vos espaces organisés en parcours interactif fluide et intuitif, avec points d'intérêt et navigation libre.",
-    },
-    {
-      icon: Headset,
-      title: "Présentation en casque VR",
-      body: "Une immersion totale pour vos rendez-vous et présentations : l'expérience la plus réaliste qui soit.",
-    },
-    {
-      icon: Clapperboard,
-      title: "Vidéo 360 en ligne",
-      body: "Vos séquences publiées et consultables en ligne : le lieu se visite depuis n'importe où, à tout moment.",
-    },
-    {
-      icon: Smartphone,
-      title: "Formats réseaux sociaux",
-      body: "Des extraits verticaux taillés pour vos réseaux : votre lieu se découvre aussi dans le fil de votre public.",
-    },
-    {
-      icon: Share2,
-      title: "Intégration digitale",
-      body: "Des contenus prêts à être intégrés sur votre site, vos réseaux sociaux ou vos campagnes digitales.",
-    },
-  ] satisfies readonly IconItem[],
-} as const;
-
-/** Hub des formats (Funnel V2, réf. PDF boss p9) : une seule captation
-    alimente tous les usages, FPV et 360 sont complémentaires. */
-export const hub360 = {
-  id: "experiences",
-  kicker: "Une captation, plusieurs formats",
-  title: "Un lieu. Plusieurs expériences.",
-  subtitle:
-    "Le film FPV et la vidéo 360 ne se remplacent pas, ils se complètent : une même captation alimente votre site, vos rendez-vous commerciaux, vos réseaux et le casque.",
-  center: "Votre lieu",
-  satellites: [
-    "Captation 360°",
-    "Film FPV",
-    "Visite interactive",
-    "Vidéo 360 en ligne",
-    "Présentation Quest 3",
-    "Formats sociaux",
+    { icon: Globe, label: "Faire découvrir à distance" },
+    { icon: Layers, label: "Faciliter la projection" },
+    { icon: Building2, label: "Valoriser l'établissement" },
+    { icon: Share2, label: "Partager partout" },
   ],
 } as const;
 
-/** Démo exploration 3D (Funnel V2, réf. PDF boss p10) : le viewer réel se
-    branche via embedUrl quand la captation démo existera (demande studio
-    n°1) ; en attendant, cadre d'attente honnête + CTA visite pilote. */
+export type ServiceFamily = {
+  id: "captation" | "experience" | "diffusion";
+  label: string;
+  intro: string;
+  items: readonly IconItem[];
+  /** Livrables envisageables de la famille (fond brochure + PDF V2), dits
+      UNE seule fois sur la page : ici, avec la prestation qui les produit. */
+  deliverables: readonly string[];
+};
+
+/** Les 8 prestations regroupées en 3 familles derrière un sélecteur (une
+    famille visible à la fois : disclosure façon /vr). Absorbe l'ancienne
+    liste séparée des livrables et l'idée du hub « une captation, plusieurs
+    formats ». */
+export const services360 = {
+  id: "prestations",
+  kicker: "Une captation, plusieurs formats",
+  title: "Un lieu réel, une expérience immersive",
+  subtitle:
+    "Trois familles de prestations qui se complètent : choisissez votre angle, les livrables suivent.",
+  selectorLabel: "Choisir une famille de prestations",
+  deliverablesLabel: "Livrables envisageables",
+  families: [
+    {
+      id: "captation",
+      label: "Captation",
+      intro: "La matière première : votre lieu saisi dans toutes les directions.",
+      items: [
+        {
+          icon: Camera,
+          title: "Captation photo 360°",
+          body: "Des vues panoramiques haute qualité pour observer chaque espace dans toutes les directions.",
+        },
+        {
+          icon: Video,
+          title: "Captation vidéo 360°",
+          body: "Des séquences immersives qui donnent la sensation d'être présent dans l'environnement filmé.",
+        },
+        {
+          icon: Plane,
+          title: "Film FPV au drone",
+          body: "Un survol dynamique du lieu au drone DJI Avata : le format spectaculaire qui complète la visite.",
+        },
+      ],
+      deliverables: ["Photographies panoramiques 360°", "Séquences vidéo 360°", "Film FPV au drone"],
+    },
+    {
+      id: "experience",
+      label: "Expérience",
+      intro: "La captation devient un parcours que votre visiteur explore librement.",
+      items: [
+        {
+          icon: MapPin,
+          title: "Création de visite virtuelle",
+          body: "Vos espaces organisés en parcours interactif fluide et intuitif, avec points d'intérêt et navigation libre.",
+        },
+        {
+          icon: Headset,
+          title: "Présentation en casque VR",
+          body: "Une immersion totale pour vos rendez-vous et présentations : l'expérience la plus réaliste qui soit.",
+        },
+      ],
+      deliverables: [
+        "Visite virtuelle interactive",
+        "Lien de consultation",
+        "Présentation immersive casque VR",
+      ],
+    },
+    {
+      id: "diffusion",
+      label: "Diffusion",
+      intro: "L'expérience part à la rencontre de votre public, sur ses écrans.",
+      items: [
+        {
+          icon: Clapperboard,
+          title: "Vidéo 360 en ligne",
+          body: "Vos séquences publiées et consultables en ligne : le lieu se visite depuis n'importe où, à tout moment.",
+        },
+        {
+          icon: Smartphone,
+          title: "Formats réseaux sociaux",
+          body: "Des extraits verticaux taillés pour vos réseaux : votre lieu se découvre aussi dans le fil de votre public.",
+        },
+        {
+          icon: Share2,
+          title: "Intégration digitale",
+          body: "Des contenus prêts à être intégrés sur votre site, vos réseaux sociaux ou vos campagnes digitales.",
+        },
+      ],
+      deliverables: [
+        "Intégration site internet",
+        "Extraits pour communication digitale",
+        "Supports de présentation commerciaux",
+      ],
+    },
+  ] satisfies readonly ServiceFamily[],
+} as const;
+
+/** Scène de la fenêtre 360 (fx Pano360Window) : hotspots en coordonnées
+    image (u,v ∈ 0..1). `projection: "sphere"` le jour où l'équirectangulaire
+    réelle (lot G) remplace la photo large : aucun changement de code. */
+export type PanoSceneContent = {
+  id: string;
+  label: string;
+  image: ImageSlot;
+  projection?: "cylinder" | "sphere";
+  arcDeg?: number;
+  hotspots: readonly { u: number; v: number; label: string }[];
+};
+
+/** Démo exploration 3D (Funnel V2, réf. PDF boss p10) : la fenêtre 360
+    interactive fait VIVRE l'expérience sur des images illustratives (la
+    mention l'assume) ; le viewer réel se branche via embedUrl quand la
+    captation démo existera (demande studio n°1) et reste PRIORITAIRE. */
 export const demo360 = {
   id: "demo",
   kicker: "La preuve par l'exploration",
@@ -192,16 +214,80 @@ export const demo360 = {
   ],
   embedUrl: null as string | null,
   /** Ambiance du cadre viewer tant que embedUrl est null (lot D Codex,
-      illustratif : la mention l'assume). */
+      illustratif : la mention l'assume). Sert aussi de repli à la fenêtre. */
   preview: {
     src: "/images/funnel-v2/xr360-pano-lobby.webp",
     alt: "Lobby d'hôtel tropical au crépuscule, vue panoramique",
     width: 1920,
     height: 960,
   } as ImageSlot | null,
+  /** Équirectangulaires seamless (lot G Codex, contrôlées + raccord fondu) :
+      la fenêtre tourne en SPHÈRE COMPLÈTE, regard libre à 360°. */
+  panoScenes: [
+    {
+      id: "lobby",
+      label: "Accueil",
+      projection: "sphere",
+      image: {
+        src: "/images/funnel-v2/xr360-equi-lobby.webp",
+        alt: "Lobby d'hôtel tropical au crépuscule, panorama 360",
+        width: 4096,
+        height: 2048,
+      },
+      hotspots: [
+        { u: 0.5, v: 0.52, label: "Réception" },
+        { u: 0.13, v: 0.6, label: "Salon" },
+        { u: 0.88, v: 0.5, label: "Piscine" },
+      ],
+    },
+    {
+      id: "chambre",
+      label: "Chambre",
+      projection: "sphere",
+      image: {
+        src: "/images/funnel-v2/xr360-equi-chambre.webp",
+        alt: "Chambre de lodge avec moustiquaire, panorama 360",
+        width: 4096,
+        height: 2048,
+      },
+      hotspots: [
+        { u: 0.22, v: 0.55, label: "Espace nuit" },
+        { u: 0.5, v: 0.5, label: "Vue extérieure" },
+      ],
+    },
+    {
+      id: "restaurant",
+      label: "Restaurant",
+      projection: "sphere",
+      image: {
+        src: "/images/funnel-v2/xr360-equi-restaurant.webp",
+        alt: "Salle de restaurant chaleureuse, panorama 360",
+        width: 4096,
+        height: 2048,
+      },
+      hotspots: [
+        { u: 0.5, v: 0.6, label: "Salle" },
+        { u: 0.14, v: 0.58, label: "Tables côté mer" },
+      ],
+    },
+  ] satisfies readonly PanoSceneContent[],
+  panoHint: "Glissez pour regarder autour",
+  panoGyroCta: "Activer le gyroscope",
+  /** Chips « pour qui » au-dessus de la fenêtre (ex-section Lieux, dont les
+      7 types sont conservés : les descriptions redisaient la démo). */
+  placesLabel: "Pour tous types de lieux",
+  places: [
+    "Hôtels & hébergements",
+    "Immobilier",
+    "Restaurants",
+    "Commerces & showrooms",
+    "Écoles & formations",
+    "Sites culturels & patrimoniaux",
+    "Entreprises",
+  ],
   placeholderTitle: "Votre lieu, exploré à 360°",
   placeholderNote:
-    "Notre visite de démonstration arrive. En attendant, demandez une visite pilote : nous vous montrons l'expérience sur VOTRE lieu.",
+    "Illustration interactive : demandez une visite pilote, nous vous montrons l'expérience sur VOTRE lieu.",
   cta: "Demander une visite pilote",
   ctaTargetId: "brief",
   mention: "Visualisation illustrative",
@@ -220,8 +306,7 @@ export const series360 = {
   id: "serie",
   kicker: "Le format récurrent",
   title: "Transformez votre lieu en série immersive",
-  subtitle:
-    "Plus qu'une visite : un rendez-vous vidéo 360 qui raconte votre lieu épisode après épisode, inspire votre public et le fait revenir.",
+  subtitle: "Un rendez-vous vidéo 360 qui raconte votre lieu, épisode après épisode.",
   episodes: [
     {
       title: "L'arrivée",
@@ -304,14 +389,6 @@ export const series360 = {
       },
     },
   ] as readonly Episode[],
-  diffusionTitle: "Une série, tous vos canaux",
-  diffusion: [
-    { icon: Globe, label: "Web" },
-    { icon: MonitorPlay, label: "Vidéo 360 en ligne" },
-    { icon: Headset, label: "Quest 3" },
-    { icon: Monitor, label: "Écrans" },
-    { icon: Smartphone, label: "Formats sociaux" },
-  ],
   cta: "Créer ma chaîne immersive",
   ctaTargetId: "brief",
 } as const;
@@ -328,6 +405,9 @@ export type Offer360 = {
   featured?: boolean;
   /** Supports du brief présélectionnés au choix de l'offre. */
   supports: readonly Brief["supports"][number][];
+  /** Composition devices (lot J Codex, PNG alpha → webp) : la panoplie de
+      l'offre posée en tête de carte, façon p12 du PDF boss. */
+  visual: ImageSlot | null;
 };
 
 /** Trois niveaux d'offre sur devis (Funnel V2, réf. PDF boss p12). Règle
@@ -352,6 +432,12 @@ export const offers360 = {
         "Partage facile",
       ],
       supports: ["site-internet", "email-qr"],
+      visual: {
+        src: "/images/funnel-v2/xr360-offre-visite.webp",
+        alt: "Ordinateur portable, smartphone et chevalet QR code",
+        width: 1400,
+        height: 933,
+      },
     },
     {
       id: "experience-360",
@@ -365,6 +451,12 @@ export const offers360 = {
       ],
       featured: true,
       supports: ["site-internet", "reseaux-sociaux"],
+      visual: {
+        src: "/images/funnel-v2/xr360-offre-experience.webp",
+        alt: "Caméra 360 sur perche, ordinateur portable et smartphone",
+        width: 1400,
+        height: 933,
+      },
     },
     {
       id: "signature-fpv-quest",
@@ -377,6 +469,12 @@ export const offers360 = {
         "Démonstration commerciale impactante",
       ],
       supports: ["reseaux-sociaux", "casque-vr"],
+      visual: {
+        src: "/images/funnel-v2/xr360-offre-signature.webp",
+        alt: "Drone FPV, caméra 360, casque VR et ordinateur portable",
+        width: 1400,
+        height: 933,
+      },
     },
   ] as readonly Offer360[],
   reassurance: [
@@ -384,69 +482,20 @@ export const offers360 = {
     { icon: ShieldCheck, label: "Données sécurisées" },
     { icon: Layers, label: "Livrables exploitables et évolutifs" },
   ],
-  pilotCta: "Demander une visite pilote",
-  pilotTargetId: "brief",
-} as const;
-
-export const places360 = {
-  id: "lieux",
-  kicker: "Pour tous types de lieux",
-  title: "Votre lieu mérite d'être exploré",
-  items: [
-    {
-      icon: Hotel,
-      title: "Hôtels & hébergements",
-      body: "Faites découvrir vos chambres, vos espaces communs et votre environnement avant la réservation.",
-    },
-    {
-      icon: Building2,
-      title: "Immobilier",
-      body: "Valorisez vos biens, maisons, appartements, villas ou programmes immobiliers.",
-    },
-    {
-      icon: UtensilsCrossed,
-      title: "Restaurants",
-      body: "Présentez votre salle, votre terrasse et l'ambiance de votre établissement.",
-    },
-    {
-      icon: Store,
-      title: "Commerces & showrooms",
-      body: "Mettez en valeur vos espaces, vos produits et votre expérience client.",
-    },
-    {
-      icon: GraduationCap,
-      title: "Écoles & formations",
-      body: "Faites découvrir vos salles, vos équipements et votre environnement pédagogique.",
-    },
-    {
-      icon: Landmark,
-      title: "Sites culturels & patrimoniaux",
-      body: "Partagez vos lieux, votre histoire et votre patrimoine avec le plus grand nombre.",
-    },
-    {
-      icon: Building2,
-      title: "Entreprises",
-      body: "Présentez vos bureaux, vos locaux, votre siège ou vos espaces professionnels.",
-    },
-  ] satisfies readonly IconItem[],
-  visitorTitle: "Ce que votre visiteur peut faire",
-  visitorItems: [
-    "Observer chaque espace à 360°",
-    "Se déplacer librement d'une zone à l'autre",
-    "Suivre un parcours complet et structuré",
-    "Comprendre les volumes et l'agencement",
-    "Se projeter avant de se déplacer",
-    "Partager la visite en quelques clics",
-    "Consulter à distance, depuis n'importe quel appareil",
-  ],
+  /** Périmètre (ex-Clarification360, condensé fidèle à la règle charte :
+      jamais de promesse de mesure côté 360) + passerelle LiDAR. */
+  note: {
+    title: "Périmètre clair",
+    body: "XR 360 présente et valorise un lieu : une prestation d'image immersive. Elle ne promet ni mesures techniques, ni plans, ni nuages de points.",
+    bridge: "Pour les relevés métriques, Scan-to-CAD et Scan-to-BIM :",
+  },
 } as const;
 
 export const process360 = {
   id: "deroulement",
   kicker: "Comment se déroule une intervention",
   title: "Vous connaissez votre lieu. Nous organisons sa découverte.",
-  subtitle:
-    "Chaque projet commence par une question simple : que doit comprendre, ressentir ou découvrir votre visiteur ? À partir de cet objectif, XR 360 prépare un parcours adapté à votre lieu, votre public et vos supports de diffusion.",
+  subtitle: "Que doit comprendre, ressentir, découvrir votre visiteur ? Tout part de là.",
   steps: [
     {
       icon: MessagesSquare,
@@ -476,20 +525,12 @@ export const process360 = {
   ],
 } as const;
 
+/** Diffusion (recentrée) : LA seule liste « où ça se voit » de la page ;
+    les livrables détaillés vivent avec leur famille de prestation. */
 export const deliverables360 = {
   id: "livrables",
-  kicker: "Livrables envisageables",
+  kicker: "Diffusion et partage",
   title: "Une captation, tous vos supports",
-  items: [
-    "Photographies panoramiques 360°",
-    "Séquences vidéo 360°",
-    "Visite virtuelle interactive",
-    "Lien de consultation",
-    "Intégration site internet",
-    "Présentation immersive casque VR",
-    "Extraits pour communication digitale",
-    "Supports de présentation commerciaux",
-  ],
   diffusionTitle: "Diffusion et compatibilité",
   /** Mockups devices (pattern validé sur /fx-lab) : les écrans affichent
       les panoramas du lot D, la preuve que la même captation vit sur tous
@@ -525,17 +566,7 @@ export const deliverables360 = {
   ],
 } as const;
 
-/** Clarification de périmètre (règle centrale de la charte : jamais de
-    promesse de mesure côté 360). Passerelle vers le pôle LiDAR. */
-export const clarification360 = {
-  title: "Clarification importante",
-  body: "XR 360 permet de visiter et de valoriser un lieu : c'est une prestation de présentation immersive et de communication visuelle. Elle ne promet ni mesures techniques, ni plans, ni nuages de points.",
-  bridge:
-    "Les relevés métriques, nuages de points, Scan-to-CAD et Scan-to-BIM relèvent d'un pôle distinct : XR LiDAR Opérationnel.",
-} as const;
-
 export const finalCta360 = {
-  kicker: "Montrer. Visiter. Valoriser.",
   /** Fond d'ambiance (lot D, chambre de lodge) : voilé fort, le texte
       reste le sujet. */
   image: {

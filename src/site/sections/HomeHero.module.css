@@ -20,6 +20,14 @@
 
 /* Fond photo (lot C, composée pour ça : équipe à droite, tiers gauche
    sombre). Premier dans le DOM : le contenu positionné passe devant. */
+/* Conteneur du calque parallax du fond : occupe tout le hero, le contenu
+   et les cartes portes restent hors calques. */
+.decorScene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .bg {
   position: absolute;
   inset: 0;

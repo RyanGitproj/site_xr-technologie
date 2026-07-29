@@ -1,38 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import type { MotionValue } from "framer-motion";
 import { diveImages } from "@/products/vr/config/images";
+import { useSceneGate } from "./useSceneGate";
+import { useWebGLSupport } from "./webglSupport";
 import styles from "./HeadsetScene.module.css";
 
 /** Le chunk three.js/R3F n'est téléchargé qu'au montage de ce composant. */
 const HeadsetScene = dynamic(() => import("./HeadsetScene").then((m) => m.HeadsetScene), {
   ssr: false,
 });
-
-/** Capacité WebGL, invariante et détectée une fois (hydration-safe via
- * useSyncExternalStore : true côté serveur, valeur réelle au client). */
-let cachedWebGL: boolean | null = null;
-function webglSnapshot(): boolean {
-  if (cachedWebGL === null) {
-    try {
-      // Mêmes exigences que le Canvas : un contexte GPU matériel non dégradé.
-      // Si seul le rendu logiciel est dispo, on préfère l'image de repli.
-      const attrs = { failIfMajorPerformanceCaveat: true, powerPreference: "high-performance" as const };
-      const canvas = document.createElement("canvas");
-      cachedWebGL = Boolean(
-        window.WebGLRenderingContext &&
-          (canvas.getContext("webgl2", attrs) || canvas.getContext("webgl", attrs)),
-      );
-    } catch {
-      cachedWebGL = false;
-    }
-  }
-  return cachedWebGL;
-}
-const subscribeNever = () => () => {};
 
 /** Image 2D de repli (Codex) : WebGL absent ou avant chargement du chunk. */
 function Fallback2D() {
@@ -64,24 +43,8 @@ type HeadsetSceneLazyProps = {
  * monte pas ScrollStage sous reduced-motion).
  */
 export function HeadsetSceneLazy({ progress, tiltX, tiltY, dpr }: HeadsetSceneLazyProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [mounted, setMounted] = useState(false);
-  const [active, setActive] = useState(false);
-  const webgl = useSyncExternalStore(subscribeNever, webglSnapshot, () => true);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setActive(entry.isIntersecting);
-        if (entry.isIntersecting) setMounted(true);
-      },
-      { rootMargin: "60% 0px" },
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  const { ref, mounted, active } = useSceneGate<HTMLDivElement>();
+  const webgl = useWebGLSupport();
 
   return (
     <div ref={ref} className={styles.root}>

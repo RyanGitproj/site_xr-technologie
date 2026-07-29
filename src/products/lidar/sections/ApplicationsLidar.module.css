@@ -43,3 +43,33 @@
   color: var(--color-ink-muted);
   font-size: 0.85rem;
 }
+
+/* « À qui » : chips scannables (ex-liste de l'ancienne définition). */
+.audience {
+  max-width: 72rem;
+  margin: 1.75rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.audienceLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+  margin-right: 0.25rem;
+}
+
+.audienceChip {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 62%, transparent);
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}

@@ -778,6 +778,59 @@
   white-space: nowrap;
 }
 
+/* Cadre de la fenêtre 360 : réplique du .viewer de Demo360 (le composant
+   remplit un parent relatif à ratio fixe). */
+.v2PanoFrame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--glass-stroke));
+  border-radius: var(--radius-card);
+  background: var(--color-bg-deep);
+}
+
+/* Vitrines des objets de pôle : un cadre par pôle, l'accent vient du
+   data-pole-accent (comme les bandes accueil). */
+.v2PoleObjects {
+  display: grid;
+  gap: 1rem;
+}
+
+.v2PoleFrame {
+  position: relative;
+  min-height: 16rem;
+  border: 1px solid color-mix(in srgb, var(--pole-accent) 30%, transparent);
+  border-radius: var(--radius-soft);
+  background: var(--color-bg-deep);
+  overflow: hidden;
+}
+
+.v2PoleName {
+  position: absolute;
+  left: 0.9rem;
+  bottom: 0.7rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--pole-accent);
+}
+
+@media (min-width: 768px) {
+  .v2PoleObjects {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Banc de la scène scan : cadre sombre garanti (points additifs). */
+.v2ScanDemo {
+  position: relative;
+  height: clamp(16rem, 48vh, 26rem);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-radius: var(--radius-tight);
+  background: var(--color-bg-deep);
+}
+
 @media (min-width: 768px) {
   .grid2 {
     grid-template-columns: repeat(2, 1fr);

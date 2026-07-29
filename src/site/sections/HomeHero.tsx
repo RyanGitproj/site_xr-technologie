@@ -2,6 +2,8 @@ import { ArrowRight } from "lucide-react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { EnterRise } from "@/components/fx/EnterRise";
+import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
+import { ParallaxScene } from "@/components/fx/ParallaxScene";
 import { OutlineButton } from "@/components/ui/OutlineButton";
 import { PRODUCT_BY_ID } from "@/config/products";
 import { homeHero } from "@/site/config/content";
@@ -9,7 +11,10 @@ import styles from "./HomeHero.module.css";
 
 /** Fond du hero en art direction (recette officielle getImageProps +
     <picture>) : paysage équipe-à-droite dès 768 px, portrait équipe
-    centrée en dessous. Un seul fichier téléchargé par viewport. */
+    centrée en dessous. Un seul fichier téléchargé par viewport.
+    Profondeur au scroll : la photo traîne (inset -0.3, neutral 0 = état
+    posé au chargement, LCP intact) ; le texte EnterRise et les cartes
+    portes (transform d'overlap) restent HORS calques. */
 function HeroBackdrop() {
   if (homeHero.image === null) return null;
   const common = { alt: homeHero.image.alt, sizes: "100vw", priority: true };
@@ -28,15 +33,17 @@ function HeroBackdrop() {
   });
   const { srcSet: mobileSrcSet, ...imgProps } = mobile.props;
   return (
-    <div className={styles.bg}>
-      <picture>
-        <source media="(min-width: 768px)" srcSet={desktop.props.srcSet} />
-        <source media="(max-width: 767px)" srcSet={mobileSrcSet} />
-        {/* eslint-disable-next-line jsx-a11y/alt-text -- alt vient de imgProps */}
-        <img {...imgProps} className={styles.bgImg} />
-      </picture>
-      <div aria-hidden="true" className={styles.veil} />
-    </div>
+    <ParallaxScene offset={["start start", "end start"]} neutral={0} className={styles.decorScene}>
+      <ParallaxLayer depth={-0.3} mode="inset" insetRange={6} className={styles.bg}>
+        <picture>
+          <source media="(min-width: 768px)" srcSet={desktop.props.srcSet} />
+          <source media="(max-width: 767px)" srcSet={mobileSrcSet} />
+          {/* eslint-disable-next-line jsx-a11y/alt-text -- alt vient de imgProps */}
+          <img {...imgProps} className={styles.bgImg} />
+        </picture>
+        <div aria-hidden="true" className={styles.veil} />
+      </ParallaxLayer>
+    </ParallaxScene>
   );
 }
 

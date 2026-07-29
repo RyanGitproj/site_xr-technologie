@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
 import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
 import { OutlineButton } from "@/components/ui/OutlineButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -30,7 +31,9 @@ export function ObjectivesSection() {
                 data-pole-accent={item.productId}
               >
                 {item.image !== null && (
-                  <span aria-hidden="true" className={styles.photo}>
+                  /* Micro-profondeur : la photo de la carte traîne (inset,
+                     auto-coupé au tactile par ParallaxLayer). */
+                  <ParallaxLayer depth={-0.25} mode="inset" className={styles.photo}>
                     <Image
                       src={item.image.src}
                       alt=""
@@ -38,7 +41,7 @@ export function ObjectivesSection() {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 380px"
                       className={styles.photoImg}
                     />
-                  </span>
+                  </ParallaxLayer>
                 )}
                 <span className={styles.icon}>
                   <Icon size={20} strokeWidth={1.6} aria-hidden />

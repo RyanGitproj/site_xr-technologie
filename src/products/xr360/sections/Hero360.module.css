@@ -26,6 +26,14 @@
   transform: translateY(50%);
 }
 
+/* Conteneur des calques parallax du décor : il occupe tout le hero, le
+   contenu (EnterRise) et les chips d'overlap restent hors calques. */
+.decorScene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 /* Fond photo (lot D) : captation dans le lobby, sujet à droite ; voile
    dense sur la zone texte, fondu bas vers le socle du thème. */
 .bg {

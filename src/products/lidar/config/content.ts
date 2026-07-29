@@ -6,16 +6,12 @@ import {
   Clock,
   Crosshair,
   Factory,
-  FileCheck2,
   FileText,
   Landmark,
-  Layers,
   LineChart,
   ListChecks,
-  Map,
   MessagesSquare,
   Plane,
-  Ruler,
   ScanLine,
   Send,
   ShieldCheck,
@@ -36,11 +32,11 @@ import type { ImageSlot } from "@/lib/images";
 
 /* Navigation interne par scrollTo (aucune ancre d'URL) : id = id de section. */
 export const navLidar = [
-  { label: "Bénéfices", id: "benefices" },
+  { label: "Usages", id: "applications" },
   { label: "Acquisition", id: "acquisition" },
-  { label: "Applications", id: "applications" },
-  { label: "Mission", id: "mission" },
+  { label: "Jumeau numérique", id: "pipeline" },
   { label: "Livrables", id: "livrables" },
+  { label: "Mission", id: "mission" },
 ] as const;
 
 export const heroLidar = {
@@ -72,46 +68,20 @@ export type IconItem = {
   body: string;
 };
 
-export const definitionLidar = {
-  kicker: "Qu'est-ce que XR LiDAR Opérationnel ?",
-  title: "Votre site existe. Rendez-le exploitable.",
-  body: "Une prestation professionnelle de captation et de documentation 3D, pensée pour les projets qui exigent une meilleure compréhension de l'existant. Selon le besoin validé, notre intervention vous permet de :",
-  usages: [
-    "Relever un bâtiment ou un espace",
-    "Numériser l'intérieur et l'extérieur d'un site",
-    "Conserver un état numérique de l'existant",
-    "Préparer un projet de rénovation ou d'aménagement",
-    "Documenter visuellement un chantier",
-    "Transmettre des données aux architectes et bureaux d'études",
-  ],
-} as const;
-
+/** Bande réassurance (respiration façon /vr) : FUSION TRIPLE des anciennes
+    listes benefits + « ce que la captation améliore » + « pourquoi XR
+    LiDAR » (elles se redisaient quasi mot pour mot). Les 5 labels sont les
+    titres du « pourquoi » de la brochure. */
 export const benefitsLidar = {
   id: "benefices",
-  kicker: "Les 4 bénéfices principaux",
-  title: "Du terrain aux données. De l'existant à la décision.",
+  ariaLabel: "Pourquoi XR LiDAR",
   items: [
-    {
-      icon: Ruler,
-      title: "Mesurer",
-      body: "Les dimensions et la configuration du site, capturées selon le niveau de précision défini pour la mission.",
-    },
-    {
-      icon: Layers,
-      title: "Comprendre",
-      body: "Une vision plus complète de l'organisation des espaces et de l'état existant, pour tous les intervenants.",
-    },
-    {
-      icon: FileCheck2,
-      title: "Documenter",
-      body: "Une référence numérique consultable à tout moment, longtemps après l'intervention sur le terrain.",
-    },
-    {
-      icon: Users,
-      title: "Coordonner",
-      body: "Des échanges facilités entre architectes, bureaux d'études, entreprises, maîtres d'œuvre et exploitants.",
-    },
-  ] satisfies readonly IconItem[],
+    { icon: Crosshair, label: "Précision et fiabilité" },
+    { icon: Clock, label: "Gain de temps" },
+    { icon: Users, label: "Référence commune" },
+    { icon: FileText, label: "Trace et historique" },
+    { icon: LineChart, label: "Meilleure anticipation" },
+  ],
 } as const;
 
 export const audienceLidar = {
@@ -135,9 +105,8 @@ export const audienceLidar = {
 export const acquisitionLidar = {
   id: "acquisition",
   kicker: "Trois modes d'acquisition",
-  title: "Voir le site. Le comprendre. Décider.",
-  subtitle:
-    "Le mode de captation se choisit selon le site, ses accès et l'objectif : au sol, à la main ou depuis le ciel.",
+  title: "Au sol, à la main ou depuis le ciel",
+  subtitle: "Le mode de captation se choisit selon le site, ses accès et l'objectif.",
   modes: [
     {
       icon: ScanLine,
@@ -145,6 +114,13 @@ export const acquisitionLidar = {
       hardware: "Matterport Pro3",
       note: null,
       body: "Le scanner sur trépied pour les intérieurs et les volumes complexes : la référence de la mission.",
+      /** Lot I Codex : cartes photo, texte sur zone sombre. */
+      image: {
+        src: "/images/funnel-v2/lidar-acquisition-terrestre.webp",
+        alt: "Scanner 3D sur trépied dans un plateau brut, ligne laser verte",
+        width: 1600,
+        height: 1067,
+      } as ImageSlot | null,
     },
     {
       icon: Smartphone,
@@ -152,6 +128,12 @@ export const acquisitionLidar = {
       hardware: "iPhone 15 Pro LiDAR",
       note: null,
       body: "La captation légère des zones difficiles d'accès ou des besoins rapides, en complément du scanner.",
+      image: {
+        src: "/images/funnel-v2/lidar-acquisition-mobile.webp",
+        alt: "Smartphone en cours de scan dans un couloir technique",
+        width: 1600,
+        height: 1067,
+      } as ImageSlot | null,
     },
     {
       icon: Plane,
@@ -159,6 +141,12 @@ export const acquisitionLidar = {
       hardware: "Drone LiDAR",
       note: "Selon mission et autorisations",
       body: "Toitures, façades et emprises extérieures, quand le projet le justifie et que le cadre le permet.",
+      image: {
+        src: "/images/funnel-v2/lidar-acquisition-aerienne.webp",
+        alt: "Drone de cartographie balayant une toiture au crépuscule",
+        width: 1600,
+        height: 1067,
+      } as ImageSlot | null,
     },
   ] satisfies readonly {
     icon: LucideIcon;
@@ -166,6 +154,7 @@ export const acquisitionLidar = {
     hardware: string;
     note: string | null;
     body: string;
+    image: ImageSlot | null;
   }[],
 } as const;
 
@@ -211,7 +200,7 @@ export const pipelineLidar = {
     },
     {
       title: "Jumeau numérique",
-      body: "Une référence numérique consultable, mesurable et comparable.",
+      body: "Le site devient consultable, mesurable et comparable.",
       image: {
         src: "/images/funnel-v2/lidar-jumeau-filaire.webp",
         alt: "Bâtiment en filaire 3D vert et cyan sur fond sombre",
@@ -220,7 +209,20 @@ export const pipelineLidar = {
       },
     },
   ] as readonly PipelineStage[],
-  actions: ["Documenter", "Mesurer", "Comparer"],
+  /** Affordance du scrollytelling (UI, pas une promesse produit). */
+  stageHint: "Faites défiler : le scan construit le jumeau",
+  /** Flux de données (ex-section « Parlez le langage de l'existant »,
+      fusionnée ici : la sortie concrète du jumeau, dite UNE fois). */
+  flow: {
+    title: "Du terrain à vos logiciels",
+    steps: [
+      { title: "Capture de l'existant" },
+      { title: "Nuage de points" },
+      { title: "E57", note: "Format d'échange standard" },
+      { title: "CAD / BIM", note: "En option, selon le besoin validé" },
+      { title: "Coordination, remise et archivage" },
+    ] as readonly { title: string; note?: string }[],
+  },
   progressTitle: "Comparaison d'avancement du site",
   progressBody:
     "Un même bâtiment, scanné à plusieurs moments : l'avancement se constate, il ne se discute plus.",
@@ -260,36 +262,15 @@ export const pipelineLidar = {
   ],
 } as const;
 
-export type FlowStep = {
-  title: string;
-  note?: string;
-};
-
-/** Flux de données (Funnel V2, réf. PDF boss p16) : de la capture à la
-    remise, formats nommés. Les 4 usages du PDF (réhabilitation,
-    aménagement, suivi, patrimoine) ne sont PAS repris ici : doublon des
-    7 applications déjà en page. */
-export const dataFlowLidar = {
-  id: "flux",
-  kicker: "Parlez le langage de l'existant",
-  title: "Des relevés 3D au modèle exploitable",
-  subtitle:
-    "Un flux de données maîtrisé et traçable, du terrain jusqu'à vos logiciels.",
-  steps: [
-    { title: "Capture de l'existant" },
-    { title: "Nuage de points" },
-    { title: "E57", note: "Format d'échange standard" },
-    { title: "CAD / BIM", note: "En option, selon le besoin validé" },
-    { title: "Coordination, remise et archivage" },
-  ] as readonly FlowStep[],
-  /** Mention fidèle au PDF boss, à ne pas reformuler. */
-  mention: "Formats, tolérances et livrables validés avant devis.",
-} as const;
-
+/** Usages : ABSORBE l'ancienne définition (kicker, titre, intro) et la
+    liste « à qui » (chips). Les 6 usages de la définition étaient des
+    doublons 1:1 des applications : les 7 tuiles font foi. */
 export const applicationsLidar = {
   id: "applications",
-  kicker: "Nos principales applications",
-  title: "Un relevé, sept terrains d'usage",
+  kicker: "Qu'est-ce que XR LiDAR Opérationnel ?",
+  title: "Votre site existe. Rendez-le exploitable.",
+  subtitle:
+    "Une prestation professionnelle de captation et de documentation 3D, pour les projets qui exigent une meilleure compréhension de l'existant.",
   items: [
     {
       icon: Building2,
@@ -329,6 +310,10 @@ export const applicationsLidar = {
   ] satisfies readonly IconItem[],
 } as const;
 
+/** Mission : timeline resserrée + ABSORBE les engagements (accordéon) et
+    les limites légales (bloc VISIBLE, jamais en disclosure) de l'ancienne
+    section confiance. Les listes « améliore »/« pourquoi » vivent dans la
+    bande réassurance. */
 export const missionLidar = {
   id: "mission",
   kicker: "Comment se déroule une mission ?",
@@ -337,62 +322,29 @@ export const missionLidar = {
     {
       icon: MessagesSquare,
       title: "Cadrage du besoin",
-      body: "Nous échangeons sur votre projet : type de bâtiment, surface, zones à capturer, objectif, niveau de détail, livrables souhaités et logiciels utilisés.",
+      body: "Type de bâtiment, surface, zones, objectif, niveau de détail, livrables et logiciels : tout est posé d'entrée.",
     },
     {
       icon: ListChecks,
       title: "Préparation de l'intervention",
-      body: "Nous évaluons l'accessibilité du site, les contraintes, les autorisations, la complexité des espaces et les conditions de captation.",
+      body: "Accès, contraintes, autorisations et conditions de captation évalués avant le déplacement.",
     },
     {
       icon: Crosshair,
       title: "Captation sur le terrain",
-      body: "Notre équipe se déplace avec le matériel adapté pour enregistrer les espaces intérieurs, extérieurs ou les zones définies.",
+      body: "Notre équipe capture les espaces définis avec le matériel adapté.",
     },
     {
       icon: ShieldCheck,
       title: "Contrôle et traitement",
-      body: "Les données collectées sont vérifiées, organisées et traitées selon les livrables validés avant l'intervention.",
+      body: "Les données collectées sont vérifiées, organisées et traitées.",
     },
     {
       icon: Send,
       title: "Livraison",
-      body: "Les fichiers et supports convenus sont préparés et transmis dans les formats confirmés avec vous.",
+      body: "Fichiers et supports transmis dans les formats confirmés avec vous.",
     },
   ],
-  improvementsTitle: "Ce que la captation peut améliorer",
-  improvements: [
-    "Moins de retours de vérification sur site",
-    "Une référence commune pour tous les intervenants",
-    "Meilleure compréhension des volumes et des accès",
-    "Une trace numérique durable de l'état du bâtiment",
-    "Préparation plus efficace des études et des interventions",
-    "Traçabilité améliorée à chaque étape du projet",
-  ],
-} as const;
-
-export const deliverablesLidar = {
-  id: "livrables",
-  kicker: "Nos livrables envisageables",
-  title: "Des données précises pour des décisions fiables",
-  subtitle:
-    "Les livrables sont définis avant la mission, selon vos besoins, les possibilités techniques, le matériel utilisé et les logiciels dans lesquels les données seront exploitées.",
-  items: [
-    { title: "Nuage de points", body: "Représentation 3D précise, consultable dans différents logiciels." },
-    { title: "Visite 3D", body: "Parcours interactif pour naviguer dans les espaces et comprendre le site." },
-    { title: "Documentation photographique", body: "Images organisées par zones pour une trace visuelle complète." },
-    { title: "Plans 2D", body: "Plans ou relevés selon le périmètre et le niveau de détail définis." },
-    { title: "Modèles / plans 3D", body: "Modélisation des espaces pour une meilleure compréhension des volumes." },
-    { title: "Orthophotos", body: "Vues corrigées et exploitables des surfaces ou des zones du projet." },
-    { title: "Jumeau numérique", body: "Référence numérique du bâtiment regroupant données, vues et informations." },
-    { title: "Scan-to-CAD", body: "Données préparées pour la conception assistée par ordinateur." },
-    { title: "Scan-to-BIM", body: "Éléments exploitables dans un processus BIM selon le niveau défini." },
-    { title: "Exports BIM", body: "Livraison dans les formats confirmés avant la mission (IFC, RVT…)." },
-    { title: "Audit / dossier complet", body: "Données, plans, vues et documents regroupés selon la prestation." },
-  ],
-} as const;
-
-export const trustLidar = {
   engagementsTitle: "Nos engagements avant intervention",
   engagements: [
     { title: "Périmètre défini", body: "Bâtiments, pièces et zones à capturer clairement identifiés avant le déplacement." },
@@ -401,15 +353,9 @@ export const trustLidar = {
     { title: "Délais estimés", body: "Captation, traitement et livraison estimés avant le lancement." },
     { title: "Contraintes prises en compte", body: "Accès, activité du site, luminosité, obstacles, sécurité et conditions techniques étudiés." },
   ],
-  whyTitle: "Pourquoi choisir XR LiDAR ?",
-  why: [
-    { icon: Crosshair, title: "Précision et fiabilité", body: "Des données de haute qualité, adaptées à l'usage prévu et au niveau de détail requis." },
-    { icon: Clock, title: "Gain de temps", body: "Moins de retours terrain, une meilleure préparation, une coordination simplifiée." },
-    { icon: Users, title: "Référence commune", body: "Une base unique compréhensible par tous les intervenants du projet." },
-    { icon: FileText, title: "Trace et historique", body: "Une trace numérique fiable de l'état du bâtiment ou du site, dans le temps." },
-    { icon: LineChart, title: "Meilleure anticipation", body: "Comprendre l'existant pour mieux planifier études, travaux et interventions." },
-  ] satisfies readonly IconItem[],
-  /** LÉGAL : repris fidèlement de la brochure, ne pas reformuler. */
+  /** LÉGAL : repris fidèlement de la brochure, ne pas reformuler, TOUJOURS
+      visible (jamais dans un accordéon). Ancre du renvoi du CTA final. */
+  limitsId: "limites",
   limitsTitle: "Limites et précisions",
   limits: [
     "La captation LiDAR ne remplace pas une étude structurelle ou un diagnostic réglementaire.",
@@ -421,8 +367,65 @@ export const trustLidar = {
   adaptNote: "Nous adaptons la mission à votre projet, à vos contraintes et à vos objectifs réels.",
 } as const;
 
-export const zoneLidar = {
-  title: "Zone d'intervention",
+export type DeliverableFamily = {
+  id: "donnees-3d" | "plans-modeles" | "documentation";
+  label: string;
+  items: readonly { title: string; body: string }[];
+};
+
+/** Livrables derrière un sélecteur à 3 familles (les 11 tuiles d'un bloc
+    étaient illisibles) ; la mention fidèle « validés avant devis » vit ICI,
+    en occurrence unique. */
+export const deliverablesLidar = {
+  id: "livrables",
+  kicker: "Nos livrables envisageables",
+  title: "Des données précises pour des décisions fiables",
+  subtitle: "Définis avant la mission, selon vos besoins, le matériel et vos logiciels.",
+  selectorLabel: "Choisir une famille de livrables",
+  families: [
+    {
+      id: "donnees-3d",
+      label: "Données 3D",
+      items: [
+        { title: "Nuage de points", body: "Représentation 3D précise, consultable dans différents logiciels." },
+        { title: "Visite 3D", body: "Parcours interactif pour naviguer dans les espaces et comprendre le site." },
+        { title: "Jumeau numérique", body: "Référence numérique du bâtiment regroupant données, vues et informations." },
+      ],
+    },
+    {
+      id: "plans-modeles",
+      label: "Plans et modèles",
+      items: [
+        { title: "Plans 2D", body: "Plans ou relevés selon le périmètre et le niveau de détail définis." },
+        { title: "Modèles / plans 3D", body: "Modélisation des espaces pour une meilleure compréhension des volumes." },
+        { title: "Orthophotos", body: "Vues corrigées et exploitables des surfaces ou des zones du projet." },
+        { title: "Scan-to-CAD", body: "Données préparées pour la conception assistée par ordinateur." },
+        { title: "Scan-to-BIM", body: "Éléments exploitables dans un processus BIM selon le niveau défini." },
+        { title: "Exports BIM", body: "Livraison dans les formats confirmés avant la mission (IFC, RVT…)." },
+      ],
+    },
+    {
+      id: "documentation",
+      label: "Documentation",
+      items: [
+        { title: "Documentation photographique", body: "Images organisées par zones pour une trace visuelle complète." },
+        { title: "Audit / dossier complet", body: "Données, plans, vues et documents regroupés selon la prestation." },
+      ],
+    },
+  ] satisfies readonly DeliverableFamily[],
+  /** Mention fidèle au PDF boss, à ne pas reformuler (occurrence unique). */
+  mention: "Formats, tolérances et livrables validés avant devis.",
+} as const;
+
+/** CTA final : ABSORBE la zone d'intervention (la portée géographique au
+    moment de la décision) ; la mention légale devient un renvoi vers le
+    bloc limites (une seule occurrence du texte fidèle, dans la mission). */
+export const finalCtaLidar = {
+  kicker: "Passons à votre site",
+  title: "De votre site aux données, il n'y a qu'un brief.",
+  subtitle:
+    "Présentez-nous votre site, vos objectifs et les livrables attendus. Notre équipe évalue votre besoin et prépare une intervention adaptée : le formulaire est juste en dessous.",
+  zonesTitle: "Zone d'intervention",
   zones: [
     "Madagascar",
     "Réunion",
@@ -435,19 +438,11 @@ export const zoneLidar = {
     "France",
     "Indonésie",
   ],
-  note: "Selon la nature et la faisabilité du projet.",
-  zoneIcon: Map,
-} as const;
-
-export const finalCtaLidar = {
-  kicker: "Mesurer. Comprendre. Documenter. Exploiter.",
-  title: "Une donnée technique fiable commence par un besoin bien défini.",
-  subtitle:
-    "Présentez-nous votre site, vos objectifs et les livrables attendus. Notre équipe évalue votre besoin et prépare une intervention adaptée : le formulaire est juste en dessous.",
+  zonesNote: "Selon la nature et la faisabilité du projet.",
   cta: "Présenter mon site",
   ctaTargetId: "brief",
-  mention:
-    "La captation LiDAR ne remplace pas automatiquement une étude structurelle, un diagnostic réglementaire ou l'intervention d'un géomètre expert lorsque celle-ci est légalement requise.",
+  limitsNote: "Les limites et précisions de la prestation sont détaillées dans la section mission.",
+  limitsTargetId: "limites",
 } as const;
 
 export const footerLidar = {
@@ -458,3 +453,4 @@ export const footerLidar = {
   privacyLabel: "Politique de confidentialité",
   mentions: "© 2026 XR Technologie · Antananarivo, Madagascar",
 } as const;
+

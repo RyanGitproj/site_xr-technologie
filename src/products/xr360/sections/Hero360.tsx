@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { EnterRise } from "@/components/fx/EnterRise";
+import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
+import { ParallaxScene } from "@/components/fx/ParallaxScene";
 import { ShimmerCTA } from "@/components/fx/ShimmerCTA";
 import { hero360 } from "@/products/xr360/config/content";
 import styles from "./Hero360.module.css";
@@ -7,28 +9,35 @@ import styles from "./Hero360.module.css";
 /** Hero 360 : promesse en deux temps (imaginer → visiter) posée sur la
     photo de captation (lot D, sujet à droite), anneau panoramique en décor
     par-dessus (langage de formes de la charte), chips des capacités.
-    Apparition en EnterRise (CSS pur) : le titre peint au premier paint,
-    sans attendre l'hydration (LCP 3G). */
+    Apparition en EnterRise (CSS pur, LCP 3G intact). Profondeur au scroll :
+    la photo traîne (inset), l'anneau devance (flow) ; neutral 0 = état
+    initial posé, et les chips (transform d'overlap) restent HORS calques. */
 export function Hero360() {
   return (
     <section className={styles.hero}>
-      {hero360.image !== null && (
-        <div className={styles.bg}>
-          <Image
-            src={hero360.image.src}
-            alt={hero360.image.alt}
-            fill
-            priority
-            sizes="100vw"
-            className={styles.bgImg}
-          />
-          <div aria-hidden="true" className={styles.veil} />
-        </div>
-      )}
-      <div aria-hidden="true" className={styles.ringField}>
-        <div className={styles.ring} />
-        <div className={styles.ringInner} />
-      </div>
+      <ParallaxScene
+        offset={["start start", "end start"]}
+        neutral={0}
+        className={styles.decorScene}
+      >
+        {hero360.image !== null && (
+          <ParallaxLayer depth={-0.3} mode="inset" insetRange={6} className={styles.bg}>
+            <Image
+              src={hero360.image.src}
+              alt={hero360.image.alt}
+              fill
+              priority
+              sizes="100vw"
+              className={styles.bgImg}
+            />
+            <div aria-hidden="true" className={styles.veil} />
+          </ParallaxLayer>
+        )}
+        <ParallaxLayer depth={0.14} range={48} touchRange={24} className={styles.ringField}>
+          <div aria-hidden="true" className={styles.ring} />
+          <div aria-hidden="true" className={styles.ringInner} />
+        </ParallaxLayer>
+      </ParallaxScene>
       <div className={styles.inner}>
         <EnterRise>
           <p className={styles.kicker}>{hero360.kicker}</p>

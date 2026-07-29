@@ -367,6 +367,14 @@
     scrollbar-color: var(--color-accent-deep) var(--color-bg-deep);
   }
 
+  /* Les sous-arbres thématisés reprennent LEUR accent pour les zones
+     défilantes internes (bandes snap) : le réglage sur html porte les
+     valeurs du thème VR par défaut et s'hérite sinon (l'orange fuyait sur
+     les strips de /360). */
+  [data-theme] {
+    scrollbar-color: var(--color-accent-deep) var(--color-bg-deep);
+  }
+
   /* Lenis actif (classe `lenis` posée sur <html> à l'instanciation ; la
      variante lenis-smooth n'existe que PENDANT un défilement) : le
      scroll-behavior natif doit rester auto, sinon les écritures de position

@@ -1,0 +1,43 @@
+.root {
+  position: absolute;
+  inset: 0;
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* Halo du pôle : la couleur en touche, jamais en aplat (règle DA accueil). */
+.halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(70%, 18rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--pole-accent) 16%, transparent),
+    transparent 70%
+  );
+}
+
+.ringThin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(56%, 14rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--pole-accent) 35%, transparent);
+}
+
+.packshot {
+  object-fit: contain;
+  padding: clamp(0.5rem, 2vw, 1.25rem);
+}

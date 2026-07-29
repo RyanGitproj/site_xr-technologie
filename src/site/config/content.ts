@@ -2,9 +2,12 @@
   Globe,
   GraduationCap,
   HardHat,
+  MapPin,
   ScanLine,
+  ShieldCheck,
   Store,
   Video,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 import type { ProductId } from "@/config/products";
@@ -64,11 +67,13 @@ export const homeHero = {
     {
       label: "Former et convaincre",
       productId: "vr",
+      /** Lot K Codex : visuel dédié (fin du doublon avec la carte objectif
+          « former vos équipes »). */
       image: {
-        src: "/images/funnel-v2/home-objectif-former-equipes.webp",
+        src: "/images/funnel-v2/home-porte-former-convaincre.webp",
         alt: "",
-        width: 1200,
-        height: 800,
+        width: 1600,
+        height: 1067,
       },
     },
     {
@@ -294,80 +299,74 @@ export const sectorsSection = {
   } satisfies Record<ProductId, string>,
   diagnosticNote:
     "Chaque mission commence par un diagnostic : vos objectifs d'abord, la technique ensuite.",
-  cta: "Parlons de votre cas d'usage",
-  ctaTargetId: "contact",
 } as const;
 
 export type PoleHighlight = {
   hook: string;
   body: string;
-  points: readonly string[];
   cta: string | null;
+  /** Packshot Codex (lot H) : repli 2D de l'objet 3D de la bande. null =
+      halo CSS en attendant la livraison ; le brancher suffit, zéro code. */
+  packshot: ImageSlot | null;
 };
 
 /** Bandes de présentation des pôles. Fond : socle neutre ; le pôle ne
-    porte que sa couleur d'identité (décision DA accueil, 27/07). */
+    porte que sa couleur d'identité (décision DA accueil, 27/07) et montre
+    son VRAI objet en 3D. Les listes de points ont disparu (elles
+    redisaient les pages pôles) : hook + une phrase de projection + CTA. */
 export const poleShowcase: Record<ProductId, PoleHighlight> = {
   vr: {
     hook: "La VR qui se déplace jusqu'à vous",
     body: "Vous réservez, nous installons, vos invités vivent l'expérience. Casques Meta Quest 3, animateurs XR et univers adaptés à votre public, chez vous ou sur votre lieu.",
-    points: [
-      "Jusqu'à 10 casques Meta Quest 3 apportés sur place",
-      "Animateurs XR qui encadrent chaque session",
-      "8 offres sectorielles, packs à partir de 750 000 Ar",
-    ],
     cta: "Découvrir XR VR",
+    packshot: {
+      src: "/images/funnel-v2/home-produit-casque-vr.webp",
+      alt: "Casque de réalité virtuelle blanc",
+      width: 1200,
+      height: 1200,
+    },
   },
   xr360: {
     hook: "Votre lieu devient visitable à distance",
     body: "Vos futurs clients explorent votre établissement avant même de se déplacer : captation photo et vidéo 360, visite virtuelle interactive et diffusion sur tous les supports.",
-    points: [
-      "Captation photo & vidéo 360 professionnelle",
-      "Visite virtuelle interactive, parcours fluide",
-      "Diffusion web, mobile, tablette et casque VR",
-    ],
     cta: "Découvrir XR 360",
+    packshot: {
+      src: "/images/funnel-v2/home-produit-camera-360.webp",
+      alt: "Caméra 360 sur perche",
+      width: 1200,
+      height: 1200,
+    },
   },
   lidar: {
-    hook: "Votre site existe. Rendez-le exploitable.",
-    body: "Un état des lieux ne devrait jamais rester une approximation : le relevé 3D transforme vos bâtiments en données fiables, prêtes pour vos architectes, bureaux d'études et équipes travaux.",
-    points: [
-      "Relevé 3D et nuage de points de l'existant",
-      "Plans 2D, modèles 3D, scan-to-CAD et scan-to-BIM",
-      "Interventions Madagascar, océan Indien et au-delà",
-    ],
+    hook: "Décidez sur des données, pas sur des estimations",
+    body: "Le relevé 3D transforme vos bâtiments en données fiables, prêtes pour vos architectes, bureaux d'études et équipes travaux.",
     cta: "Découvrir XR LiDAR",
+    packshot: {
+      src: "/images/funnel-v2/home-produit-scanner-lidar.webp",
+      alt: "Scanner 3D sur trépied",
+      width: 1200,
+      height: 1200,
+    },
   },
 } as const;
 
 export const polesSection = {
   id: "poles",
-  kicker: "Trois pôles, trois codes visuels",
+  kicker: "Trois façons de mettre l'immersion au travail",
   title: "Une même exigence XR",
   upcomingLabel: "Bientôt en ligne",
 } as const;
 
-export const aboutSection = {
-  kicker: "XR Technologie",
-  title: "Trois métiers, une seule équipe",
-  body: "Depuis Antananarivo, nous mettons l'immersion au travail avec du matériel professionnel et une méthode éprouvée. Vous n'avez rien à prévoir : chaque prestation est préparée, installée et accompagnée jusqu'au résultat.",
-  /** Slot photo : null depuis que la photo équipe (lot C) vit dans le
-      hero (28/07, doublon évité) ; disponible pour un visuel studio
-      distinct un jour. */
-  image: null as ImageSlot | null,
+/** Bande réassurance (remplace l'ancienne section « à propos », qui
+    concaténait les bandes pôles) : 4 preuves en labels courts, respiration
+    sans titre façon /vr. */
+export const homeReassurance = {
+  ariaLabel: "XR Technologie en bref",
   items: [
-    {
-      title: "Basés à Antananarivo",
-      body: "Interventions partout à Madagascar, et jusqu'à l'océan Indien pour le relevé 3D.",
-    },
-    {
-      title: "Matériel professionnel",
-      body: "Casques Meta Quest 3, captation 360 et scanner LiDAR, entretenus et prêts à l'emploi.",
-    },
-    {
-      title: "Clé en main",
-      body: "Préparation, installation, accompagnement : vous restez concentré sur votre projet.",
-    },
+    { icon: MapPin, label: "Basés à Antananarivo" },
+    { icon: Globe, label: "Madagascar et océan Indien" },
+    { icon: Wrench, label: "Matériel professionnel" },
+    { icon: ShieldCheck, label: "Prestations clé en main" },
   ],
 } as const;
 

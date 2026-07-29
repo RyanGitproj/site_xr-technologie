@@ -1,0 +1,251 @@
+"use client";
+
+import { useEffect, useMemo, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { PerspectiveCamera } from "@react-three/drei";
+import type { MotionValue } from "framer-motion";
+import {
+  AdditiveBlending,
+  BufferAttribute,
+  BufferGeometry,
+  Color,
+  DoubleSide,
+  type LineBasicMaterial,
+  type Mesh,
+  type MeshBasicMaterial,
+  type LineSegments,
+  type Points,
+  type ShaderMaterial,
+} from "three";
+import { ramp } from "@/lib/motion/sceneRamp";
+import { SCANNER_POSITION, buildPointCloud, buildWireframe } from "@/lib/lidar/scanModel";
+import ScannerModel from "./poleModels/ScannerModel";
+import styles from "./LidarScanScene.module.css";
+
+/** Couleurs du thème lidar, lues des tokens par le wrapper (readCssColor). */
+export type LidarScanPalette = {
+  base: string;
+  hot: string;
+  tech: string;
+};
+
+type LidarScanSceneProps = {
+  progress: MotionValue<number>;
+  tiltX: MotionValue<number>;
+  tiltY: MotionValue<number>;
+  palette: LidarScanPalette;
+  /** 22k desktop / 14k tactile (fill-rate). */
+  pointCount: number;
+  dpr?: number;
+  active?: boolean;
+};
+
+const DEG = Math.PI / 180;
+
+const POINTS_VERTEX = /* glsl */ `
+  uniform float uProgress;
+  uniform float uPixelRatio;
+  uniform float uSize;
+  attribute float aBirth;
+  attribute float aShade;
+  varying float vAlpha;
+  varying float vHot;
+  varying float vShade;
+
+  void main() {
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * mv;
+    gl_PointSize = clamp(uSize * uPixelRatio * (10.0 / -mv.z), 1.0, 6.0);
+    /* Né quand l'onde radiale (uProgress) a dépassé le seuil du point.
+       Bornes CROISSANTES obligatoires : smoothstep(e0 > e1) est indéfini
+       en GLSL (et s'évaluait à l'envers ici). */
+    vAlpha = smoothstep(aBirth - 0.06, aBirth, uProgress);
+    /* Front chaud : les points qui viennent de naître brillent. */
+    vHot = (1.0 - smoothstep(0.0, 0.1, uProgress - aBirth)) * vAlpha;
+    vShade = aShade;
+  }
+`;
+
+const POINTS_FRAGMENT = /* glsl */ `
+  uniform vec3 uColorBase;
+  uniform vec3 uColorTech;
+  uniform vec3 uColorHot;
+  varying float vAlpha;
+  varying float vHot;
+  varying float vShade;
+
+  void main() {
+    float m = smoothstep(0.5, 0.32, length(gl_PointCoord - 0.5));
+    if (m < 0.01 || vAlpha < 0.01) discard;
+    vec3 color = mix(mix(uColorBase, uColorTech, vShade * 0.35), uColorHot, vHot);
+    gl_FragColor = vec4(color, vAlpha * m * (0.55 + 0.45 * vHot));
+  }
+`;
+
+type RigProps = Omit<LidarScanSceneProps, "dpr" | "active">;
+
+/** Rig : l'onde révèle le nuage (0.12→0.55), le filaire du jumeau se fige
+    (0.60→0.78), la caméra orbite pendant toute la traversée. Zéro état
+    React : uniforms et matériaux mutés dans useFrame. */
+function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
+  const pointsRef = useRef<Points>(null);
+  const wireRef = useRef<LineSegments>(null);
+  const sweepRef = useRef<Mesh>(null);
+
+  const pointsGeometry = useMemo(() => {
+    const cloud = buildPointCloud(pointCount);
+    const geometry = new BufferGeometry();
+    geometry.setAttribute("position", new BufferAttribute(cloud.positions, 3));
+    geometry.setAttribute("aBirth", new BufferAttribute(cloud.birth, 1));
+    geometry.setAttribute("aShade", new BufferAttribute(cloud.shade, 1));
+    return geometry;
+  }, [pointCount]);
+
+  const wireGeometry = useMemo(() => {
+    const geometry = new BufferGeometry();
+    geometry.setAttribute("position", new BufferAttribute(buildWireframe(), 3));
+    return geometry;
+  }, []);
+
+  useEffect(
+    () => () => {
+      pointsGeometry.dispose();
+      wireGeometry.dispose();
+    },
+    [pointsGeometry, wireGeometry],
+  );
+
+  const uniforms = useMemo(
+    () => ({
+      uProgress: { value: 0 },
+      uPixelRatio: { value: 1 },
+      uSize: { value: 2.2 },
+      uColorBase: { value: new Color(palette.base) },
+      uColorTech: { value: new Color(palette.tech) },
+      uColorHot: { value: new Color(palette.hot) },
+    }),
+    [palette],
+  );
+
+  useFrame((state) => {
+    const p = progress.get();
+    const gx = tiltX.get();
+    const gy = tiltY.get();
+
+    /* Onde de scan → uniform des points + anneau au sol. */
+    const wave = ramp(p, 0.12, 0.55, 0, 1);
+    const material = pointsRef.current?.material as ShaderMaterial | undefined;
+    if (material) {
+      material.uniforms.uProgress.value = wave;
+      material.uniforms.uPixelRatio.value = state.gl.getPixelRatio();
+    }
+    const sweep = sweepRef.current;
+    if (sweep) {
+      const scale = ramp(p, 0.12, 0.55, 0.4, 15);
+      sweep.scale.setScalar(scale);
+      const mat = sweep.material as MeshBasicMaterial;
+      mat.opacity = 0.4 * ramp(p, 0.08, 0.14, 0, 1) * (1 - ramp(p, 0.55, 0.68, 0, 1));
+    }
+
+    /* Le jumeau se fige. */
+    const wire = wireRef.current;
+    if (wire) {
+      const mat = wire.material as LineBasicMaterial;
+      mat.opacity = ramp(p, 0.6, 0.78, 0, 0.85);
+    }
+
+    /* Orbite caméra (état du callback : jamais mutée en portée de rendu). */
+    const azimut = ramp(p, 0, 1, -40 * DEG, 38 * DEG) + gx * 0.06;
+    const radius = ramp(p, 0, 0.7, 15, 10.5);
+    const height = ramp(p, 0, 0.7, 5.2, 3.4) + gy * 0.4;
+    state.camera.position.set(Math.sin(azimut) * radius, height, Math.cos(azimut) * radius);
+    state.camera.lookAt(0, 1.1, 0);
+  });
+
+  return (
+    <>
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[3, 6, 4]} intensity={0.8} color="#dfe8ee" />
+
+      {/* Le scanner (modèle partagé avec l'accueil) émet le balayage. */}
+      <group position={[SCANNER_POSITION[0], 0.98, SCANNER_POSITION[2]]} scale={0.75}>
+        <ScannerModel accent={palette.base} />
+      </group>
+
+      {/* Onde au sol, centrée sur le scanner. */}
+      <mesh
+        ref={sweepRef}
+        position={[SCANNER_POSITION[0], 0.03, SCANNER_POSITION[2]]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <ringGeometry args={[0.94, 1, 64]} />
+        <meshBasicMaterial
+          color={palette.base}
+          transparent
+          opacity={0}
+          side={DoubleSide}
+          blending={AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Le nuage naît là où l'onde est passée. */}
+      <points ref={pointsRef} geometry={pointsGeometry}>
+        <shaderMaterial
+          vertexShader={POINTS_VERTEX}
+          fragmentShader={POINTS_FRAGMENT}
+          uniforms={uniforms}
+          transparent
+          depthWrite={false}
+          blending={AdditiveBlending}
+        />
+      </points>
+
+      {/* Le jumeau filaire se fige sur les mêmes surfaces. */}
+      <lineSegments ref={wireRef} geometry={wireGeometry}>
+        <lineBasicMaterial color={palette.tech} transparent opacity={0} />
+      </lineSegments>
+    </>
+  );
+}
+
+/**
+ * Scène « le scan construit le jumeau » : état réel suggéré (scanner en
+ * place) → l'onde balaye, le nuage de points vert laser se densifie → les
+ * arêtes filaires se figent. Pilotée par le progress du ScrollStage
+ * (contrat HeadsetScene), lazy-montée par LidarScanSceneLazy.
+ */
+export default function LidarScanScene({
+  progress,
+  tiltX,
+  tiltY,
+  palette,
+  pointCount,
+  dpr = 1.5,
+  active = true,
+}: LidarScanSceneProps) {
+  return (
+    <div className={styles.root} aria-hidden="true">
+      <Canvas
+        dpr={[1, dpr]}
+        frameloop={active ? "always" : "never"}
+        gl={{
+          antialias: dpr >= 1.5,
+          alpha: true,
+          powerPreference: "high-performance",
+          failIfMajorPerformanceCaveat: true,
+        }}
+        onCreated={({ gl }) => gl.setClearAlpha(0)}
+      >
+        <PerspectiveCamera makeDefault position={[0, 5.2, 15]} fov={42} />
+        <Rig
+          progress={progress}
+          tiltX={tiltX}
+          tiltY={tiltY}
+          palette={palette}
+          pointCount={pointCount}
+        />
+      </Canvas>
+    </div>
+  );
+}

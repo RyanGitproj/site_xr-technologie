@@ -108,28 +108,6 @@
   font-size: 0.95rem;
 }
 
-.points {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.point {
-  position: relative;
-  padding-left: 1.1rem;
-  font-size: 0.9rem;
-}
-
-.point::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.5em;
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 2px;
-  background: var(--pole-accent);
-}
-
 .cta {
   font-weight: 500;
   color: var(--pole-accent);
@@ -140,107 +118,16 @@
   opacity: 0.8;
 }
 
-/* Zone visuelle : l'objet signature du pôle, en CSS teinté --pole-accent. */
+/* Zone visuelle : le VRAI objet du pôle en 3D (PoleObjectVisual), qui
+   remplace les décors abstraits du 27/07 (orbe, anneaux, réticule). */
 .bandVisual {
   position: relative;
   min-height: clamp(14rem, 30svh, 20rem);
 }
 
-.decor {
+/* Calque parallax du visuel : il remplit la zone, l'objet devance
+   légèrement le contenu au scroll (depth +0.12). */
+.visualLayer {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  border-radius: var(--radius-soft);
-}
-
-/* VR : orbe immersif + orbite inclinée. */
-.orbVr {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  width: min(58%, 15rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 34% 30%,
-    color-mix(in srgb, var(--pole-accent) 55%, transparent),
-    color-mix(in srgb, var(--pole-accent) 14%, transparent) 55%,
-    transparent 72%
-  );
-}
-
-.orbitVr {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  width: min(86%, 22rem);
-  aspect-ratio: 2.2;
-  border: 1px solid color-mix(in srgb, var(--pole-accent) 45%, transparent);
-  border-radius: 50%;
-  rotate: -16deg;
-}
-
-/* 360 : double anneau + arc lumineux (le cercle panoramique de la charte). */
-.ring360 {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  width: min(64%, 17rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--pole-accent) 40%, transparent);
-  background: conic-gradient(
-    from 210deg,
-    var(--pole-accent) 0 48deg,
-    transparent 48deg 360deg
-  );
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
-}
-
-.ringInner360 {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  width: min(46%, 12rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1px dashed color-mix(in srgb, var(--pole-accent) 45%, transparent);
-}
-
-/* LiDAR : réticule de visée sur la trame GridPulse (teintée par la bande). */
-.reticleLidar {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  width: min(52%, 13rem);
-  aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--pole-accent) 55%, transparent);
-  border-radius: 50%;
-}
-
-.reticleLidar::before,
-.reticleLidar::after {
-  content: "";
-  position: absolute;
-  background: color-mix(in srgb, var(--pole-accent) 65%, transparent);
-}
-
-.reticleLidar::before {
-  left: 50%;
-  top: -12%;
-  width: 1px;
-  height: 124%;
-}
-
-.reticleLidar::after {
-  top: 50%;
-  left: -12%;
-  height: 1px;
-  width: 124%;
 }

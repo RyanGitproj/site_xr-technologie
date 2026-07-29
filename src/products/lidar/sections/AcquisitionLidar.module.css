@@ -16,6 +16,8 @@
 
 /* Fiche mode d'acquisition : angles nets, matériel en badge technique. */
 .mode {
+  position: relative;
+  overflow: hidden;
   height: 100%;
   display: grid;
   gap: 0.6rem;
@@ -25,6 +27,36 @@
   border-top: 2px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
   border-radius: var(--radius-tight);
   background: color-mix(in srgb, var(--color-bg-raised) 62%, transparent);
+}
+
+/* Variante photo (lot I) : l'image est le FOND, le texte se pose sur le
+   voile sombre (règle images du projet). */
+.modePhoto {
+  min-height: 15rem;
+  align-content: end;
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-bg-deep) 30%, transparent) 0%,
+    color-mix(in srgb, var(--color-bg-deep) 86%, transparent) 68%,
+    color-mix(in srgb, var(--color-bg-deep) 94%, transparent) 100%
+  );
+}
+
+.modePhoto .icon,
+.modePhoto .modeTitle,
+.modePhoto .hardware,
+.modePhoto .note,
+.modePhoto .body {
+  position: relative;
 }
 
 .icon {

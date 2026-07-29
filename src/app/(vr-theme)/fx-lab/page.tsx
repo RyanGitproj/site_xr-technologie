@@ -15,6 +15,7 @@ import { GlassPanel } from "@/components/fx/GlassPanel";
 import { GlowReactive, GlowReactiveGroup } from "@/components/fx/GlowReactive";
 import { GridPulse } from "@/components/fx/GridPulse";
 import { HeadsetScene } from "@/components/fx/HeadsetScene";
+import { LidarScanSceneLazy } from "@/components/fx/LidarScanSceneLazy";
 import { HoloFigure } from "@/components/fx/HoloFigure";
 import { HoloHeadset } from "@/components/fx/HoloHeadset";
 import { LampHeader } from "@/components/fx/LampHeader";
@@ -25,6 +26,7 @@ import { TapHint } from "@/components/fx/TapHint";
 import { MagneticButton } from "@/components/fx/MagneticButton";
 import { Meteors } from "@/components/fx/Meteors";
 import { NumberTicker } from "@/components/fx/NumberTicker";
+import { Pano360Window } from "@/components/fx/Pano360Window";
 import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
 import { ParallaxScene } from "@/components/fx/ParallaxScene";
 import { ProjectionBeam } from "@/components/fx/ProjectionBeam";
@@ -47,6 +49,8 @@ import Image from "next/image";
 import { m, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
 import { diveImages, galleryImages } from "@/products/vr/config/images";
+import { demo360 } from "@/products/xr360/config/content";
+import { PoleObjectVisual } from "@/site/sections/PoleObjectVisual";
 import { PRODUCTS } from "@/config/products";
 import { ANTANANARIVO } from "@/lib/geo/madagascar";
 import { toViewPct } from "@/lib/geo/madagascarView";
@@ -146,6 +150,38 @@ function HeadsetLabDemo() {
     <>
       <div className={cx(styles.demo, styles.headsetDemo)}>
         <HeadsetScene progress={progress} tiltX={tiltX} tiltY={tiltY} />
+      </div>
+      <label className={styles.headsetSlider}>
+        progression {value.toFixed(2)}
+        <input
+          type="range"
+          min={0}
+          max={1}
+          step={0.01}
+          value={value}
+          onChange={(e) => {
+            const v = Number(e.target.value);
+            setValue(v);
+            progress.set(v);
+          }}
+        />
+      </label>
+    </>
+  );
+}
+
+/** Banc de la scène scan LiDAR : le slider joue le rôle du scroll (onde →
+    nuage de points → jumeau filaire). La palette est lue des tokens du
+    stage lidar par le wrapper lazy. */
+function LidarScanLabDemo() {
+  const progress = useMotionValue(0);
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const [value, setValue] = useState(0);
+  return (
+    <>
+      <div className={cx(styles.demo, styles.v2ScanDemo)}>
+        <LidarScanSceneLazy progress={progress} tiltX={tiltX} tiltY={tiltY} fallback={null} />
       </div>
       <label className={styles.headsetSlider}>
         progression {value.toFixed(2)}
@@ -399,6 +435,52 @@ export default function FxLabPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className={styles.v2Stage} data-theme="xr360">
+          <p className={styles.v2StageLabel}>
+            Fenêtre 360 interactive (refonte immersive) : panorama incurvé WebGL, drag pour
+            regarder autour (inertie), gyroscope mobile, hotspots pulsants, sélecteur de scènes
+            à fondu GPU. Repli : image + sélecteur fonctionnels sans three.js (reduced-motion,
+            WebGL absent). Les scènes viennent de la config /360 (illustratives, mention côté
+            section). Passera en sphère complète via « projection: sphere » (équirect lot G).
+          </p>
+          <div className={styles.v2PanoFrame}>
+            <Pano360Window
+              scenes={demo360.panoScenes}
+              hint={demo360.panoHint}
+              gyroLabel={demo360.panoGyroCta}
+            />
+          </div>
+        </div>
+
+        <div className={styles.v2Stage} data-theme="site">
+          <p className={styles.v2StageLabel}>
+            Objets de pôle 3D (refonte immersive) : le VRAI matériel remplace les décors
+            abstraits des bandes accueil. Casque Quest 3 (GLB réutilisé, chunk isolé), caméra
+            360 et scanner procéduraux premium. Idle 24 s/tour + inclinaison vers le pointeur
+            (fine only), accent lu du token du pôle, repli halo/packshot sous reduced-motion
+            ou sans WebGL.
+          </p>
+          <div className={styles.v2PoleObjects}>
+            {PRODUCTS.map((product) => (
+              <div key={product.id} className={styles.v2PoleFrame} data-pole-accent={product.id}>
+                <PoleObjectVisual productId={product.id} />
+                <span className={styles.v2PoleName}>{product.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.v2Stage} data-theme="lidar">
+          <p className={styles.v2StageLabel}>
+            « Le scan construit le jumeau » (refonte immersive) : scène du pipeline /lidar.
+            L&apos;onde du scanner révèle un nuage de ~22k points (ShaderMaterial, naissance
+            radiale déterministe), puis le filaire du jumeau se fige, caméra orbitale. En page :
+            piloté par un ScrollStage 3 écrans ; ici le slider joue le scroll. Repli : cartes
+            images du pipeline (reduced-motion) / nuage webp (sans WebGL).
+          </p>
+          <LidarScanLabDemo />
         </div>
       </LabSection>
 

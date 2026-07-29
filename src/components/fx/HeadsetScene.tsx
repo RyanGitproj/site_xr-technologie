@@ -5,6 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
 import type { MotionValue } from "framer-motion";
 import type { Group } from "three";
+import { ramp } from "@/lib/motion/sceneRamp";
 import { Quest3Gltf } from "./Quest3Gltf";
 import styles from "./HeadsetScene.module.css";
 
@@ -18,16 +19,6 @@ type Choreography = {
   tiltX: MotionValue<number>;
   tiltY: MotionValue<number>;
 };
-
-function clamp01(v: number) {
-  return v < 0 ? 0 : v > 1 ? 1 : v;
-}
-/** Interpolation lissée (smoothstep) de `a`→`b` sur la fenêtre [p0, p1]. */
-function ramp(p: number, p0: number, p1: number, a: number, b: number) {
-  const t = clamp01((p - p0) / (p1 - p0));
-  const s = t * t * (3 - 2 * t);
-  return a + (b - a) * s;
-}
 
 /**
  * Rig : lit la progression du scroll (et le gyro) à chaque frame et joue la

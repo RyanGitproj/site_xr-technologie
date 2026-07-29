@@ -28,6 +28,14 @@
 
 /* Fond photo (lot F) : scan en cours, faisceau vert ; voile dense sur la
    zone texte, fondu bas vers le graphite du thème. */
+/* Conteneur des calques parallax du décor : tout le hero, contenu et
+   chips d'overlap hors calques. */
+.decorScene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .bg {
   position: absolute;
   inset: 0;

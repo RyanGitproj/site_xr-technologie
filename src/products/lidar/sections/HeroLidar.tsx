@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { EnterRise } from "@/components/fx/EnterRise";
 import { GridPulse } from "@/components/fx/GridPulse";
+import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
+import { ParallaxScene } from "@/components/fx/ParallaxScene";
 import { ShimmerCTA } from "@/components/fx/ShimmerCTA";
 import { heroLidar } from "@/products/lidar/config/content";
 import styles from "./HeroLidar.module.css";
@@ -8,28 +10,35 @@ import styles from "./HeroLidar.module.css";
 /** Hero LiDAR : le problème (l'approximation) puis la réponse (la donnée),
     posés sur la photo du scan en cours (lot F), trame technique +
     réticule de visée par-dessus : le langage de la charte. Apparition en
-    EnterRise (CSS pur) : le titre peint au premier paint, sans attendre
-    l'hydration (LCP 3G). */
+    EnterRise (CSS pur, LCP intact). Profondeur au scroll : la photo traîne
+    (inset), la trame/réticule devance (flow) ; chips d'overlap HORS
+    calques. */
 export function HeroLidar() {
   return (
     <section className={styles.hero}>
-      {heroLidar.image !== null && (
-        <div className={styles.bg}>
-          <Image
-            src={heroLidar.image.src}
-            alt={heroLidar.image.alt}
-            fill
-            priority
-            sizes="100vw"
-            className={styles.bgImg}
-          />
-          <div aria-hidden="true" className={styles.veil} />
-        </div>
-      )}
-      <div aria-hidden="true" className={styles.decor}>
-        <GridPulse intensity="ambient" patternId="grid-pulse-lidar-hero" />
-        <div className={styles.reticle} />
-      </div>
+      <ParallaxScene
+        offset={["start start", "end start"]}
+        neutral={0}
+        className={styles.decorScene}
+      >
+        {heroLidar.image !== null && (
+          <ParallaxLayer depth={-0.3} mode="inset" insetRange={6} className={styles.bg}>
+            <Image
+              src={heroLidar.image.src}
+              alt={heroLidar.image.alt}
+              fill
+              priority
+              sizes="100vw"
+              className={styles.bgImg}
+            />
+            <div aria-hidden="true" className={styles.veil} />
+          </ParallaxLayer>
+        )}
+        <ParallaxLayer depth={0.14} range={48} touchRange={24} className={styles.decor}>
+          <GridPulse intensity="ambient" patternId="grid-pulse-lidar-hero" />
+          <div aria-hidden="true" className={styles.reticle} />
+        </ParallaxLayer>
+      </ParallaxScene>
       <div className={styles.inner}>
         <EnterRise>
           <p className={styles.kicker}>{heroLidar.kicker}</p>

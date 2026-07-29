@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     fond animé aux aurores du pôle (fallback statique reduced-motion). */
 export default function LidarLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div data-theme="lidar" className={styles.theme}>
+    <div data-theme="lidar" data-page-theme="lidar" className={styles.theme}>
       <AuroraField className={styles.aurora} />
       {children}
     </div>

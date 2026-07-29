@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     XR Technologie, thème « site » comme l'accueil. */
 export default function ConfidentialitePage() {
   return (
-    <div data-theme="site" className={styles.shell}>
+    <div data-theme="site" data-page-theme="site" className={styles.shell}>
       <SiteHeader />
       <main id="contenu" className={styles.main}>
         <GlassPanel className={styles.panel}>

@@ -14,6 +14,12 @@ describe("catalogue des pôles", () => {
     expect(new Set(routes).size).toBe(PRODUCTS.length);
   });
 
+  it("libellés courts distincts (navbar mobile)", () => {
+    const shortNames = PRODUCTS.map((product) => product.shortName);
+    expect(new Set(shortNames).size).toBe(PRODUCTS.length);
+    expect(shortNames.every((label) => label.length <= 6)).toBe(true);
+  });
+
   it("LIVE_PRODUCTS ne contient que les pôles en ligne", () => {
     expect(LIVE_PRODUCTS.every((product) => product.status === "live")).toBe(true);
     expect(LIVE_PRODUCTS.length).toBeGreaterThan(0);
@@ -47,6 +53,27 @@ describe("catalogue des pôles", () => {
     for (const product of PRODUCTS) {
       expect(globalsCss).toContain(`--color-pole-${product.id}:`);
       expect(globalsCss).toContain(`[data-pole-accent="${product.id}"]`);
+    }
+  });
+
+  it("la barre de défilement du document suit le thème de chaque page", () => {
+    const globalsCss = readFileSync(join(__dirname, "..", "app", "globals.css"), "utf8");
+    const themeIds = [...PRODUCTS.map((product) => product.id), "site"];
+    // Le couple pouce/piste de chaque thème vit au niveau du document…
+    for (const themeId of themeIds) {
+      expect(globalsCss, `--palette-${themeId}-bg-deep manquant`).toContain(
+        `--palette-${themeId}-bg-deep:`,
+      );
+      expect(globalsCss, `--palette-${themeId}-accent-deep manquant`).toContain(
+        `--palette-${themeId}-accent-deep:`,
+      );
+    }
+    // …et chaque thème NON défaut le sélectionne sur <html> (les wrappers
+    // [data-theme] ne peuvent pas colorer le chrome du navigateur).
+    for (const themeId of themeIds.filter((id) => id !== DEFAULT_THEME_ID)) {
+      expect(globalsCss, `règle html:has([data-page-theme="${themeId}"]) manquante`).toContain(
+        `html:has([data-page-theme="${themeId}"])`,
+      );
     }
   });
 

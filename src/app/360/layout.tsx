@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     animé aux aurores du pôle (fallback statique reduced-motion). */
 export default function Xr360Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div data-theme="xr360" className={styles.theme}>
+    <div data-theme="xr360" data-page-theme="xr360" className={styles.theme}>
       <AuroraField className={styles.aurora} />
       {children}
     </div>

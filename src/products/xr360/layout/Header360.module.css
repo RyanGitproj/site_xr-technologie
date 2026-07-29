@@ -1,24 +1,5 @@
-.header {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: 40;
-  padding: 0.75rem clamp(1rem, 3vw, 2rem) 0;
-}
-
-.panel {
-  max-width: 72rem;
-  margin-inline: auto;
-  border-radius: var(--radius-cta);
-}
-
-.bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: var(--header-h);
-  padding: 0 clamp(1rem, 2.5vw, 1.5rem);
-}
+/* Contenu propre à la navbar 360 : la forme (bandeau plein cadre, compactage,
+   filet de progression) vit dans HeaderShell.module.css. */
 
 .wordmark {
   display: grid;

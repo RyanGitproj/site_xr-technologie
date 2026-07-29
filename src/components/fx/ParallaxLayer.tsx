@@ -68,26 +68,36 @@ export function ParallaxLayer({
   const insetY = useTransform(progress, [0, 1], [`${insetFrom}%`, `${insetTo}%`]);
   const y = mode === "flow" ? flowY : insetY;
 
-  // Inset coupé sur tactile (même logique que la Famille B, règle Motion) :
+  // La sur-échelle inset est STATIQUE : elle vit sur un div serveur présent
+  // dans TOUTES les branches, jamais sur le m.div (framer ne sérialise pas
+  // ses styles en SSR : l'image sauterait de +3-4 % à l'hydratation et le
+  // repaint plus grand re-déclencherait le LCP du hero, mesuré à +2,5 s).
+  const insetInner =
+    mode === "inset" ? (
+      <div
+        className={styles.insetInner}
+        style={{ transform: `scale(${insetScale(depth, insetRange)})` }}
+      >
+        {children}
+      </div>
+    ) : null;
+
+  // Inset figé sur tactile (même logique que la Famille B, règle Motion) :
   // le micro-glissement d'image ne se perçoit pas au pouce et son coût
   // composité pèse sur le budget mobile ; l'immersion tactile passe par la
   // plongée et le gyroscope. Le mode flow garde touchRange pour se doser.
   if (reduce || (mode === "inset" && !fine)) {
     return (
       <div ref={ref} className={cx(mode === "inset" && styles.inset, className)}>
-        {children}
+        {insetInner ?? children}
       </div>
     );
   }
 
   if (mode === "inset") {
     return (
-      <m.div
-        ref={ref}
-        className={cx(styles.inset, className)}
-        style={{ y, scale: insetScale(depth, insetRange) }}
-      >
-        {children}
+      <m.div ref={ref} className={cx(styles.inset, className)} style={{ y }}>
+        {insetInner}
       </m.div>
     );
   }

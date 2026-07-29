@@ -1,31 +1,5 @@
-.header {
-  position: fixed;
-  inset-inline: 0;
-  top: 0;
-  z-index: 50;
-}
-
-/* La navbar est un verre pleine largeur : pas de rayon ni de bordures latérales. */
-.panel {
-  border-radius: 0;
-  border-inline: none;
-  border-top: none;
-}
-
-.bar {
-  margin-inline: auto;
-  display: flex;
-  max-width: 72rem;
-  height: var(--header-h);
-  align-items: center;
-  justify-content: space-between;
-  padding-inline: 1.5rem;
-  transition: height 300ms var(--ease-out);
-}
-
-.compact {
-  height: 3.25rem;
-}
+/* Contenu propre à la navbar VR : la forme (bandeau plein cadre, compactage,
+   filet de progression) vit dans HeaderShell.module.css. */
 
 .logo {
   display: flex;

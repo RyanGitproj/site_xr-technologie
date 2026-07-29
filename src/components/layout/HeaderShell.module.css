@@ -1,0 +1,40 @@
+/* Coquille commune des 4 navbars (référence : la navbar VR). Le verre
+   occupe TOUTE la largeur et touche le haut de l'écran : jamais de navbar
+   flottante avec une bande de fond au-dessus. */
+
+.header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 50;
+}
+
+/* Bandeau plein cadre : ni rayon, ni bordures latérales, ni arête haute. */
+.panel {
+  border-radius: 0;
+  border-inline: none;
+  border-top: none;
+}
+
+/* Le contenu, lui, reste dans la colonne de lecture. */
+.bar {
+  margin-inline: auto;
+  display: flex;
+  max-width: 72rem;
+  height: var(--header-h);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: clamp(1rem, 2.5vw, 1.5rem);
+  transition: height 300ms var(--ease-out);
+}
+
+.compact {
+  height: 3.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}

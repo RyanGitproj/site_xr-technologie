@@ -16,7 +16,7 @@ import styles from "./home.module.css";
     Navigation libre, funnels dans les pôles. */
 export default function HomePage() {
   return (
-    <div data-theme="site" className={styles.site}>
+    <div data-theme="site" data-page-theme="site" className={styles.site}>
       <AuroraField className={styles.aurora} />
       <SiteHeader />
       <main id="contenu">

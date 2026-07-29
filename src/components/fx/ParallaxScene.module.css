@@ -17,6 +17,13 @@
   inset: 0;
 }
 
+/* Porteur SSR de la sur-échelle inset (statique, inline) : présent dans
+   toutes les branches pour que le premier paint ait déjà la taille finale. */
+.insetInner {
+  position: absolute;
+  inset: 0;
+}
+
 /* Discipline chap. 8 : will-change armé uniquement quand la scène approche
    du viewport (IntersectionObserver ±160px), relâché sitôt sortie. */
 .scene[data-active="true"] .layer,

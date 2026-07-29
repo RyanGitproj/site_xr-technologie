@@ -5,6 +5,7 @@ import { Volume2, VolumeX } from "lucide-react";
 import type { VideoSlot } from "@/lib/images";
 import { cx } from "@/lib/cx";
 import { useReducedMotionPref } from "@/lib/motion/useReducedMotion";
+import { VIDEO_VISIBLE_RATIO, isVideoVisibleEnough } from "@/lib/motion/videoVisibility";
 import styles from "./AmbientVideo.module.css";
 
 type AmbientVideoProps = {
@@ -16,11 +17,14 @@ type AmbientVideoProps = {
 
 /**
  * Vidéo d'ambiance : autoplay muet en boucle qui ne se charge et ne joue
- * QUE lorsqu'elle entre à l'écran (IntersectionObserver + preload=none),
- * se met en pause hors écran et quand l'onglet est masqué. Sous
+ * QUE tant qu'elle occupe vraiment l'écran (IntersectionObserver +
+ * preload=none), et qui se met en pause dès que l'utilisateur scrolle hors
+ * de sa section, change d'onglet ou quitte la page. Sous
  * `prefers-reduced-motion`, aucune lecture auto : poster figé + contrôles
- * natifs pour lancer à la demande. Un bouton coupe/active le son (démarrage
- * muet obligatoire pour l'autoplay). Ratio réservé par le poster (zéro CLS).
+ * natifs pour lancer à la demande (la mise en pause hors écran, elle,
+ * s'applique quand même : le son ne doit jamais suivre le lecteur).
+ * Un bouton coupe/active le son (démarrage muet obligatoire pour
+ * l'autoplay). Ratio réservé par le poster (zéro CLS).
  */
 export function AmbientVideo({ video, soundOnLabel, soundOffLabel, className }: AmbientVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -28,29 +32,44 @@ export function AmbientVideo({ video, soundOnLabel, soundOffLabel, className }: 
   const [muted, setMuted] = useState(true);
   const { poster } = video;
 
-  // Lecture pilotée par la visibilité (écran + onglet), mais jamais sous
-  // reduced-motion (le fallback poster/contrôles prend le relais).
+  // Un seul juge : « assez visible ». Pas de rootMargin ici (une marge
+  // laissait la vidéo parler alors qu'elle avait quitté l'écran), et des
+  // seuils échelonnés pour que la sortie de section déclenche la pause.
   useEffect(() => {
     const el = ref.current;
-    if (reduce || el === null) return;
+    if (el === null) return;
 
-    let onScreen = false;
+    let visible = false;
     const sync = () => {
-      if (onScreen && !document.hidden) void el.play().catch(() => {});
-      else el.pause();
+      if (visible && !document.hidden && !reduce) {
+        void el.play().catch(() => {});
+      } else if (!el.paused) {
+        el.pause();
+      }
     };
     const observer = new IntersectionObserver(
       (entries) => {
-        onScreen = entries[0]?.isIntersecting ?? false;
+        const entry = entries[entries.length - 1];
+        if (entry === undefined) return;
+        visible = isVideoVisibleEnough({
+          intersectionHeight: entry.intersectionRect.height,
+          elementHeight: entry.boundingClientRect.height,
+          rootHeight: entry.rootBounds?.height ?? null,
+        });
         sync();
       },
-      { rootMargin: "200px" },
+      { threshold: [0, 0.25, VIDEO_VISIBLE_RATIO, 0.75, 1] },
     );
     observer.observe(el);
     document.addEventListener("visibilitychange", sync);
+    // pagehide couvre ce que visibilitychange rate sur iOS (retour arrière,
+    // bascule d'app) : la bande-son ne survit pas à la page.
+    window.addEventListener("pagehide", sync);
     return () => {
       observer.disconnect();
       document.removeEventListener("visibilitychange", sync);
+      window.removeEventListener("pagehide", sync);
+      el.pause();
     };
   }, [reduce]);
 

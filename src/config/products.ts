@@ -51,3 +51,8 @@ export const PRODUCTS: readonly Product[] = [
 
 /** Pôles dont la landing est en ligne (navigation, sitemap). */
 export const LIVE_PRODUCTS = PRODUCTS.filter((product) => product.status === "live");
+
+/** Accès direct par id (cartes objectifs, mappings de contenu). */
+export const PRODUCT_BY_ID = Object.fromEntries(
+  PRODUCTS.map((product) => [product.id, product]),
+) as Record<ProductId, Product>;

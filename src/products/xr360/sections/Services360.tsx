@@ -3,8 +3,9 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { services360 } from "@/products/xr360/config/content";
 import styles from "./Services360.module.css";
 
-/** Les 5 prestations, en liste éditoriale numérotée (01-05) : un langage
-    différent des cards, la ligne panoramique de la charte en séparateur. */
+/** Les prestations (8 depuis Funnel V2 : FPV, vidéo en ligne et formats
+    sociaux ajoutés), en liste éditoriale numérotée : un langage différent
+    des cards, la ligne panoramique de la charte en séparateur. */
 export function Services360() {
   return (
     <section id={services360.id} className={styles.section}>

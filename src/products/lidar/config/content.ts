@@ -14,13 +14,16 @@ import {
   ListChecks,
   Map,
   MessagesSquare,
+  Plane,
   Ruler,
   ScanLine,
   Send,
   ShieldCheck,
+  Smartphone,
   Users,
   type LucideIcon,
 } from "lucide-react";
+import type { ImageSlot } from "@/lib/images";
 
 /**
  * Contenu du funnel XR LiDAR Opérationnel (relevé 3D, reality capture).
@@ -34,6 +37,7 @@ import {
 /* Navigation interne par scrollTo (aucune ancre d'URL) : id = id de section. */
 export const navLidar = [
   { label: "Bénéfices", id: "benefices" },
+  { label: "Acquisition", id: "acquisition" },
   { label: "Applications", id: "applications" },
   { label: "Mission", id: "mission" },
   { label: "Livrables", id: "livrables" },
@@ -43,11 +47,17 @@ export const heroLidar = {
   kicker: "XR LiDAR Opérationnel · Relevé 3D · Reality capture",
   titleLead: "Le terrain ne devrait pas",
   titleAccent: "rester une approximation.",
-  subtitle:
-    "Une mesure manquante ou un état des lieux incomplet ralentit un projet, provoque des retours sur site et complique la coordination. XR LiDAR Opérationnel transforme vos bâtiments, espaces et sites existants en données numériques structurées et exploitables.",
   baseline: "Mesurer. Documenter. Exploiter.",
   cta: "Présenter mon site",
   ctaTargetId: "brief",
+  /** Fond du hero (lot F) : scanner au faisceau vert dans un plateau en
+      travaux. Priority : re-mesurer le LCP à chaque changement de visuel. */
+  image: {
+    src: "/images/funnel-v2/lidar-chantier-scanner.webp",
+    alt: "Scanner 3D sur trépied balayant un plateau en travaux d'un faisceau vert",
+    width: 1600,
+    height: 1000,
+  } as ImageSlot | null,
   chips: [
     { icon: ScanLine, label: "Relevé 3D" },
     { icon: Box, label: "Nuage de points" },
@@ -117,6 +127,163 @@ export const audienceLidar = {
     "Exploitants de bâtiments",
     "Propriétaires de sites complexes",
   ],
+} as const;
+
+/** Trois modes d'acquisition (Funnel V2, réf. PDF boss p14). Matériel
+    affiché sur arbitrage du 28/07 (source boss) ; la mention drone
+    « selon mission et autorisations » est reprise FIDÈLEMENT. */
+export const acquisitionLidar = {
+  id: "acquisition",
+  kicker: "Trois modes d'acquisition",
+  title: "Voir le site. Le comprendre. Décider.",
+  subtitle:
+    "Le mode de captation se choisit selon le site, ses accès et l'objectif : au sol, à la main ou depuis le ciel.",
+  modes: [
+    {
+      icon: ScanLine,
+      title: "Acquisition terrestre",
+      hardware: "Matterport Pro3",
+      note: null,
+      body: "Le scanner sur trépied pour les intérieurs et les volumes complexes : la référence de la mission.",
+    },
+    {
+      icon: Smartphone,
+      title: "Capture mobile",
+      hardware: "iPhone 15 Pro LiDAR",
+      note: null,
+      body: "La captation légère des zones difficiles d'accès ou des besoins rapides, en complément du scanner.",
+    },
+    {
+      icon: Plane,
+      title: "Acquisition aérienne",
+      hardware: "Drone LiDAR",
+      note: "Selon mission et autorisations",
+      body: "Toitures, façades et emprises extérieures, quand le projet le justifie et que le cadre le permet.",
+    },
+  ] satisfies readonly {
+    icon: LucideIcon;
+    title: string;
+    hardware: string;
+    note: string | null;
+    body: string;
+  }[],
+} as const;
+
+export type PipelineStage = {
+  title: string;
+  body: string;
+  /** Visuel réel (lot F du brief Codex, ou capture studio) ; null =
+      placeholder dégradé. */
+  image: ImageSlot | null;
+};
+
+export type ProgressState = {
+  label: string;
+  image: ImageSlot | null;
+};
+
+/** Pipeline « du réel au jumeau numérique » (Funnel V2, réf. PDF boss
+    p15) + comparaison d'avancement pour le suivi de chantier. */
+export const pipelineLidar = {
+  id: "pipeline",
+  kicker: "Du réel au jumeau numérique",
+  title: "Comprendre le site avant d'agir",
+  stages: [
+    {
+      title: "État réel",
+      body: "Le site tel qu'il est, capturé sur place.",
+      image: {
+        src: "/images/funnel-v2/lidar-scan-trame.webp",
+        alt: "Pièce brute balayée par une trame laser verte",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      title: "Nuage de points",
+      body: "Des millions de points mesurés : la matière première du projet.",
+      image: {
+        src: "/images/funnel-v2/lidar-nuage-points.webp",
+        alt: "Intérieur de bâtiment restitué en nuage de points verts",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      title: "Jumeau numérique",
+      body: "Une référence numérique consultable, mesurable et comparable.",
+      image: {
+        src: "/images/funnel-v2/lidar-jumeau-filaire.webp",
+        alt: "Bâtiment en filaire 3D vert et cyan sur fond sombre",
+        width: 1200,
+        height: 800,
+      },
+    },
+  ] as readonly PipelineStage[],
+  actions: ["Documenter", "Mesurer", "Comparer"],
+  progressTitle: "Comparaison d'avancement du site",
+  progressBody:
+    "Un même bâtiment, scanné à plusieurs moments : l'avancement se constate, il ne se discute plus.",
+  progressStates: [
+    {
+      label: "Scan initial",
+      image: {
+        src: "/images/funnel-v2/lidar-avancement-01.webp",
+        alt: "Bâtiment en filaire gris, points de scan épars",
+        width: 1200,
+        height: 900,
+      },
+    },
+    {
+      label: "En cours",
+      image: {
+        src: "/images/funnel-v2/lidar-avancement-02.webp",
+        alt: "Même bâtiment, niveaux inférieurs restitués en points verts",
+        width: 1200,
+        height: 900,
+      },
+    },
+    {
+      label: "Aujourd'hui",
+      image: {
+        src: "/images/funnel-v2/lidar-avancement-03.webp",
+        alt: "Même bâtiment complet en volume bleu technique",
+        width: 1200,
+        height: 900,
+      },
+    },
+  ] as readonly ProgressState[],
+  /** Mentions fidèles au PDF boss, à ne pas reformuler. */
+  mentions: [
+    "Livrables selon faisabilité et validation technique.",
+    "Visualisation illustrative.",
+  ],
+} as const;
+
+export type FlowStep = {
+  title: string;
+  note?: string;
+};
+
+/** Flux de données (Funnel V2, réf. PDF boss p16) : de la capture à la
+    remise, formats nommés. Les 4 usages du PDF (réhabilitation,
+    aménagement, suivi, patrimoine) ne sont PAS repris ici : doublon des
+    7 applications déjà en page. */
+export const dataFlowLidar = {
+  id: "flux",
+  kicker: "Parlez le langage de l'existant",
+  title: "Des relevés 3D au modèle exploitable",
+  subtitle:
+    "Un flux de données maîtrisé et traçable, du terrain jusqu'à vos logiciels.",
+  steps: [
+    { title: "Capture de l'existant" },
+    { title: "Nuage de points" },
+    { title: "E57", note: "Format d'échange standard" },
+    { title: "CAD / BIM", note: "En option, selon le besoin validé" },
+    { title: "Coordination, remise et archivage" },
+  ] as readonly FlowStep[],
+  /** Mention fidèle au PDF boss, à ne pas reformuler. */
+  mention: "Formats, tolérances et livrables validés avant devis.",
 } as const;
 
 export const applicationsLidar = {

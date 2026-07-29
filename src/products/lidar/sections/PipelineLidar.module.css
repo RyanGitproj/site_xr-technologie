@@ -1,0 +1,223 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.stages {
+  max-width: 72rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.cell {
+  display: grid;
+}
+
+.stage {
+  position: relative;
+  height: 100%;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+}
+
+.stageNumber {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* Visuel d'étape : capture réelle à terme (lot F), trame dégradée sinon.
+   Les trois variantes marquent la transformation réel → donnée → modèle. */
+.visual {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+  border-radius: var(--radius-tight);
+  background: linear-gradient(210deg, var(--color-bg-raised), var(--color-bg-deep));
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.visualReal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    90% 80% at 30% 25%,
+    color-mix(in srgb, var(--color-ink-muted) 22%, transparent) 0%,
+    transparent 65%
+  );
+}
+
+.visualCloud::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      1.5px 1.5px at 22% 30%,
+      var(--color-accent) 50%,
+      transparent 51%
+    ),
+    radial-gradient(1.5px 1.5px at 45% 60%, var(--color-accent) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 68% 35%, var(--color-accent) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 80% 70%, var(--color-accent) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 33% 78%, var(--color-accent) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 58% 18%, var(--color-accent) 50%, transparent 51%),
+    radial-gradient(
+      100% 100% at 50% 50%,
+      color-mix(in srgb, var(--color-accent) 10%, transparent) 0%,
+      transparent 70%
+    );
+  opacity: 0.9;
+}
+
+.visualTwin::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px solid color-mix(in srgb, var(--color-accent-hot) 65%, transparent);
+  background:
+    linear-gradient(
+        color-mix(in srgb, var(--color-accent-hot) 25%, transparent) 1px,
+        transparent 1px
+      )
+      0 0 / 100% 25%,
+    linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--color-accent-hot) 25%, transparent) 1px,
+        transparent 1px
+      )
+      0 0 / 25% 100%;
+}
+
+.stageTitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.stageBody {
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.actions {
+  max-width: 72rem;
+  margin: 1.75rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2rem;
+  justify-content: center;
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.action::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid var(--color-accent);
+}
+
+/* Comparaison d'avancement : trois états, même cadrage. */
+.progress {
+  max-width: 72rem;
+  margin: calc(var(--stack-gap) * 0.75) auto 0;
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 18%, transparent);
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 55%, transparent);
+}
+
+.progressTitle {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.progressBody {
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.states {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.state {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.stateVisual {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+  border-radius: var(--radius-tight);
+  background: linear-gradient(210deg, var(--color-bg-raised), var(--color-bg-deep));
+}
+
+/* Remplissage croissant : jauge de secours quand la photo manque. */
+.stateVisual::after {
+  content: "";
+  position: absolute;
+  inset: auto 12% 12%;
+  height: calc(76% * var(--progress, 0.2));
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--color-accent) calc(18% * var(--progress, 0.2) + 6%), transparent);
+}
+
+/* Avec photo (reprise lot F) : la jauge s'efface, l'image parle seule. */
+.statePhoto::after {
+  content: none;
+}
+
+.stateLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.mentions {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.mention {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--color-ink-muted);
+}
+
+@media (min-width: 768px) {
+  .stages {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .states {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

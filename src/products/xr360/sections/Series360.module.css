@@ -1,0 +1,148 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+/* Cartes compactes au pattern des cartes objectifs de l'accueil :
+   pastille numéro + titre + accroche sur photo voilée. Mobile : bande à
+   défilement horizontal avec snap. Desktop : 3 colonnes. */
+.episodes {
+  max-width: 72rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(78vw, 19rem);
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.25rem;
+}
+
+/* STRICTEMENT le pattern des cartes objectifs de l'accueil (mêmes
+   dimensions, voile, fond, typo) : seule la pastille numéro remplace
+   l'icône, et pas de flèche (la carte n'est pas un lien). */
+.episode {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  height: 100%;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--glass-stroke));
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 72%, transparent);
+}
+
+.episodeImg {
+  object-fit: cover;
+}
+
+.episodeVeil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-bg-deep) 92%, transparent) 0%,
+    color-mix(in srgb, var(--color-bg-deep) 78%, transparent) 55%,
+    color-mix(in srgb, var(--color-bg-deep) 38%, transparent) 100%
+  );
+}
+
+.episodeNumber {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.episodeText {
+  position: relative;
+  display: block;
+}
+
+.episodeTitle {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.episodeBody {
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+}
+
+.cell {
+  display: grid;
+  scroll-snap-align: start;
+}
+
+.diffusion {
+  max-width: 64rem;
+  margin: 2rem auto 0;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.diffusionTitle {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.channels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.channel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--glass-stroke));
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 78%, transparent);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.channelIcon {
+  width: 1.05rem;
+  height: 1.05rem;
+  color: var(--color-accent);
+}
+
+@media (min-width: 640px) {
+  .episodes {
+    grid-auto-flow: row;
+    grid-auto-columns: unset;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .episodes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

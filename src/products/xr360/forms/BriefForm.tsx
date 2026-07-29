@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { LucideIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
@@ -20,7 +20,9 @@ import {
   TYPE_LIEU_ICONS,
   TYPE_LIEU_LABELS,
 } from "@/products/xr360/config/briefForm";
+import { offers360 } from "@/products/xr360/config/content";
 import { briefSchema, type Brief } from "@/products/xr360/lib/brief";
+import { useOffer360Selection } from "@/products/xr360/lib/selection";
 import { cx } from "@/lib/cx";
 import styles from "@/components/forms/formShell.module.css";
 
@@ -55,6 +57,8 @@ export function BriefForm() {
     handleSubmit,
     trigger,
     control,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<Brief>({
     resolver: standardSchemaResolver(briefSchema),
@@ -63,6 +67,24 @@ export function BriefForm() {
     mode: "onSubmit",
     defaultValues: { supports: [], message: "", email: "" },
   });
+
+  // Présélection « Choisir ce niveau » (section Offres) : supports adaptés
+  // à l'offre + mention dans le message, SANS écraser un texte déjà saisi
+  // (seul le texte auto précédent est remplaçable).
+  const offerId = useOffer360Selection();
+  const lastAutoMessage = useRef<string | null>(null);
+  useEffect(() => {
+    if (offerId === null) return;
+    const offer = offers360.items.find((item) => item.id === offerId);
+    if (offer === undefined) return;
+    setValue("supports", [...offer.supports]);
+    const autoMessage = `Offre envisagée : ${offer.name}.`;
+    const currentMessage = getValues("message");
+    if (currentMessage === "" || currentMessage === lastAutoMessage.current) {
+      setValue("message", autoMessage);
+      lastAutoMessage.current = autoMessage;
+    }
+  }, [offerId, setValue, getValues]);
 
   const isLastStep = step === FORM_STEPS.length - 1;
   const lastNavAt = useRef(0);

@@ -42,6 +42,7 @@ import { TracingBeam } from "@/components/fx/TracingBeam";
 import { VelocityMarquee } from "@/components/fx/VelocityMarquee";
 import { PROJECTION_TIMELINE } from "@/components/fx/projectionTimeline";
 import { Figure } from "@/components/ui/Figure";
+import { ArrowRight, Globe, ScanLine, Users } from "lucide-react";
 import Image from "next/image";
 import { m, useMotionValue, useTransform } from "framer-motion";
 import { useState } from "react";
@@ -55,6 +56,48 @@ import styles from "./fx-lab.module.css";
 
 const TANA = toViewPct(ANTANANARIVO);
 const BEAM_TOP = { x: 50, width: 28, y: 42.5 } as const;
+
+/* Vitrine Funnel V2 : données de démonstration (le contenu réel viendra
+   des configs de pôle au moment de construire les sections). */
+const V2_OBJECTIVES = [
+  {
+    pole: "vr",
+    icon: Users,
+    title: "Former vos équipes",
+    note: "Sessions VR encadrées, sur votre site",
+  },
+  {
+    pole: "xr360",
+    icon: Globe,
+    title: "Faire visiter à distance",
+    note: "La première visite avant le déplacement",
+  },
+  {
+    pole: "lidar",
+    icon: ScanLine,
+    title: "Documenter l'existant",
+    note: "Du relevé 3D au jumeau numérique",
+  },
+] as const;
+
+const V2_SECTORS = [
+  { pole: "xr360", label: "Hôtels, resorts et tourisme" },
+  { pole: "lidar", label: "Architecture, BTP et bureaux d'études" },
+  { pole: "vr", label: "Marques et évènementiel" },
+] as const;
+
+const V2_STEPS = [
+  { title: "Capture de l'existant", note: "Scan terrestre ou mobile selon le site" },
+  { title: "Nuage de points", note: "Contrôlé, nettoyé, structuré" },
+  { title: "Livrables E57 / CAD / BIM", note: "Formats validés avant devis" },
+] as const;
+
+const V2_HUB_SATELLITES = [
+  { x: 16, y: 18, label: "Captation 360°" },
+  { x: 84, y: 18, label: "Film FPV" },
+  { x: 16, y: 82, label: "Visite interactive" },
+  { x: 84, y: 82, label: "Formats sociaux" },
+] as const;
 
 const DEMO_STEPS = [
   { title: "Brief & objectifs", body: "30 minutes pour cadrer date, lieu et public." },
@@ -237,6 +280,125 @@ export default function FxLabPage() {
               </GlassPanel>
             </div>
           ))}
+        </div>
+      </LabSection>
+
+      <LabSection
+        title="Patterns Funnel V2 (accueil, 360, LiDAR)"
+        note="Chantier Funnel V2 (28/07, arbitrages charte docs/Utils). Cinq patterns statiques à valider ici avant toute section réelle ; les visuels sont des placeholders dégradés en attendant les lots Codex (docs/images-funnel-v2-brief.md). Chaque scène est montrée sous le thème du pôle qui la consommera. La page /vr n'est pas concernée."
+      >
+        <div className={styles.v2Stage} data-theme="site">
+          <p className={styles.v2StageLabel}>
+            Carte objectif : accueil, « Que voulez-vous obtenir ? » (accent du pôle cible)
+          </p>
+          <div className={styles.v2GridCards}>
+            {V2_OBJECTIVES.map((objective) => {
+              const Icon = objective.icon;
+              return (
+                <div
+                  key={objective.title}
+                  className={styles.v2Objective}
+                  data-pole-accent={objective.pole}
+                >
+                  <span className={styles.v2ObjectiveIcon}>
+                    <Icon size={20} strokeWidth={1.6} aria-hidden />
+                  </span>
+                  <span>
+                    <span className={styles.v2ObjectiveTitle}>{objective.title}</span>
+                    <span className={styles.v2ObjectiveNote}>{objective.note}</span>
+                  </span>
+                  <ArrowRight size={18} strokeWidth={1.8} aria-hidden className={styles.v2ObjectiveArrow} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className={styles.v2Stage} data-theme="site">
+          <p className={styles.v2StageLabel}>
+            Carte secteur photo : accueil, « les secteurs où l&apos;immersion crée le plus de valeur »
+          </p>
+          <div className={styles.v2GridCards}>
+            {V2_SECTORS.map((sector) => (
+              <div key={sector.label} className={styles.v2Sector} data-pole-accent={sector.pole}>
+                <p className={styles.v2SectorLabel}>{sector.label}</p>
+                <span className={styles.v2SectorTag}>placeholder Codex</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.v2Stage} data-theme="lidar">
+          <p className={styles.v2StageLabel}>
+            Étape numérotée : flux LiDAR 01-05 (marqueurs carrés, charte angles nets)
+          </p>
+          <div className={styles.v2Steps}>
+            {V2_STEPS.map((step, index) => (
+              <div key={step.title} className={styles.v2Step}>
+                <span className={styles.v2StepBadge}>0{index + 1}</span>
+                <p className={styles.v2StepTitle}>{step.title}</p>
+                <p className={styles.v2StepNote}>{step.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.v2Stage} data-theme="xr360">
+          <p className={styles.v2StageLabel}>
+            Mockup device : livrables 360 (écrans = crops des panoramas Codex à venir)
+          </p>
+          <div className={styles.v2Devices}>
+            <div className={styles.v2Laptop}>
+              <div className={styles.v2LaptopScreen}>
+                <div className={styles.v2Screen} />
+              </div>
+              <div className={styles.v2LaptopBase} />
+              <p className={styles.v2DeviceLabel}>Visite interactive, expérience complète</p>
+            </div>
+            <div className={styles.v2Phone}>
+              <div className={styles.v2PhoneScreen}>
+                <div className={styles.v2Screen} />
+              </div>
+              <p className={styles.v2DeviceLabel}>Mobile</p>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.v2Stage} data-theme="xr360">
+          <p className={styles.v2StageLabel}>
+            Diagramme hub : /360, « Un lieu. Plusieurs expériences. »
+          </p>
+          <div className={styles.v2Hub}>
+            <svg
+              className={styles.v2HubLines}
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden
+            >
+              {V2_HUB_SATELLITES.map((satellite) => (
+                <line
+                  key={satellite.label}
+                  x1={50}
+                  y1={50}
+                  x2={satellite.x}
+                  y2={satellite.y}
+                  vectorEffect="non-scaling-stroke"
+                />
+              ))}
+            </svg>
+            <div className={styles.v2HubNode} style={{ left: "50%", top: "50%" }}>
+              <span className={styles.v2HubCenter}>Votre lieu</span>
+            </div>
+            {V2_HUB_SATELLITES.map((satellite) => (
+              <div
+                key={satellite.label}
+                className={styles.v2HubNode}
+                style={{ left: `${satellite.x}%`, top: `${satellite.y}%` }}
+              >
+                <span className={styles.v2HubSat}>{satellite.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </LabSection>
 

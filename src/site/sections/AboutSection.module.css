@@ -3,6 +3,21 @@
   padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
 }
 
+/* Photo équipe (lot C) : pleine largeur du bloc, fondue vers le fond par
+   un masque bas pour rester dans le langage du socle. */
+.visual {
+  max-width: 64rem;
+  margin: var(--stack-gap) auto 0;
+}
+
+.visualImg {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--radius-card);
+  mask-image: linear-gradient(180deg, black 78%, transparent 100%);
+}
+
 .items {
   max-width: 72rem;
   margin: var(--stack-gap) auto 0;

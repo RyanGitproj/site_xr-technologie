@@ -1,15 +1,67 @@
+/* Pas d'overflow:hidden sur la section : les chips chevauchent le bord
+   bas (le décor, lui, est clippé par son propre calque). */
 .hero {
   position: relative;
   min-height: 100svh;
   display: grid;
-  align-content: center;
-  padding: calc(var(--header-h) + 2.5rem) clamp(1.25rem, 4vw, 3rem) var(--section-pad-y);
-  overflow: hidden;
+  grid-template-rows: 1fr auto;
+  padding: calc(var(--header-h) + 2.5rem) clamp(1.25rem, 4vw, 3rem) 0;
 }
 
+/* Mobile : le hero s'arrête au contenu, pas de désert vertical. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    row-gap: 1.5rem;
+  }
+}
+
+/* Rangée des chips : moitié sur la photo, moitié sur la section suivante. */
+.chipsRow {
+  position: relative;
+  z-index: 1;
+  max-width: 72rem;
+  margin-inline: auto;
+  width: 100%;
+  transform: translateY(50%);
+}
+
+/* Fond photo (lot F) : scan en cours, faisceau vert ; voile dense sur la
+   zone texte, fondu bas vers le graphite du thème. */
+.bg {
+  position: absolute;
+  inset: 0;
+}
+
+.bgImg {
+  object-fit: cover;
+  object-position: 65% 50%;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-bg-deep) 88%, transparent) 0%,
+      color-mix(in srgb, var(--color-bg-deep) 62%, transparent) 45%,
+      color-mix(in srgb, var(--color-bg-deep) 22%, transparent) 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-bg-deep) 62%, transparent) 0%,
+      transparent 32%,
+      transparent 62%,
+      var(--color-bg-deep) 100%
+    );
+}
+
+/* overflow:hidden ICI (le réticule déborde à droite), plus sur la section. */
 .decor {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -48,6 +100,7 @@
 
 .inner {
   position: relative;
+  align-self: center;
   max-width: 72rem;
   margin-inline: auto;
   width: 100%;
@@ -114,7 +167,8 @@
   border-radius: var(--radius-tight);
   font-size: 0.85rem;
   color: var(--color-ink-muted);
-  background: var(--glass-fill);
+  /* Fond dense : la chip chevauche deux fonds (photo + section). */
+  background: color-mix(in srgb, var(--color-bg-raised) 88%, transparent);
 }
 
 .chipIcon {

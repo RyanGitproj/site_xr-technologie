@@ -1,0 +1,73 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.flow {
+  max-width: 72rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: 1rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 18%, transparent);
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 62%, transparent);
+}
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.stepTitle {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.stepNote {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-ink-muted);
+}
+
+.mention {
+  max-width: 72rem;
+  margin: 1.75rem auto 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+}
+
+@media (min-width: 900px) {
+  .flow {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* Connecteur horizontal entre étapes du flux (desktop uniquement). */
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 2.1rem;
+    right: -1rem;
+    width: 1rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  }
+}

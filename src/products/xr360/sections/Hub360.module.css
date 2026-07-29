@@ -1,0 +1,73 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+/* Hub : pile grille en mobile (le diagramme absolu déborderait, mesuré sur
+   la vitrine fx-lab), diagramme spatial à partir de 768 px. */
+.hub {
+  position: relative;
+  max-width: 64rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+}
+
+.lines {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.lines line {
+  stroke: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  stroke-width: 1;
+}
+
+.node {
+  position: static;
+}
+
+.center {
+  display: grid;
+  place-items: center;
+  width: 7.5rem;
+  height: 7.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-bg-raised));
+  box-shadow: var(--glow-soft);
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.satellite {
+  padding: 0.45rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, var(--glass-stroke));
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 82%, transparent);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .hub {
+    display: block;
+    aspect-ratio: 16 / 9;
+    min-height: 16rem;
+  }
+
+  .lines {
+    display: block;
+  }
+
+  .node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+}

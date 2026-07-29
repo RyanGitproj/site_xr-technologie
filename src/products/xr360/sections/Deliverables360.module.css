@@ -3,6 +3,71 @@
   padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
 }
 
+/* Mockups devices (pattern validé sur /fx-lab) : cadres CSS purs, les
+   écrans affichent les panoramas du lot D. */
+.mockups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.laptop {
+  width: min(26rem, 100%);
+}
+
+.laptopScreen {
+  aspect-ratio: 16 / 10;
+  padding: 0.45rem;
+  border: 1px solid var(--glass-edge);
+  border-radius: 0.6rem 0.6rem 0 0;
+  background: color-mix(in srgb, var(--color-ink) 10%, var(--color-bg-deep));
+}
+
+.laptopBase {
+  height: 0.55rem;
+  border-radius: 0 0 0.8rem 0.8rem;
+  background: color-mix(in srgb, var(--color-ink) 18%, var(--color-bg-raised));
+}
+
+.phone {
+  width: 5.6rem;
+}
+
+.phoneScreen {
+  aspect-ratio: 9 / 19;
+  padding: 0.3rem;
+  border: 1px solid var(--glass-edge);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--color-ink) 10%, var(--color-bg-deep));
+}
+
+.screen {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: 0.35rem;
+  background: linear-gradient(
+    200deg,
+    color-mix(in srgb, var(--color-accent-deep) 55%, var(--color-bg-raised)),
+    var(--color-bg-deep)
+  );
+}
+
+.screenImg {
+  object-fit: cover;
+}
+
+.deviceLabel {
+  margin-top: 0.6rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-ink-muted);
+}
+
 .inner {
   max-width: 60rem;
   margin: var(--stack-gap) auto 0;

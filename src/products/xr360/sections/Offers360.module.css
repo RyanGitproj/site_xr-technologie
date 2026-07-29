@@ -1,0 +1,112 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.grid {
+  max-width: 68rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.cell {
+  display: grid;
+}
+
+.card {
+  height: 100%;
+  padding: 1.5rem;
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+}
+
+/* Offre mise en avant : l'arête du verre passe à l'accent (GlassPanel
+   borde avec --glass-edge), sans changer le fond. */
+.cardFeatured {
+  --glass-edge: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.offerName {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.tagline {
+  font-size: 0.88rem;
+  color: var(--color-ink-muted);
+}
+
+.features {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0;
+  list-style: none;
+}
+
+.feature {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+}
+
+.feature::before {
+  content: "";
+  flex-shrink: 0;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.choose {
+  justify-self: start;
+}
+
+.footer {
+  max-width: 68rem;
+  margin: 2rem auto 0;
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+}
+
+.reassurance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.75rem;
+  justify-content: center;
+}
+
+.reassuranceItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+}
+
+.reassuranceIcon {
+  width: 1.05rem;
+  height: 1.05rem;
+  color: var(--color-accent);
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

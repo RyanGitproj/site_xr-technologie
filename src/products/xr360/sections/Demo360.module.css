@@ -1,0 +1,113 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.inner {
+  max-width: 64rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.features {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.featureIcon {
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  border-radius: 50%;
+  color: var(--color-accent);
+}
+
+/* Cadre du viewer : panorama dégradé tant que embedUrl est null ; l'iframe
+   de la vraie visite prendra exactement cette place. */
+.viewer {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--glass-stroke));
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(
+      70% 60% at 68% 30%,
+      color-mix(in srgb, var(--color-accent-hot) 32%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      200deg,
+      color-mix(in srgb, var(--color-accent-deep) 50%, var(--color-bg-raised)),
+      var(--color-bg-deep)
+    );
+}
+
+.viewerFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Ambiance du viewer (lot D) : la photo respire derrière un voile qui
+   garantit la lisibilité du bloc promesse. */
+.previewImg {
+  object-fit: cover;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.9rem;
+  justify-items: center;
+  padding: 1.5rem;
+  text-align: center;
+  background: radial-gradient(
+    75% 85% at 50% 50%,
+    color-mix(in srgb, var(--color-bg-deep) 82%, transparent) 0%,
+    color-mix(in srgb, var(--color-bg-deep) 45%, transparent) 100%
+  );
+}
+
+.placeholderTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+  font-weight: 700;
+}
+
+.placeholderNote {
+  max-width: 28rem;
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+.mention {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.7rem;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: var(--color-ink-muted);
+}
+
+@media (min-width: 900px) {
+  .inner {
+    grid-template-columns: 16rem 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+}

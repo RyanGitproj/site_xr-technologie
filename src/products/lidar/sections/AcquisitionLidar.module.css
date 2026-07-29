@@ -1,0 +1,69 @@
+.section {
+  position: relative;
+  padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
+}
+
+.grid {
+  max-width: 72rem;
+  margin: var(--stack-gap) auto 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.cell {
+  display: grid;
+}
+
+/* Fiche mode d'acquisition : angles nets, matériel en badge technique. */
+.mode {
+  height: 100%;
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 18%, transparent);
+  border-top: 2px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+  border-radius: var(--radius-tight);
+  background: color-mix(in srgb, var(--color-bg-raised) 62%, transparent);
+}
+
+.icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--color-accent);
+}
+
+.modeTitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.hardware {
+  justify-self: start;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border-radius: var(--radius-tight);
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+}
+
+.note {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--color-ink-muted);
+}
+
+.body {
+  font-size: 0.9rem;
+  color: var(--color-ink-muted);
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -22,7 +22,14 @@ export function LiquidBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const renderer = createRenderer(canvas);
-    if (!renderer) return;
+    // Sans renderer (WebGL absent OU contexte perdu après un remontage),
+    // le canvas doit rester invisible : le dégradé CSS du conteneur prend
+    // le relais. Sans ce retrait, un canvas mort resterait affiché BLANC
+    // (contexte alpha:false perdu = composite blanc opaque).
+    if (!renderer) {
+      canvas.classList.remove(styles.isLive);
+      return;
+    }
 
     const pointer = { x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5 };
     let rafId = 0;
@@ -98,6 +105,10 @@ export function LiquidBackground() {
       document.removeEventListener("visibilitychange", onVisibility);
       reducedMotion.removeEventListener("change", onMotionPref);
       canvas.removeEventListener("webglcontextlost", onContextLost);
+      // Le prochain montage (Strict Mode dev, navigation SPA) remettra
+      // isLive une fois son premier rendu dessiné : entre-temps le canvas
+      // doit rester invisible.
+      canvas.classList.remove(styles.isLive);
       renderer.dispose();
     };
   }, []);
@@ -271,7 +282,11 @@ function createRenderer(canvas: HTMLCanvasElement): Renderer | null {
     dispose() {
       gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // JAMAIS loseContext() ici : un canvas garde le même contexte toute
+      // sa vie, le perdre volontairement condamne tout REMONTAGE du même
+      // élément (Strict Mode dev, remount React) à un canvas mort rendu
+      // blanc opaque (bug « fond blanc jusqu'au F5 » du 28/07). Le
+      // contexte est libéré par le navigateur avec l'élément démonté.
     },
   };
 }

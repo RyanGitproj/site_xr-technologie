@@ -1,10 +1,36 @@
 .section {
   position: relative;
+  overflow: hidden;
   padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
   text-align: center;
 }
 
+/* Ambiance chambre (lot D) : fortement voilée, fondue haut et bas vers le
+   socle : le texte reste le sujet. */
+.bg {
+  position: absolute;
+  inset: 0;
+}
+
+.bgImg {
+  object-fit: cover;
+}
+
+.bgVeil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      var(--color-bg-deep) 0%,
+      color-mix(in srgb, var(--color-bg-deep) 68%, transparent) 30%,
+      color-mix(in srgb, var(--color-bg-deep) 68%, transparent) 70%,
+      var(--color-bg-deep) 100%
+    );
+}
+
 .inner {
+  position: relative;
   max-width: 46rem;
   margin-inline: auto;
   display: grid;

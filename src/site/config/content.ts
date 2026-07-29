@@ -1,4 +1,14 @@
+﻿import {
+  Globe,
+  GraduationCap,
+  HardHat,
+  ScanLine,
+  Store,
+  Video,
+  type LucideIcon,
+} from "lucide-react";
 import type { ProductId } from "@/config/products";
+import type { ImageSlot } from "@/lib/images";
 
 /**
  * Contenu de l'accueil XR Technologie (socle « site », thème neutre).
@@ -8,19 +18,284 @@ import type { ProductId } from "@/config/products";
  * catalogue VR docs/Offres).
  */
 
-/** Hero : un verbe par pôle, chacun porté par sa couleur d'identité. */
+export type HeroTitleSegment = {
+  text: string;
+  /** Mot-clé porté par l'accent d'un pôle (vente → 360, formation → VR,
+      décision → LiDAR) ; absent = encre neutre. */
+  productId?: ProductId;
+};
+
+export type HeroCard = {
+  label: string;
+  productId: ProductId;
+  image: ImageSlot | null;
+};
+
+/** Hero : la promesse du PDF boss (p1) en titre, les trois résultats
+    portés chacun par la couleur d'un pôle (charte, pas le bleu du PDF). */
 export const homeHero = {
   kicker: "XR Technologie · Antananarivo",
-  titleWords: [
-    { word: "Vivez.", productId: "vr" },
-    { word: "Montrez.", productId: "xr360" },
-    { word: "Mesurez.", productId: "lidar" },
-  ] satisfies readonly { word: string; productId: ProductId }[],
+  titleSegments: [
+    { text: "Transformez vos lieux en outils de " },
+    { text: "vente", productId: "xr360" },
+    { text: ", de " },
+    { text: "formation", productId: "vr" },
+    { text: " et de " },
+    { text: "décision", productId: "lidar" },
+    { text: "." },
+  ] satisfies readonly HeroTitleSegment[],
+  cta: "Choisir mon objectif",
+  /** id de la section objectifs (scroll sans hash, comme le pôle VR). */
+  ctaTargetId: "objectifs",
+  /** Les 3 portes d'entrée (réf. p1 du PDF) : cartes photo qui chevauchent
+      le bas du hero, chacune route vers son pôle (faire vivre → 360,
+      former et convaincre → VR, numériser et suivre → LiDAR). */
+  cards: [
+    {
+      label: "Faire vivre un lieu",
+      productId: "xr360",
+      image: {
+        src: "/images/funnel-v2/xr360-pano-restaurant.webp",
+        alt: "",
+        width: 1920,
+        height: 960,
+      },
+    },
+    {
+      label: "Former et convaincre",
+      productId: "vr",
+      image: {
+        src: "/images/funnel-v2/home-objectif-former-equipes.webp",
+        alt: "",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      label: "Numériser et suivre",
+      productId: "lidar",
+      image: {
+        src: "/images/funnel-v2/lidar-chantier-scanner.webp",
+        alt: "",
+        width: 1600,
+        height: 1000,
+      },
+    },
+  ] as readonly HeroCard[],
+  /** Fond du hero (lot C) : équipe + matériel au-dessus de Tana, sujet à
+      droite. Chargé en priority : re-mesurer le LCP 3G à chaque
+      changement de visuel. */
+  image: {
+    src: "/images/funnel-v2/home-hero-equipe.webp",
+    alt: "L'équipe XR Technologie autour de ses casques VR, caméra 360, drone et scanner, au-dessus d'Antananarivo au crépuscule",
+    width: 1920,
+    height: 1200,
+  } as ImageSlot | null,
+  /** Variante portrait (art direction < 768 px) : équipe centrée, cadrage
+      vertical pensé pour mobile. */
+  imageMobile: {
+    src: "/images/funnel-v2/home-hero-equipe-mobile.webp",
+    alt: "",
+    width: 1080,
+    height: 1350,
+  } as ImageSlot | null,
+} as const;
+
+export type Objective = {
+  icon: LucideIcon;
+  productId: ProductId;
+  title: string;
+  note: string;
+  /** Fond photo (lot A du brief Codex) ; null = carte sobre sans visuel. */
+  image: ImageSlot | null;
+};
+
+/** Orientation par objectif (Funnel V2, réf. PDF boss p2) : le lecteur
+    choisit le résultat qu'il veut obtenir, chaque carte l'emmène au pôle
+    qui le produit. Le fond vient des brochures, jamais de promesse neuve. */
+export const objectivesSection = {
+  id: "objectifs",
+  kicker: "Par où commencer ?",
+  title: "Que voulez-vous obtenir ?",
   subtitle:
-    "Trois pôles XR au service de votre projet : des animations VR qui se déplacent jusqu'à vous, des visites virtuelles qui font découvrir vos lieux à distance et des relevés 3D qui transforment vos sites en données exploitables.",
-  cta: "Découvrir nos pôles",
-  /** id de la section pôles (scroll sans hash, comme le pôle VR). */
-  ctaTargetId: "poles",
+    "Six objectifs concrets, trois pôles pour les atteindre : choisissez le vôtre, nous nous occupons du chemin.",
+  items: [
+    {
+      icon: Store,
+      productId: "vr",
+      title: "Attirer et vendre",
+      note: "Une animation VR qui crée l'événement là où sont vos clients.",
+      image: {
+        src: "/images/funnel-v2/home-objectif-attirer-vendre.webp",
+        alt: "Vitrine de boutique premium éclairée de nuit",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      icon: Globe,
+      productId: "xr360",
+      title: "Faire visiter à distance",
+      note: "La première visite a lieu avant même le déplacement.",
+      image: {
+        src: "/images/funnel-v2/home-objectif-visite-distance.webp",
+        alt: "Villa moderne éclairée au crépuscule",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      icon: Video,
+      productId: "xr360",
+      title: "Créer un contenu immersif",
+      note: "Captation 360 diffusée sur tous vos supports.",
+      image: {
+        src: "/images/funnel-v2/home-objectif-contenu-immersif.webp",
+        alt: "Personne devant un grand écran immersif lumineux",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      icon: GraduationCap,
+      productId: "vr",
+      title: "Former vos équipes",
+      note: "Des sessions VR encadrées, directement sur votre site.",
+      image: {
+        src: "/images/funnel-v2/home-objectif-former-equipes.webp",
+        alt: "Équipe en salle de formation face à un écran",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      icon: ScanLine,
+      productId: "lidar",
+      title: "Documenter l'existant",
+      note: "Vos bâtiments transformés en données exploitables.",
+      image: {
+        src: "/images/funnel-v2/home-objectif-documenter-existant.webp",
+        alt: "Plateau à rénover avec trépied de scan en silhouette",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      icon: HardHat,
+      productId: "lidar",
+      title: "Suivre un site ou un chantier",
+      note: "Une trace numérique fiable de chaque étape.",
+      image: {
+        src: "/images/funnel-v2/home-objectif-suivre-chantier.webp",
+        alt: "Chantier avec grue au crépuscule",
+        width: 1200,
+        height: 800,
+      },
+    },
+  ] satisfies readonly Objective[],
+  hesitation: "Vous hésitez entre plusieurs objectifs ?",
+  hesitationCta: "Décrire mon besoin",
+  /** Scroll sans hash vers le contact (même pattern que le CTA du hero). */
+  hesitationTargetId: "contact",
+} as const;
+
+export type Sector = {
+  /** Pôle qui donne sa couleur à la carte (liseré, cadre). */
+  accent: ProductId;
+  label: string;
+  /** Pôles pertinents pour le secteur, affichés en chips-liens. */
+  poles: readonly ProductId[];
+  /** Visuel du secteur (lot B du brief docs/images-funnel-v2-brief.md) ;
+      null = placeholder dégradé en attendant la livraison. */
+  image: ImageSlot | null;
+};
+
+/** Secteurs à forte valeur (Funnel V2, réf. PDF boss p3) : le lecteur se
+    reconnaît, les chips l'emmènent vers les pôles pertinents. Mapping
+    fondé sur les brochures (360 : hôtels, immobilier, patrimoine ; LiDAR :
+    BTP, industrie, logistique ; VR : campus, écoles, tourisme). */
+export const sectorsSection = {
+  id: "secteurs",
+  kicker: "Vous reconnaissez-vous ?",
+  title: "Les secteurs où l'immersion crée le plus de valeur",
+  items: [
+    {
+      accent: "xr360",
+      label: "Hôtels, resorts et tourisme",
+      poles: ["xr360", "vr"],
+      image: {
+        src: "/images/funnel-v2/home-secteur-hotels-tourisme.webp",
+        alt: "Piscine de resort au crépuscule sous les palmiers",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      accent: "xr360",
+      label: "Promoteurs et immobilier premium",
+      poles: ["xr360", "lidar"],
+      image: {
+        src: "/images/funnel-v2/home-secteur-immobilier.webp",
+        alt: "Immeuble résidentiel premium aux balcons éclairés, de nuit",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      accent: "lidar",
+      label: "Architecture, BTP et bureaux d'études",
+      poles: ["lidar"],
+      image: {
+        src: "/images/funnel-v2/home-secteur-architecture-btp.webp",
+        alt: "Bureau d'études de nuit, écran filaire 3D et casque de chantier",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      accent: "lidar",
+      label: "Industrie, énergie et sites techniques",
+      poles: ["lidar"],
+      image: {
+        src: "/images/funnel-v2/home-secteur-industrie.webp",
+        alt: "Technicien de dos dans un site industriel de nuit",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      accent: "lidar",
+      label: "Ports, aéroports et logistique",
+      poles: ["lidar"],
+      image: {
+        src: "/images/funnel-v2/home-secteur-logistique.webp",
+        alt: "Terminal à conteneurs de nuit, portiques éclairés",
+        width: 1200,
+        height: 800,
+      },
+    },
+    {
+      accent: "vr",
+      label: "Patrimoine, institutions et grands campus",
+      poles: ["vr", "xr360"],
+      image: {
+        src: "/images/funnel-v2/home-secteur-patrimoine.webp",
+        alt: "Façade historique en pierre et allée arborée à l'heure bleue",
+        width: 1200,
+        height: 800,
+      },
+    },
+  ] as readonly Sector[],
+  /** Libellés courts des chips-liens vers les pôles. */
+  poleChipLabels: {
+    vr: "XR VR",
+    xr360: "XR 360",
+    lidar: "XR LiDAR",
+  } satisfies Record<ProductId, string>,
+  diagnosticNote:
+    "Chaque mission commence par un diagnostic : vos objectifs d'abord, la technique ensuite.",
+  cta: "Parlons de votre cas d'usage",
+  ctaTargetId: "contact",
 } as const;
 
 export type PoleHighlight = {
@@ -76,6 +351,10 @@ export const aboutSection = {
   kicker: "XR Technologie",
   title: "Trois métiers, une seule équipe",
   body: "Depuis Antananarivo, nous mettons l'immersion au travail avec du matériel professionnel et une méthode éprouvée. Vous n'avez rien à prévoir : chaque prestation est préparée, installée et accompagnée jusqu'au résultat.",
+  /** Slot photo : null depuis que la photo équipe (lot C) vit dans le
+      hero (28/07, doublon évité) ; disponible pour un visuel studio
+      distinct un jour. */
+  image: null as ImageSlot | null,
   items: [
     {
       title: "Basés à Antananarivo",

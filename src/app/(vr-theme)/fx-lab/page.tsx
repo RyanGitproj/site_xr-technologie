@@ -44,6 +44,8 @@ import { TiltCard } from "@/components/fx/TiltCard";
 import { TracingBeam } from "@/components/fx/TracingBeam";
 import { VelocityMarquee } from "@/components/fx/VelocityMarquee";
 import { PROJECTION_TIMELINE } from "@/components/fx/projectionTimeline";
+import { PackCard } from "@/components/offers/PackCard";
+import type { OfferPack } from "@/components/offers/types";
 import { Figure } from "@/components/ui/Figure";
 import { ArrowRight, Globe, ScanLine, Users } from "lucide-react";
 import Image from "next/image";
@@ -112,6 +114,42 @@ const DEMO_STEPS = [
   { title: "Bilan", body: "Chiffres de participation et recommandations." },
 ] as const;
 
+/* Banc des ambiances de cartes : trois packs factices, la gamme se lit à la
+   matière (verre nu / halo aurora / fond densifié + braises). */
+const AMBIANCE_LAB_PACKS = [
+  {
+    id: "lab-decouverte",
+    name: "Découverte",
+    tagline: "Tier 0 : verre nu, calme.",
+    price: 1600000,
+    features: ["3 h d'animation", "4 casques VR"],
+  },
+  {
+    id: "lab-vedette",
+    name: "Vedette",
+    tagline: "Tier 1 : halo aurora derrière le verre.",
+    price: 3300000,
+    features: ["Demi-journée d'animation", "6 casques VR"],
+    featured: true,
+    badge: "Idéal week-ends",
+  },
+  {
+    id: "lab-premium",
+    name: "Premium",
+    tagline: "Tier 2 : fond densifié + braises.",
+    price: 6900000,
+    features: ["Journée complète", "10 casques VR"],
+  },
+] as const satisfies readonly OfferPack[];
+
+/* Trois teintes contrastées pour vérifier que les ambiances suivent
+   n'importe quel accent d'offre (orange / turquoise / violet). */
+const AMBIANCE_LAB_ACCENTS = [
+  "centres-commerciaux",
+  "ecoles-colleges",
+  "universite-formation",
+] as const;
+
 /* Banc DeckRail : assez de cartes pour dépasser trois pages en desktop. */
 const DECK_LAB_CARDS = [
   "L'arrivée",
@@ -150,6 +188,63 @@ function DemoCard({ title, note }: { title: string; note: string }) {
       <p className={styles.cardTitle}>{title}</p>
       <p className={styles.cardNote}>{note}</p>
     </>
+  );
+}
+
+/** Banc des fonds d'ambiance par tier : sélecteur d'accent + cartes réelles. */
+function PackAmbianceLabDemo() {
+  const [accent, setAccent] = useState<(typeof AMBIANCE_LAB_ACCENTS)[number]>(
+    AMBIANCE_LAB_ACCENTS[0],
+  );
+  return (
+    <div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+        {AMBIANCE_LAB_ACCENTS.map((id) => (
+          <button
+            key={id}
+            type="button"
+            data-offer-accent={id}
+            onClick={() => setAccent(id)}
+            style={{
+              padding: "0.4rem 0.9rem",
+              fontFamily: "var(--font-display)",
+              fontSize: "0.8125rem",
+              border: "1px solid var(--glass-stroke)",
+              background:
+                accent === id
+                  ? "color-mix(in srgb, var(--offer-accent) 22%, var(--color-bg-raised))"
+                  : "var(--color-bg-raised)",
+              color: "var(--color-ink)",
+              cursor: "pointer",
+            }}
+          >
+            {id}
+          </button>
+        ))}
+      </div>
+      <div
+        data-offer-accent={accent}
+        style={{
+          display: "grid",
+          gap: "1.5rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(16rem, 1fr))",
+          alignItems: "stretch",
+          paddingTop: "2rem" /* dégage le badge du pack vedette */,
+        }}
+      >
+        {AMBIANCE_LAB_PACKS.map((pack, index) => (
+          <PackCard
+            key={pack.id}
+            pack={pack}
+            tier={index}
+            pricePrefix="à partir de"
+            cta="Choisir ce pack"
+            formAnchor="devis"
+            onChoose={() => {}}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -580,6 +675,13 @@ export default function FxLabPage() {
             </span>
           </GeoFrame>
         </div>
+      </LabSection>
+
+      <LabSection
+        title="Ambiances de cartes (PackCard par tier)"
+        note="La gamme se lit à la matière, DERRIÈRE le verre (couches sœurs du GlassPanel dans le clip du GeoFrame, réellement floutées par le backdrop-blur) : tier 0 verre nu, tier 1 halo aurora déphasé (--dur-ambient), tier 2 fond densifié + braises teintées par l'offre. Sélecteur d'accent pour vérifier les teintes non-orange ; nappes figées sous reduced-motion, couches coupées sous reduced-transparency."
+      >
+        <PackAmbianceLabDemo />
       </LabSection>
 
       <LabSection

@@ -220,7 +220,7 @@ export function OfferExplorer<Id extends string>({
             {activeGroup.tagline}
           </m.p>
           <div className={styles.packs}>
-            {activeGroup.packs.map((pack) => (
+            {activeGroup.packs.map((pack, index) => (
               <m.div
                 key={pack.id}
                 variants={packVariants}
@@ -228,6 +228,7 @@ export function OfferExplorer<Id extends string>({
               >
                 <PackCard
                   pack={pack}
+                  tier={index}
                   pricePrefix={copy.pricePrefix}
                   cta={copy.cta}
                   formAnchor={formAnchor}

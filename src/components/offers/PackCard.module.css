@@ -21,6 +21,113 @@
   padding: 1.5rem;
 }
 
+/* ---- Fonds d'ambiance par tier (la gamme se lit à la matière) ----
+   Couches absolues en z-index -1 dans le conteneur clippé du GeoFrame
+   (position: relative + clip-path côté GeoFrame) : elles peignent DERRIÈRE
+   le GlassPanel, dont le backdrop-blur les floute réellement, tout en
+   restant découpées à la silhouette HUD. */
+
+/* Tier vedette : deux nappes aurora déphasées, teintées par l'offre. */
+.aurora {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.aurora::before {
+  left: -14%;
+  top: -18%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--offer-accent, var(--color-accent)) 30%, transparent),
+    transparent 70%
+  );
+  animation: pack-aurora-a var(--dur-ambient) ease-in-out infinite;
+}
+
+.aurora::after {
+  right: -16%;
+  bottom: -22%;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    color-mix(in srgb, var(--offer-accent, var(--color-fx-4)) 24%, transparent),
+    transparent 70%
+  );
+  animation: pack-aurora-b var(--dur-ambient) ease-in-out infinite;
+  animation-delay: calc(var(--dur-ambient) / -2);
+}
+
+@keyframes pack-aurora-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(16%, 20%) scale(1.15);
+  }
+}
+
+@keyframes pack-aurora-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.1);
+  }
+
+  50% {
+    transform: translate(-18%, -16%) scale(0.9);
+  }
+}
+
+/* Tier premium : fond nettement densifié (le verre nu laisse passer le décor,
+   ici la carte gagne sa propre profondeur), accent qui monte du pied. */
+.deepFill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-bg-deep) 88%, var(--offer-accent, var(--color-accent))),
+    color-mix(in srgb, var(--color-bg-deep) 64%, var(--offer-accent, var(--color-accent)))
+  );
+}
+
+/* Braises du premium : même plan que le fond dense (ordre DOM = au-dessus),
+   sous le verre ; la montée qui déborde est simplement clippée. */
+.embers {
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora::before,
+  .aurora::after {
+    animation: none; /* nappes statiques visibles ; braises figées via fx-neon.css */
+  }
+}
+
+/* Verre opaque dans ce mode : les couches seraient invisibles, autant
+   couper leur travail. */
+@media (prefers-reduced-transparency: reduce) {
+  .aurora,
+  .deepFill,
+  .embers {
+    display: none;
+  }
+}
+
 /* Remplace le box-shadow du verre par un glow teinté par l'offre active
    (même recette que --glow-featured, couleur pilotée par --offer-accent). */
 .panelFeatured {
@@ -64,6 +171,8 @@
   position: absolute;
   top: -1rem;
   left: 50%;
+  width: max-content; /* l'absolu en left 50% ne shrink-to-fit que sur la
+                         moitié de la card : sans ceci le libellé se replie */
   z-index: 3; /* au-dessus de l'arête SVG du GeoFrame */
   translate: -50% 0;
   border: none;
@@ -116,15 +225,6 @@
   font-family: var(--font-display);
   font-size: 1.875rem;
   font-weight: 700;
-}
-
-.priceRegular {
-  color: var(--offer-accent, var(--color-accent-hot));
-}
-
-/* Prix du pack vedette : accent d'offre plein (remplace le holo-text de
-   marque, la vedette restant marquée par badge, glow et élévation). */
-.priceFeatured {
   color: var(--offer-accent, var(--color-accent-hot));
 }
 

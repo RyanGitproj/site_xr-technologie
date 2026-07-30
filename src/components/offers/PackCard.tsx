@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Check, Plus } from "lucide-react";
 import { DecryptNumber } from "@/components/fx/DecryptNumber";
+import { Embers } from "@/components/fx/Embers";
 import { GeoFrame } from "@/components/fx/GeoFrame";
 import { GlassPanel } from "@/components/fx/GlassPanel";
 import { TiltCard } from "@/components/fx/TiltCard";
@@ -10,8 +11,19 @@ import { cx } from "@/lib/cx";
 import type { OfferPack } from "./types";
 import styles from "./PackCard.module.css";
 
+/* Braises du tier premium, teintées par l'offre active (styles inline,
+   donc les var() passent) ; pointe d'étincelle de marque en contrepoint. */
+const EMBER_COLORS = [
+  "var(--offer-accent, var(--color-accent))",
+  "color-mix(in srgb, var(--offer-accent, var(--color-accent)) 60%, white)",
+  "var(--color-fx-spark)",
+] as const;
+
 type PackCardProps = {
   pack: OfferPack;
+  /** Position du pack dans la gamme (0 découverte, 1 vedette, 2 premium) ;
+      l'ordre = prix croissants, invariant garanti par catalogAudit. */
+  tier: number;
   pricePrefix: string;
   cta: string;
   /** Id de la section formulaire de la page (« devis », « brief »). */
@@ -27,9 +39,14 @@ type PackCardProps = {
  * Card de pack : GlassPanel en TiltCard sous GeoFrame, pack vedette avec
  * chamfer élargi + trace + glow, prix en DecryptNumber (révélation
  * déchiffrement, car un compteur croissant ferait « grimper » le prix).
+ * La gamme se lit à la matière : chaque tier a son fond d'ambiance DERRIÈRE
+ * le verre (sœur du GlassPanel dans le conteneur clippé du GeoFrame, donc
+ * réellement floutée par le backdrop-blur) : verre nu (découverte), halo
+ * aurora (vedette), fond densifié + braises (premium).
  */
 export function PackCard({
   pack,
+  tier,
   pricePrefix,
   cta,
   formAnchor,
@@ -46,6 +63,13 @@ export function PackCard({
         trace={featured}
         className={styles.geo}
       >
+        {tier === 1 && <div aria-hidden="true" className={styles.aurora} />}
+        {tier === 2 && (
+          <>
+            <div aria-hidden="true" className={styles.deepFill} />
+            <Embers count={14} colors={EMBER_COLORS} className={styles.embers} />
+          </>
+        )}
         <GlassPanel className={cx(styles.panel, featured && styles.panelFeatured)}>
           {pack.visual !== undefined && (
             <div className={styles.visual}>
@@ -63,7 +87,7 @@ export function PackCard({
           <p className={styles.tagline}>{pack.tagline}</p>
           <p className={styles.priceBlock}>
             <span className={styles.pricePrefix}>{pricePrefix}</span>
-            <span className={cx(styles.price, featured ? styles.priceFeatured : styles.priceRegular)}>
+            <span className={styles.price}>
               <DecryptNumber value={pack.price} unit="ar" />
             </span>
           </p>

@@ -12,6 +12,9 @@ const COLORS = ["#ffc24d", "#f5661e", "#f5431c", "#e82818", "#2fbfa8", "#c18cff"
 type EmbersProps = {
   /** Avant-plan de scène : ~34 ; nappe d'ambiance : ~20. */
   count?: number;
+  /** Palette cyclée ; les valeurs finissent en styles inline, donc les
+      `var(--…)` sont acceptés (ex. braises teintées par l'offre active). */
+  colors?: readonly string[];
   className?: string;
 };
 
@@ -22,7 +25,7 @@ type EmbersProps = {
  * transform + opacity uniquement, pause hors écran (useOffscreenPause).
  * Sous prefers-reduced-motion : braises figées discrètes (fx-neon.css).
  */
-export function Embers({ count = 30, className }: EmbersProps) {
+export function Embers({ count = 30, colors = COLORS, className }: EmbersProps) {
   const ref = useRef<HTMLDivElement>(null);
   useOffscreenPause(ref);
 
@@ -30,7 +33,7 @@ export function Embers({ count = 30, className }: EmbersProps) {
     <div ref={ref} aria-hidden="true" className={cx("fx-layer", "fx-field", className)}>
       {Array.from({ length: count }, (_, i) => {
         const size = 2.5 + pseudoRandom(i, 4) * 4;
-        const color = COLORS[i % COLORS.length];
+        const color = colors[i % colors.length];
         const drift = ((pseudoRandom(i, 3) - 0.5) * 52).toFixed(0);
         return (
           <span

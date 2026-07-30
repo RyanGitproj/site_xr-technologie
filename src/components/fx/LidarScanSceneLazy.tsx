@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import type { MotionValue } from "framer-motion";
@@ -33,6 +33,8 @@ export function LidarScanSceneLazy({ progress, tiltX, tiltY, fallback }: LidarSc
   const webgl = useWebGLSupport();
   const fine = usePointerFine();
   const [palette, setPalette] = useState<LidarScanPalette | null>(null);
+  const [painted, setPainted] = useState(false);
+  const onReady = useCallback(() => setPainted(true), []);
 
   useEffect(() => {
     const el = ref.current;
@@ -46,6 +48,17 @@ export function LidarScanSceneLazy({ progress, tiltX, tiltY, fallback }: LidarSc
 
   return (
     <div ref={ref} className={styles.root}>
+      {/* Le nuage de points 2D tient l'écran SOUS le canvas jusqu'à la
+          première frame dessinée (chunk puis géométrie). */}
+      {fallback !== null ? (
+        <div
+          className={styles.fallback2d}
+          data-painted={painted ? "true" : undefined}
+          aria-hidden="true"
+        >
+          <Image src={fallback.src} alt="" fill sizes="100vw" className={styles.fallbackImg} />
+        </div>
+      ) : null}
       {webgl && mounted && palette !== null ? (
         <LidarScanScene
           progress={progress}
@@ -55,11 +68,8 @@ export function LidarScanSceneLazy({ progress, tiltX, tiltY, fallback }: LidarSc
           pointCount={fine ? 22000 : 14000}
           dpr={fine ? 1.5 : 1}
           active={active}
+          onReady={onReady}
         />
-      ) : fallback !== null ? (
-        <div className={styles.fallback2d} aria-hidden="true">
-          <Image src={fallback.src} alt="" fill sizes="100vw" className={styles.fallbackImg} />
-        </div>
       ) : null}
     </div>
   );

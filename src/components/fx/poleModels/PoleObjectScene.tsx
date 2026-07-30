@@ -1,23 +1,28 @@
 "use client";
 
-import { Suspense, useRef, type ReactNode } from "react";
+import { Suspense, useCallback, useRef, useState, type ReactNode } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
 import type { Group } from "three";
+import { SceneReady } from "../SceneReady";
 import styles from "./PoleObjectScene.module.css";
 
 /** Position pointeur normalisée (-1..1), écrite par le wrapper (handlers),
     lue ici dans useFrame : zéro re-render pendant le survol. */
 export type PolePointer = { x: number; y: number };
 
-type PoleObjectSceneProps = {
+/** Contrat commun aux 3 modèles de pôle (casque, caméra, scanner). */
+export type PoleModelSceneProps = {
   /** Couleur du pôle (lue des tokens par le wrapper via readCssColor). */
   accent: string;
   pointerRef: React.RefObject<PolePointer>;
   dpr?: number;
   active?: boolean;
-  children: ReactNode;
+  /** Première frame dessinée : le wrapper efface alors son repli 2D. */
+  onReady: () => void;
 };
+
+type PoleObjectSceneProps = PoleModelSceneProps & { children: ReactNode };
 
 const WARM_WHITE = "#f4efe8";
 
@@ -58,13 +63,23 @@ export default function PoleObjectScene({
   pointerRef,
   dpr = 1.5,
   active = true,
+  onReady,
   children,
 }: PoleObjectSceneProps) {
+  const [painted, setPainted] = useState(false);
+  const handleReady = useCallback(() => {
+    setPainted(true);
+    onReady();
+  }, [onReady]);
+
   return (
     <div className={styles.canvas} aria-hidden="true">
       <Canvas
         dpr={[1, dpr]}
-        frameloop={active ? "always" : "never"}
+        /* Tant que la scène n'a pas peint, elle rend même hors écran : sinon
+           l'objet n'existe à l'image qu'une fois le lecteur arrivé. Une fois
+           peinte, retour à la règle : rien hors écran, zéro GPU au repos. */
+        frameloop={active || !painted ? "always" : "never"}
         gl={{
           antialias: dpr >= 1.5,
           alpha: true,
@@ -86,7 +101,10 @@ export default function PoleObjectScene({
           <Lightformer intensity={1.8} color={WARM_WHITE} position={[0, 3, 2]} scale={[4, 2, 1]} />
           <Lightformer intensity={1.1} color={accent} position={[-3, 0.5, 2.5]} scale={[4, 4, 1]} />
         </Environment>
+        {/* La sonde vit DANS la frontière Suspense : elle ne signale la
+            scène prête qu'une fois le modèle résolu (GLB du casque compris). */}
         <Suspense fallback={null}>
+          <SceneReady onReady={handleReady} />
           <Rig pointerRef={pointerRef}>{children}</Rig>
         </Suspense>
       </Canvas>

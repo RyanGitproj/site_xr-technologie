@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 import type { MotionValue } from "framer-motion";
@@ -26,6 +26,7 @@ import {
   scanFraming,
 } from "@/lib/lidar/scanModel";
 import ScannerModel from "./poleModels/ScannerModel";
+import { SceneReady } from "./SceneReady";
 import styles from "./LidarScanScene.module.css";
 
 /** Couleurs du thème lidar, lues des tokens par le wrapper (readCssColor). */
@@ -44,6 +45,8 @@ type LidarScanSceneProps = {
   pointCount: number;
   dpr?: number;
   active?: boolean;
+  /** Première frame dessinée : le wrapper efface alors son repli 2D. */
+  onReady: () => void;
 };
 
 const DEG = Math.PI / 180;
@@ -88,7 +91,7 @@ const POINTS_FRAGMENT = /* glsl */ `
   }
 `;
 
-type RigProps = Omit<LidarScanSceneProps, "dpr" | "active">;
+type RigProps = Omit<LidarScanSceneProps, "dpr" | "active" | "onReady">;
 
 /** Rig : l'onde révèle le nuage (0.12→0.55), le filaire du jumeau se fige
     (0.60→0.78), la caméra orbite pendant toute la traversée. Zéro état
@@ -241,12 +244,22 @@ export default function LidarScanScene({
   pointCount,
   dpr = 1.5,
   active = true,
+  onReady,
 }: LidarScanSceneProps) {
+  const [painted, setPainted] = useState(false);
+  const handleReady = useCallback(() => {
+    setPainted(true);
+    onReady();
+  }, [onReady]);
+
   return (
     <div className={styles.root} aria-hidden="true">
       <Canvas
         dpr={[1, dpr]}
-        frameloop={active ? "always" : "never"}
+        /* Tant que le nuage n'a pas peint, la scène rend même hors écran :
+           sinon il n'existe à l'image qu'une fois le stage épinglé. Une fois
+           peint, retour à la règle : zéro GPU hors écran. */
+        frameloop={active || !painted ? "always" : "never"}
         gl={{
           antialias: dpr >= 1.5,
           alpha: true,
@@ -256,6 +269,7 @@ export default function LidarScanScene({
         onCreated={({ gl }) => gl.setClearAlpha(0)}
       >
         <PerspectiveCamera makeDefault position={[0, 5.2, 15]} fov={42} />
+        <SceneReady onReady={handleReady} />
         <Rig
           progress={progress}
           tiltX={tiltX}

@@ -9,9 +9,15 @@
   height: 100%;
 }
 
+/* Reste sous le canvas et ne s'efface qu'à la première frame dessinée. */
 .fallback2d {
   position: absolute;
   inset: 0;
+  transition: opacity var(--dur-med) var(--ease-out);
+}
+
+.fallback2d[data-painted="true"] {
+  opacity: 0;
 }
 
 .fallbackImg {

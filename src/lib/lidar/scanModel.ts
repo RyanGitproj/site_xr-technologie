@@ -104,6 +104,70 @@ function inHole(rect: ScanRect, u: number, v: number): boolean {
   return (rect.holes ?? []).some((h) => u >= h.u0 && u <= h.u1 && v >= h.v0 && v <= h.v1);
 }
 
+function pointAt(rect: ScanRect, u: number, v: number): [number, number, number] {
+  return [
+    rect.origin[0] + rect.uAxis[0] * u + rect.vAxis[0] * v,
+    rect.origin[1] + rect.uAxis[1] * u + rect.vAxis[1] * v,
+    rect.origin[2] + rect.uAxis[2] * u + rect.vAxis[2] * v,
+  ];
+}
+
+/** Distance du scanner à une surface (axes u ⟂ v dans SCAN_STRUCTURE :
+    projection orthogonale bornée, ouvertures ignorées). */
+function distanceToRect(rect: ScanRect, p: readonly [number, number, number]): number {
+  const d: [number, number, number] = [
+    p[0] - rect.origin[0],
+    p[1] - rect.origin[1],
+    p[2] - rect.origin[2],
+  ];
+  const uLen2 = rect.uAxis[0] ** 2 + rect.uAxis[1] ** 2 + rect.uAxis[2] ** 2;
+  const vLen2 = rect.vAxis[0] ** 2 + rect.vAxis[1] ** 2 + rect.vAxis[2] ** 2;
+  const clamp = (t: number) => (t < 0 ? 0 : t > 1 ? 1 : t);
+  const u = clamp((d[0] * rect.uAxis[0] + d[1] * rect.uAxis[1] + d[2] * rect.uAxis[2]) / uLen2);
+  const v = clamp((d[0] * rect.vAxis[0] + d[1] * rect.vAxis[1] + d[2] * rect.vAxis[2]) / vLen2);
+  const q = pointAt(rect, u, v);
+  return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+}
+
+export type ScanBirthRange = {
+  /** Distance scanner → surface la plus proche (naissance 0). */
+  minD: number;
+  /** Amplitude des distances (naissance 1 au coin le plus lointain). */
+  span: number;
+};
+
+/**
+ * Bornes EXACTES de la normalisation des naissances, calculées sur la
+ * géométrie et non sur un échantillon : le nuage (buildPointCloud) et le
+ * front radial des surfaces pleines (shader de la bande accueil) partagent
+ * ainsi le même repère temporel — le réel disparaît exactement là où les
+ * points naissent.
+ */
+export function scanBirthRange(): ScanBirthRange {
+  let minD = Number.POSITIVE_INFINITY;
+  let maxD = 0;
+  for (const rect of SCAN_STRUCTURE) {
+    minD = Math.min(minD, distanceToRect(rect, SCANNER_POSITION));
+    for (const [u, v] of [
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+    ] as const) {
+      const c = pointAt(rect, u, v);
+      maxD = Math.max(
+        maxD,
+        Math.hypot(
+          c[0] - SCANNER_POSITION[0],
+          c[1] - SCANNER_POSITION[1],
+          c[2] - SCANNER_POSITION[2],
+        ),
+      );
+    }
+  }
+  return { minD, span: Math.max(1e-6, maxD - minD) };
+}
+
 export type ScanPointCloud = {
   positions: Float32Array;
   /** Seuil d'apparition [0..1] : distance radiale au scanner, bruitée. */
@@ -124,8 +188,6 @@ export function buildPointCloud(count: number, salt = 7): ScanPointCloud {
   const birthRaw = new Float32Array(count);
   const shade = new Float32Array(count);
   const [sx, sy, sz] = SCANNER_POSITION;
-  let minD = Number.POSITIVE_INFINITY;
-  let maxD = 0;
 
   for (let i = 0; i < count; i++) {
     /* Choix de surface pondéré par l'aire. */
@@ -152,30 +214,21 @@ export function buildPointCloud(count: number, salt = 7): ScanPointCloud {
     positions[i * 3 + 1] = y;
     positions[i * 3 + 2] = z;
 
-    const d = Math.hypot(x - sx, y - sy, z - sz);
-    birthRaw[i] = d;
-    if (d < minD) minD = d;
-    if (d > maxD) maxD = d;
+    birthRaw[i] = Math.hypot(x - sx, y - sy, z - sz);
     shade[i] = pseudoRandom(i, salt + 53);
   }
 
-  /* Normalisation + bruit : l'onde a une épaisseur, pas un front dur. */
+  /* Normalisation + bruit : l'onde a une épaisseur, pas un front dur.
+     Bornes GÉOMÉTRIQUES (scanBirthRange) et non échantillonnées : le
+     shader des surfaces pleines calcule la même naissance par pixel. */
   const birth = new Float32Array(count);
-  const span = Math.max(1e-6, maxD - minD);
+  const { minD, span } = scanBirthRange();
   for (let i = 0; i < count; i++) {
     const noise = (pseudoRandom(i, salt + 67) - 0.5) * 0.04;
     birth[i] = Math.min(0.98, Math.max(0, (birthRaw[i] - minD) / span + noise));
   }
 
   return { positions, birth, shade };
-}
-
-function pointAt(rect: ScanRect, u: number, v: number): [number, number, number] {
-  return [
-    rect.origin[0] + rect.uAxis[0] * u + rect.vAxis[0] * v,
-    rect.origin[1] + rect.uAxis[1] * u + rect.vAxis[1] * v,
-    rect.origin[2] + rect.uAxis[2] * u + rect.vAxis[2] * v,
-  ];
 }
 
 /** Filaire du jumeau : contours des surfaces + contours des ouvertures,
@@ -206,4 +259,132 @@ export function buildWireframe(): Float32Array {
   }
 
   return new Float32Array(segments);
+}
+
+export type ScanSolid = {
+  positions: Float32Array;
+  normals: Float32Array;
+};
+
+/**
+ * Les MÊMES surfaces en maillage plein : c'est « l'avant » de la bande
+ * accueil (le bâtiment réel), que le front radial efface pixel par pixel
+ * pour laisser le nuage. Triangulation par grille : les bords d'ouvertures
+ * découpent le rectangle en cellules, celles qui tombent dans un trou sont
+ * jetées (fenêtres et porte réellement percées, pas peintes).
+ */
+export function buildSolidSurfaces(): ScanSolid {
+  const positions: number[] = [];
+  const normals: number[] = [];
+
+  const axisCuts = (values: readonly number[]) =>
+    [...new Set([0, ...values, 1])].sort((a, b) => a - b);
+
+  for (const rect of SCAN_STRUCTURE) {
+    const holes = rect.holes ?? [];
+    const us = axisCuts(holes.flatMap((h) => [h.u0, h.u1]));
+    const vs = axisCuts(holes.flatMap((h) => [h.v0, h.v1]));
+
+    /* Normale = u × v, normalisée (matériau DoubleSide côté scène : la
+       pièce se regarde de l'extérieur comme de l'intérieur). */
+    const n: [number, number, number] = [
+      rect.uAxis[1] * rect.vAxis[2] - rect.uAxis[2] * rect.vAxis[1],
+      rect.uAxis[2] * rect.vAxis[0] - rect.uAxis[0] * rect.vAxis[2],
+      rect.uAxis[0] * rect.vAxis[1] - rect.uAxis[1] * rect.vAxis[0],
+    ];
+    const nLen = Math.hypot(...n) || 1;
+
+    for (let i = 0; i < us.length - 1; i++) {
+      for (let j = 0; j < vs.length - 1; j++) {
+        const [u0, u1] = [us[i], us[i + 1]];
+        const [v0, v1] = [vs[j], vs[j + 1]];
+        if (inHole(rect, (u0 + u1) / 2, (v0 + v1) / 2)) continue;
+        const a = pointAt(rect, u0, v0);
+        const b = pointAt(rect, u1, v0);
+        const c = pointAt(rect, u1, v1);
+        const d = pointAt(rect, u0, v1);
+        for (const corner of [a, b, c, a, c, d]) {
+          positions.push(corner[0], corner[1], corner[2]);
+          normals.push(n[0] / nLen, n[1] / nLen, n[2] / nLen);
+        }
+      }
+    }
+  }
+
+  return { positions: new Float32Array(positions), normals: new Float32Array(normals) };
+}
+
+export type ScanBounds = {
+  min: readonly [number, number, number];
+  max: readonly [number, number, number];
+};
+
+/** Boîte englobante de la pièce, déduite des surfaces (source unique). */
+export function scanBounds(): ScanBounds {
+  const min: [number, number, number] = [Infinity, Infinity, Infinity];
+  const max: [number, number, number] = [-Infinity, -Infinity, -Infinity];
+  for (const rect of SCAN_STRUCTURE) {
+    for (const [u, v] of [
+      [0, 0],
+      [1, 0],
+      [1, 1],
+      [0, 1],
+    ] as const) {
+      const c = pointAt(rect, u, v);
+      for (let axis = 0; axis < 3; axis++) {
+        min[axis] = Math.min(min[axis], c[axis]);
+        max[axis] = Math.max(max[axis], c[axis]);
+      }
+    }
+  }
+  return { min, max };
+}
+
+/**
+ * Distance de caméra qui garde TOUTE la pièce dans le cadre, pour un
+ * azimut/une élévation et une forme de canvas donnés. La bande accueil est
+ * un cadre court et large en desktop, presque carré en mobile : plutôt que
+ * des constantes réglées à l'œil, on résout la distance sur les 8 coins de
+ * la boîte englobante (marge comprise).
+ */
+export function scanFitDistance(
+  azimut: number,
+  elevation: number,
+  fovDeg: number,
+  aspect: number,
+  target: readonly [number, number, number],
+  margin = 1.08,
+): number {
+  const tanV = Math.tan(((fovDeg / 2) * Math.PI) / 180);
+  const tanH = tanV * Math.max(aspect, 0.1);
+
+  /* Base caméra : direction cible → caméra, puis droite et haut. */
+  const dir: [number, number, number] = [
+    Math.sin(azimut) * Math.cos(elevation),
+    Math.sin(elevation),
+    Math.cos(azimut) * Math.cos(elevation),
+  ];
+  const forward: [number, number, number] = [-dir[0], -dir[1], -dir[2]];
+  const rightLen = Math.hypot(dir[2], dir[0]) || 1;
+  const right: [number, number, number] = [dir[2] / rightLen, 0, -dir[0] / rightLen];
+  const up: [number, number, number] = [
+    right[1] * forward[2] - right[2] * forward[1],
+    right[2] * forward[0] - right[0] * forward[2],
+    right[0] * forward[1] - right[1] * forward[0],
+  ];
+
+  const bounds = scanBounds();
+  let distance = 0;
+  for (let corner = 0; corner < 8; corner++) {
+    const p: [number, number, number] = [
+      (corner & 1 ? bounds.max : bounds.min)[0] - target[0],
+      (corner & 2 ? bounds.max : bounds.min)[1] - target[1],
+      (corner & 4 ? bounds.max : bounds.min)[2] - target[2],
+    ];
+    const along = p[0] * forward[0] + p[1] * forward[1] + p[2] * forward[2];
+    const x = Math.abs(p[0] * right[0] + p[1] * right[1] + p[2] * right[2]);
+    const y = Math.abs(p[0] * up[0] + p[1] * up[1] + p[2] * up[2]);
+    distance = Math.max(distance, x / tanH - along, y / tanV - along);
+  }
+  return distance * margin;
 }

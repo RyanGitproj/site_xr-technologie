@@ -125,6 +125,12 @@
   min-height: clamp(14rem, 30svh, 20rem);
 }
 
+/* LiDAR : la bande ne montre pas un objet mais une SCÈNE (le bâtiment
+   balayé qui devient nuage puis jumeau) — elle a besoin d'air. */
+.band[data-pole-accent="lidar"] .bandVisual {
+  min-height: clamp(17rem, 36svh, 24rem);
+}
+
 /* Calque parallax du visuel : il remplit la zone, l'objet devance
    légèrement le contenu au scroll (depth +0.12). */
 .visualLayer {

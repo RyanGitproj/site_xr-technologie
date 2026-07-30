@@ -21,7 +21,7 @@ import { useWebGLSupport } from "./webglSupport";
 const SCENE_CHUNKS: Record<SceneChunkId, () => Promise<unknown>> = {
   "pole-vr": () => import("./poleModels/Quest3PoleScene"),
   "pole-xr360": () => import("./poleModels/CameraPoleScene"),
-  "pole-lidar": () => import("./poleModels/ScannerPoleScene"),
+  "pole-lidar": () => import("./poleModels/ScanBandScene"),
   "vr-headset": () => import("./HeadsetScene"),
   "lidar-scan": () => import("./LidarScanScene"),
   "pano-360": () => import("./Pano360Scene"),

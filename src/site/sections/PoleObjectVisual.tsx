@@ -5,8 +5,10 @@ import { poleShowcase } from "@/site/config/content";
 import styles from "./PoleObjectVisual.module.css";
 
 /** Le VRAI objet du pôle en 3D dans sa bande (remplace les décors abstraits
-    du 27/07, dont l'orbe « Jupiter »). Repli : packshot Codex (lot H) dès
-    qu'il est branché dans la config, sinon halo + anneau discrets. */
+    du 27/07, dont l'orbe « Jupiter ») — sauf LiDAR, où la bande montre le
+    RÉSULTAT : le bâtiment balayé qui devient nuage puis jumeau. Repli :
+    packshot Codex (lot H) dès qu'il est branché dans la config, sinon halo
+    + anneau discrets. */
 export function PoleObjectVisual({ productId }: { productId: ProductId }) {
   const packshot = poleShowcase[productId].packshot;
 

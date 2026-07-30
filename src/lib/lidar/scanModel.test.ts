@@ -4,7 +4,11 @@ import {
   SCAN_REFERENCE_ASPECT,
   SCAN_STRUCTURE,
   buildPointCloud,
+  buildSolidSurfaces,
   buildWireframe,
+  scanBirthRange,
+  scanBounds,
+  scanFitDistance,
   scanFraming,
 } from "./scanModel";
 
@@ -110,6 +114,124 @@ describe("buildPointCloud", () => {
       expect(cloud.positions[i * 3 + 2]).toBeGreaterThanOrEqual(-4.001);
       expect(cloud.positions[i * 3 + 2]).toBeLessThanOrEqual(4.001);
     }
+  });
+});
+
+describe("scanBirthRange", () => {
+  /** Contrat de la bande accueil : la matière s'efface exactement là où les
+      points naissent, donc les deux doivent lire la MÊME normalisation. */
+  it("encadre les naissances du nuage (mêmes bornes que buildPointCloud)", () => {
+    const { minD, span } = scanBirthRange();
+    const cloud = buildPointCloud(4000);
+    const [sx, sy, sz] = SCANNER_POSITION;
+    for (let i = 0; i < 4000; i++) {
+      const d = Math.hypot(
+        cloud.positions[i * 3] - sx,
+        cloud.positions[i * 3 + 1] - sy,
+        cloud.positions[i * 3 + 2] - sz,
+      );
+      const birth = (d - minD) / span;
+      /* Tolérance = le bruit ±0,02 appliqué aux naissances. */
+      expect(birth).toBeGreaterThanOrEqual(-0.001);
+      expect(birth).toBeLessThanOrEqual(1.001);
+      expect(Math.abs(birth - cloud.birth[i])).toBeLessThanOrEqual(0.021);
+    }
+  });
+});
+
+describe("buildSolidSurfaces", () => {
+  const solid = buildSolidSurfaces();
+
+  it("produit des triangles complets, une normale par sommet", () => {
+    expect(solid.positions.length % 9).toBe(0);
+    expect(solid.normals.length).toBe(solid.positions.length);
+  });
+
+  it("perce vraiment les ouvertures (aucun sommet dans une fenêtre)", () => {
+    /* La fenêtre gauche du mur du fond : u 0,14→0,34 de 12 m, v 0,34→0,78
+       de 3,2 m. Son centre ne doit être couvert par aucun triangle. */
+    const cx = -6 + 12 * 0.24;
+    const cy = 3.2 * 0.56;
+    let covered = 0;
+    for (let t = 0; t < solid.positions.length; t += 9) {
+      const zs = [solid.positions[t + 2], solid.positions[t + 5], solid.positions[t + 8]];
+      if (!zs.every((z) => Math.abs(z + 4) < 1e-6)) continue;
+      const xs = [solid.positions[t], solid.positions[t + 3], solid.positions[t + 6]];
+      const ys = [solid.positions[t + 1], solid.positions[t + 4], solid.positions[t + 7]];
+      const inside =
+        cx >= Math.min(...xs) &&
+        cx <= Math.max(...xs) &&
+        cy >= Math.min(...ys) &&
+        cy <= Math.max(...ys);
+      if (inside) covered += 1;
+    }
+    expect(covered).toBe(0);
+  });
+
+  it("reste dans l'emprise de la pièce", () => {
+    const { min, max } = scanBounds();
+    for (let i = 0; i < solid.positions.length; i += 3) {
+      for (let axis = 0; axis < 3; axis++) {
+        expect(solid.positions[i + axis]).toBeGreaterThanOrEqual(min[axis] - 0.001);
+        expect(solid.positions[i + axis]).toBeLessThanOrEqual(max[axis] + 0.001);
+      }
+    }
+  });
+});
+
+describe("scanFitDistance", () => {
+  const TARGET = [0, 1.15, 0] as const;
+
+  /** Le défaut qu'on refuse : une pièce rognée par le cadre court et large
+      de la bande accueil. On reprojette les 8 coins depuis la caméra
+      calculée et on vérifie qu'ils tombent tous dans le frustum. */
+  const allCornersVisible = (azimut: number, elevation: number, aspect: number) => {
+    const fov = 40;
+    const distance = scanFitDistance(azimut, elevation, fov, aspect, TARGET);
+    const cam = [
+      TARGET[0] + Math.sin(azimut) * Math.cos(elevation) * distance,
+      TARGET[1] + Math.sin(elevation) * distance,
+      TARGET[2] + Math.cos(azimut) * Math.cos(elevation) * distance,
+    ];
+    const forward = [
+      TARGET[0] - cam[0],
+      TARGET[1] - cam[1],
+      TARGET[2] - cam[2],
+    ].map((v) => v / distance);
+    const rightLen = Math.hypot(forward[0], forward[2]) || 1;
+    const right = [-forward[2] / rightLen, 0, forward[0] / rightLen];
+    const up = [
+      right[1] * forward[2] - right[2] * forward[1],
+      right[2] * forward[0] - right[0] * forward[2],
+      right[0] * forward[1] - right[1] * forward[0],
+    ];
+    const tanV = Math.tan(((fov / 2) * Math.PI) / 180);
+    const { min, max } = scanBounds();
+    return [0, 1, 2, 3, 4, 5, 6, 7].every((corner) => {
+      const p = [
+        (corner & 1 ? max : min)[0] - cam[0],
+        (corner & 2 ? max : min)[1] - cam[1],
+        (corner & 4 ? max : min)[2] - cam[2],
+      ];
+      const z = p[0] * forward[0] + p[1] * forward[1] + p[2] * forward[2];
+      const x = Math.abs(p[0] * right[0] + p[1] * right[1] + p[2] * right[2]);
+      const y = Math.abs(p[0] * up[0] + p[1] * up[1] + p[2] * up[2]);
+      return z > 0 && x <= z * tanV * aspect && y <= z * tanV;
+    });
+  };
+
+  it("garde toute la pièce dans le cadre, quelle que soit la forme", () => {
+    for (const aspect of [2.4, 1.6, 1.2, 0.8]) {
+      for (const azimut of [-0.6, -0.28, 0.22, 0.72]) {
+        expect(allCornersVisible(azimut, 0.42, aspect), `${aspect} / ${azimut}`).toBe(true);
+      }
+    }
+  });
+
+  it("recule quand le cadre se resserre", () => {
+    const large = scanFitDistance(0.22, 0.42, 40, 2.4, TARGET);
+    const étroit = scanFitDistance(0.22, 0.42, 40, 0.8, TARGET);
+    expect(étroit).toBeGreaterThan(large);
   });
 });
 

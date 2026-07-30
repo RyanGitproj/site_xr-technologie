@@ -1,4 +1,4 @@
--- Leads du funnel XR VR Discovery (landing multi-offres, 8 secteurs).
+-- Leads du funnel XR VR Discovery (landing multi-offres, 10 secteurs).
 -- À exécuter dans le SQL editor Supabase.
 -- Base existante : appliquer supabase/migrations/*.sql au lieu de ce fichier.
 --
@@ -11,8 +11,8 @@ create table public.funnel_xr_discovery_leads (
   created_at timestamptz not null default now(),
 
   -- Qualification (étape 1 du formulaire) : secteur = id d'offre
-  -- (src/config/offers.ts) ou 'autre' ; pack = id de pack de ce secteur,
-  -- null si « je ne sais pas encore ».
+  -- (src/products/vr/config/offers.ts) ou 'autre' ; pack = id de pack de ce
+  -- secteur, null si « je ne sais pas encore ».
   secteur text not null,
   pack text,
   -- Legacy (formulaire mono-cible retail d'avant 2026-07-20) : plus écrite.

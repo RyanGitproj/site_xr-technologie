@@ -63,15 +63,3 @@
   border-color: var(--edge-lit);
   color: var(--color-accent-hot);
 }
-
-.vrNote {
-  margin-top: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--color-ink-muted);
-}
-
-.vrLink {
-  color: var(--pole-accent, var(--color-accent));
-  font-weight: 500;
-  white-space: nowrap;
-}

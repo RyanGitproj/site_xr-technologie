@@ -1,9 +1,7 @@
-import Link from "next/link";
 import { GlassPanel } from "@/components/fx/GlassPanel";
 import { Reveal } from "@/components/fx/Reveal";
 import { WhatsAppFooterLink } from "@/components/tracking/WhatsAppFooterLink";
 import { OutlineButton } from "@/components/ui/OutlineButton";
-import { LIVE_PRODUCTS } from "@/config/products";
 import { siteConfig } from "@/config/site";
 import { buildWhatsAppLink } from "@/lib/format/whatsapp";
 import { contactSection } from "@/site/config/content";
@@ -16,8 +14,6 @@ export function ContactSection() {
     siteConfig.whatsappNumber,
     contactSection.whatsappMessage,
   );
-  const vrProduct = LIVE_PRODUCTS.find((product) => product.id === "vr");
-
   return (
     <section id={contactSection.id} className={styles.section}>
       <Reveal className={styles.inner}>
@@ -33,14 +29,6 @@ export function ContactSection() {
               {contactSection.whatsappLabel}
             </WhatsAppFooterLink>
           </div>
-          {vrProduct !== undefined && (
-            <p className={styles.vrNote} data-pole-accent={vrProduct.id}>
-              {contactSection.vrFormNote}{" "}
-              <Link href={vrProduct.route} className={styles.vrLink}>
-                {contactSection.vrFormCta} →
-              </Link>
-            </p>
-          )}
         </GlassPanel>
       </Reveal>
     </section>

@@ -380,8 +380,6 @@ export const contactSection = {
   emailLabel: "Nous écrire",
   whatsappLabel: "WhatsApp",
   whatsappMessage: "Bonjour XR Technologie ! J'ai une question sur vos prestations.",
-  vrFormNote: "Un projet d'animation VR ? Le pôle XR VR a son formulaire de devis dédié.",
-  vrFormCta: "Demander un devis VR",
 } as const;
 
 export const siteHeader = {

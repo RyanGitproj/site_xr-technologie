@@ -11,8 +11,10 @@
   position: relative;
 }
 
-/* Sélecteur : 8 tuiles toutes visibles, en 2 colonnes mobile et 4 desktop
-   (jamais de scroller horizontal : la découvrabilité prime). */
+/* Sélecteur : toutes les tuiles visibles, 2 colonnes mobile et --tile-cols
+   au-delà (jamais de scroller horizontal : la découvrabilité prime). Le
+   nombre de colonnes est calculé par selectorColumns() pour que le catalogue
+   remplisse des rangées pleines, quel que soit le pôle. */
 .selector {
   margin-top: 0.875rem;
   display: grid;
@@ -155,7 +157,7 @@
 
 @media (min-width: 1024px) {
   .selector {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(var(--tile-cols), 1fr);
   }
 
   .packs {

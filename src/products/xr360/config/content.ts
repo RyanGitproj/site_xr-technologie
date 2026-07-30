@@ -23,7 +23,6 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { ImageSlot } from "@/lib/images";
-import type { Brief } from "@/products/xr360/lib/brief";
 
 /**
  * Contenu du funnel XR 360 (visite virtuelle & valorisation immersive).
@@ -393,101 +392,42 @@ export const series360 = {
   ctaTargetId: "brief",
 } as const;
 
-export type Offer360Id = "visite-business" | "experience-360" | "signature-fpv-quest";
-
-export type Offer360 = {
-  /** Id stable (présélection du brief, tracking) : ne jamais renommer. */
-  id: Offer360Id;
-  name: string;
-  tagline: string;
-  features: readonly string[];
-  /** Offre mise en avant (cadre accentué). */
-  featured?: boolean;
-  /** Supports du brief présélectionnés au choix de l'offre. */
-  supports: readonly Brief["supports"][number][];
-  /** Composition devices (lot J Codex, PNG alpha → webp) : la panoplie de
-      l'offre posée en tête de carte, façon p12 du PDF boss. */
-  visual: ImageSlot | null;
-};
-
-/** Trois niveaux d'offre sur devis (Funnel V2, réf. PDF boss p12). Règle
-    inchangée : aucun prix, chaque projet est chiffré après brief. */
+/** Section Offres : le catalogue (3 offres chiffrées × 8 cibles) vit dans
+    config/offers.ts, source docs/Nouvelle_brochure/XR 360 - BROCHURE.pdf.
+    La note de périmètre trace la frontière avec les offres commerciales
+    LiDAR : XR 360 = captation photo 360°, XR Reality Capture = scan 3D
+    Matterport ; deux prix d'entrée voisins, deux prestations différentes. */
 export const offers360 = {
   id: "offres",
-  kicker: "Trois niveaux, sur devis",
-  title: "Jusqu'où voulez-vous faire vivre votre lieu ?",
+  kicker: "Nos offres",
+  title: "Trois offres pour montrer, visiter et valoriser votre lieu",
   subtitle:
-    "Chaque niveau reprend le précédent et l'amplifie. Aucun tarif imposé : chaque lieu est différent, chaque projet est chiffré sur devis, après échange.",
-  priceLabel: "Sur devis",
-  chooseCta: "Choisir ce niveau",
-  items: [
-    {
-      id: "visite-business",
-      name: "Visite Business interactive",
-      tagline: "Visite web, points interactifs et QR code",
-      features: [
-        "Visite web immersive",
-        "Points d'intérêt",
-        "QR code",
-        "Partage facile",
-      ],
-      supports: ["site-internet", "email-qr"],
-      visual: {
-        src: "/images/funnel-v2/xr360-offre-visite.webp",
-        alt: "Ordinateur portable, smartphone et chevalet QR code",
-        width: 1400,
-        height: 933,
-      },
-    },
-    {
-      id: "experience-360",
-      name: "Expérience 360 immersive",
-      tagline: "Vidéo 360, narration et diffusion en ligne",
-      features: [
-        "Vidéo 360°",
-        "Narration et hotspots",
-        "Diffusion en ligne",
-        "Analyses de vues",
-      ],
-      featured: true,
-      supports: ["site-internet", "reseaux-sociaux"],
-      visual: {
-        src: "/images/funnel-v2/xr360-offre-experience.webp",
-        alt: "Caméra 360 sur perche, ordinateur portable et smartphone",
-        width: 1400,
-        height: 933,
-      },
-    },
-    {
-      id: "signature-fpv-quest",
-      name: "Signature 360 + FPV + Quest 3",
-      tagline: "Film FPV, expérience 360 et démonstration en casque",
-      features: [
-        "Film FPV au drone",
-        "Vidéo 360°",
-        "Expérience en casque Quest 3",
-        "Démonstration commerciale impactante",
-      ],
-      supports: ["reseaux-sociaux", "casque-vr"],
-      visual: {
-        src: "/images/funnel-v2/xr360-offre-signature.webp",
-        alt: "Drone FPV, caméra 360, casque VR et ordinateur portable",
-        width: 1400,
-        height: 933,
-      },
-    },
-  ] as readonly Offer360[],
+    "Chaque lieu a des besoins différents : choisissez votre univers, on vous recommande le bon format. Tarifs « à partir de », selon la surface, le nombre de zones et les livrables.",
+  selectorLabel: "Choisissez votre type de lieu",
+  hint: "Cliquez sur votre univers et les offres s'adaptent.",
+  panelIntroPrefix: "Nos trois offres pour",
+  pricePrefix: "à partir de",
+  cta: "Choisir cette offre",
   reassurance: [
     { icon: Users, label: "Accompagnement de A à Z" },
     { icon: ShieldCheck, label: "Données sécurisées" },
     { icon: Layers, label: "Livrables exploitables et évolutifs" },
   ],
+  /** Options complémentaires de la brochure : sans prix, en pied de section. */
+  optionsTitle: "Options complémentaires",
+  options: [
+    "Intégration sur votre site internet",
+    "Extraits pour réseaux sociaux",
+    "Support de présentation",
+    "Lien pour campagne publicitaire",
+    "Adaptation pour funnel ou page de vente",
+  ],
   /** Périmètre (ex-Clarification360, condensé fidèle à la règle charte :
       jamais de promesse de mesure côté 360) + passerelle LiDAR. */
   note: {
     title: "Périmètre clair",
-    body: "XR 360 présente et valorise un lieu : une prestation d'image immersive. Elle ne promet ni mesures techniques, ni plans, ni nuages de points.",
-    bridge: "Pour les relevés métriques, Scan-to-CAD et Scan-to-BIM :",
+    body: "XR 360 présente et valorise un lieu par la photo 360° : une prestation d'image immersive. Elle ne promet ni scan 3D, ni mesures techniques, ni plans, ni nuages de points.",
+    bridge: "Pour un scan 3D Matterport, des relevés métriques, Scan-to-CAD et Scan-to-BIM :",
   },
 } as const;
 

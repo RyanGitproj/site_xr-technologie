@@ -1,6 +1,6 @@
 /**
- * Coordonnées et identité du site. Les valeurs de contact sont des
- * PLACEHOLDERS tant que le client n'a pas fourni les vraies (voir TODO.md).
+ * Coordonnées et identité du site. Coordonnées réelles fournies par Ryan le
+ * 30/07/2026 : seul point de vérité, aucun contact en dur dans une section.
  */
 export const siteConfig = {
   /** Nom de l'entreprise et du site (graphie actée par Ryan le 27/07). */
@@ -8,6 +8,6 @@ export const siteConfig = {
   city: "Antananarivo",
   baseUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://xr-technologie.com",
   /** Numéro WhatsApp de réception des leads, format international sans « + ». */
-  whatsappNumber: "261340000000",
+  whatsappNumber: "261389230368",
   contactEmail: "contact@xr-technologie.com",
 } as const;

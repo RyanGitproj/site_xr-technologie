@@ -1,22 +1,18 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
 import { Info } from "lucide-react";
-import { GlassPanel } from "@/components/fx/GlassPanel";
-import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
-import { OutlineButton } from "@/components/ui/OutlineButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PRODUCTS } from "@/config/products";
-import { cx } from "@/lib/cx";
 import { offers360 } from "@/products/xr360/config/content";
-import { chooseOffer360 } from "@/products/xr360/lib/selection";
+import { OfferExplorer360 } from "@/products/xr360/sections/OfferExplorer360";
 import styles from "./Offers360.module.css";
 
-/** Trois niveaux d'offre sur devis : choisir un niveau présélectionne le
-    brief (supports + mention de l'offre) et y descend. En pied : le
-    périmètre (règle charte, ex-Clarification360) + passerelle LiDAR, près
-    des offres où la question se pose, sans casser l'élan du CTA final. */
+/** Trois offres chiffrées (brochure XR 360) derrière le sélecteur partagé
+    avec /vr et /lidar : 8 tuiles par type de lieu, chaque cible mettant en
+    avant son format recommandé. Choisir une offre présélectionne le brief
+    (type de lieu + offre) et y descend. En pied : options complémentaires
+    sans prix, réassurance, et le périmètre (règle charte : jamais de
+    promesse de mesure côté 360) + passerelle LiDAR, près des offres où la
+    question se pose, sans casser l'élan du CTA final. */
 export function Offers360() {
   const lidar = PRODUCTS.find((product) => product.id === "lidar");
 
@@ -27,47 +23,14 @@ export function Offers360() {
         title={offers360.title}
         subtitle={offers360.subtitle}
       />
-      <RevealGroup className={styles.grid}>
-        {offers360.items.map((offer) => (
-          <RevealItem key={offer.id} className={styles.cell}>
-            <GlassPanel
-              thin
-              className={cx(styles.card, offer.featured === true && styles.cardFeatured)}
-            >
-              {offer.visual !== null && (
-                <div className={styles.visual}>
-                  <span aria-hidden="true" className={styles.visualHalo} />
-                  <Image
-                    src={offer.visual.src}
-                    alt={offer.visual.alt}
-                    fill
-                    sizes="(max-width: 900px) 90vw, 360px"
-                    className={styles.visualImg}
-                  />
-                </div>
-              )}
-              <h3 className={styles.offerName}>{offer.name}</h3>
-              <p className={styles.tagline}>{offer.tagline}</p>
-              <ul className={styles.features}>
-                {offer.features.map((feature) => (
-                  <li key={feature} className={styles.feature}>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <p className={styles.price}>{offers360.priceLabel}</p>
-              <OutlineButton
-                scrollTo="brief"
-                onClick={() => chooseOffer360(offer.id)}
-                className={styles.choose}
-              >
-                {offers360.chooseCta}
-              </OutlineButton>
-            </GlassPanel>
-          </RevealItem>
-        ))}
-      </RevealGroup>
+      <div className={styles.explorer}>
+        <OfferExplorer360 />
+      </div>
       <div className={styles.footer}>
+        <p className={styles.optionsLine}>
+          <strong className={styles.optionsTitle}>{offers360.optionsTitle} : </strong>
+          {offers360.options.join(" · ")}.
+        </p>
         <div className={styles.reassurance}>
           {offers360.reassurance.map((item) => (
             <span key={item.label} className={styles.reassuranceItem}>

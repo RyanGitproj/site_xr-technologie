@@ -36,6 +36,7 @@ export const navLidar = [
   { label: "Acquisition", id: "acquisition" },
   { label: "Jumeau numérique", id: "pipeline" },
   { label: "Livrables", id: "livrables" },
+  { label: "Offres", id: "offres" },
   { label: "Mission", id: "mission" },
 ] as const;
 
@@ -415,6 +416,30 @@ export const deliverablesLidar = {
   ] satisfies readonly DeliverableFamily[],
   /** Mention fidèle au PDF boss, à ne pas reformuler (occurrence unique). */
   mention: "Formats, tolérances et livrables validés avant devis.",
+} as const;
+
+/** Section Offres : le catalogue (2 familles × 3 solutions) vit dans
+    config/offers.ts. La note de périmètre sépare explicitement la famille
+    commerciale (scan Matterport, montrer un lieu) de XR 360 (captation photo
+    360°) : sans elle, deux prix d'entrée voisins sur deux pages du site
+    donneraient l'impression de vendre deux fois la même chose. */
+export const offersLidar = {
+  id: "offres",
+  kicker: "Nos offres",
+  title: "Deux familles, trois solutions chacune",
+  subtitle:
+    "Montrer un lieu ou mesurer un existant ne demandent ni le même travail, ni les mêmes livrables. Tarifs « à partir de », sur devis selon le périmètre, la surface et les livrables.",
+  selectorLabel: "Choisissez une famille d'offres",
+  hint: "Cliquez sur une famille et les solutions s'adaptent.",
+  panelIntroPrefix: "Voici les solutions",
+  pricePrefix: "à partir de",
+  cta: "Choisir cette solution",
+  optionsLabel: "Options et suppléments",
+  note: {
+    title: "Deux besoins, deux métiers",
+    body: "Les solutions commerciales numérisent votre lieu en 3D pour le montrer et le vendre. Les solutions techniques produisent des données de relevé pour vos études, vos plans et vos modèles.",
+    bridge: "Pour une visite virtuelle en photo 360°, plus légère à produire :",
+  },
 } as const;
 
 /** CTA final : ABSORBE la zone d'intervention (la portée géographique au

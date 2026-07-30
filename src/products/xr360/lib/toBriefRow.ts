@@ -4,14 +4,17 @@ import type { Attribution, Brief } from "@/products/xr360/lib/brief";
 
 /**
  * Mapping PUR brief + attribution → ligne funnel_xr360_leads (camelCase →
- * snake_case, message vide → null). Attribution et `is_organic` : mapping
- * partagé lib/leads/attributionColumns.ts.
+ * snake_case, optionnels vides → null). Attribution et `is_organic` :
+ * mapping partagé lib/leads/attributionColumns.ts.
  */
 export function toBriefRow(brief: Brief, attribution: Attribution | null): BriefRow {
   return {
     type_lieu: brief.typeLieu,
+    offre: brief.offre === "" ? null : brief.offre,
     objectif: brief.objectif,
     supports: brief.supports,
+    budget: brief.budget,
+    periode: brief.periode,
     message: brief.message === "" ? null : brief.message,
     nom: brief.nom,
     telephone: brief.telephone,

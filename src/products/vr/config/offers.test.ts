@@ -1,20 +1,26 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import {
+  duplicatePackIds,
+  groupsWithoutSingleFeatured,
+  missingAccentTokens,
+} from "@/components/offers/catalogAudit";
 import { ALL_PACK_IDS, OFFERS, OFFER_IDS, offerPriceFrom } from "./offers";
 
 /**
  * Invariants du catalogue : les ids servent de valeurs Zod et de colonnes
  * DB, la structure 3 packs à prix croissants structure l'UI (sélecteur,
- * good-better-best).
+ * good-better-best). VR ajoute aux audits partagés ses deux conventions
+ * éditoriales propres : prix STRICTEMENT croissants et vedette au centre.
  */
 describe("catalogue des offres", () => {
-  it("expose les 8 offres, dans l'ordre des ids", () => {
+  it("expose les 10 offres, dans l'ordre des ids", () => {
     expect(OFFERS.map((offer) => offer.id)).toEqual([...OFFER_IDS]);
   });
 
   it("a des ids de packs uniques globalement (valeurs Zod + colonne DB)", () => {
-    expect(new Set(ALL_PACK_IDS).size).toBe(ALL_PACK_IDS.length);
+    expect(duplicatePackIds(OFFERS)).toEqual([]);
     expect(ALL_PACK_IDS).toHaveLength(OFFERS.length * 3);
   });
 
@@ -27,8 +33,8 @@ describe("catalogue des offres", () => {
   });
 
   it("met en avant exactement le pack central de chaque offre", () => {
+    expect(groupsWithoutSingleFeatured(OFFERS)).toEqual([]);
     for (const offer of OFFERS) {
-      expect(offer.packs.filter((pack) => pack.featured === true)).toHaveLength(1);
       expect(offer.packs[1].featured).toBe(true);
     }
   });
@@ -44,9 +50,6 @@ describe("catalogue des offres", () => {
       join(__dirname, "..", "..", "..", "app", "globals.css"),
       "utf8",
     );
-    for (const id of OFFER_IDS) {
-      expect(globalsCss).toContain(`--color-offer-${id}:`);
-      expect(globalsCss).toContain(`[data-offer-accent="${id}"]`);
-    }
+    expect(missingAccentTokens(globalsCss, OFFERS)).toEqual([]);
   });
 });

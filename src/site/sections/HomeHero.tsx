@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Image, { getImageProps } from "next/image";
 import Link from "next/link";
+import { DeckRail } from "@/components/fx/DeckRail";
 import { EnterRise } from "@/components/fx/EnterRise";
 import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
 import { ParallaxScene } from "@/components/fx/ParallaxScene";
@@ -82,30 +83,32 @@ export function HomeHero() {
           <OutlineButton scrollTo={homeHero.ctaTargetId}>{homeHero.cta}</OutlineButton>
         </EnterRise>
       </div>
-      <EnterRise delay={0.26} className={styles.cards}>
-        {homeHero.cards.map((card) => (
-          <Link
-            key={card.label}
-            href={PRODUCT_BY_ID[card.productId].route}
-            className={styles.card}
-            data-pole-accent={card.productId}
-          >
-            {card.image !== null && (
-              <Image
-                src={card.image.src}
-                alt=""
-                fill
-                sizes="(max-width: 767px) 75vw, 380px"
-                className={styles.cardImg}
-              />
-            )}
-            <span aria-hidden="true" className={styles.cardVeil} />
-            <span className={styles.cardLabel}>{card.label}</span>
-            <span aria-hidden="true" className={styles.cardArrow}>
-              <ArrowRight size={16} strokeWidth={1.8} />
-            </span>
-          </Link>
-        ))}
+      <EnterRise delay={0.26} className={styles.cardsRow}>
+        <DeckRail label={homeHero.cardsLabel} className={styles.cards}>
+          {homeHero.cards.map((card) => (
+            <Link
+              key={card.label}
+              href={PRODUCT_BY_ID[card.productId].route}
+              className={styles.card}
+              data-pole-accent={card.productId}
+            >
+              {card.image !== null && (
+                <Image
+                  src={card.image.src}
+                  alt=""
+                  fill
+                  sizes="(max-width: 767px) 75vw, 380px"
+                  className={styles.cardImg}
+                />
+              )}
+              <span aria-hidden="true" className={styles.cardVeil} />
+              <span className={styles.cardLabel}>{card.label}</span>
+              <span aria-hidden="true" className={styles.cardArrow}>
+                <ArrowRight size={16} strokeWidth={1.8} />
+              </span>
+            </Link>
+          ))}
+        </DeckRail>
       </EnterRise>
     </section>
   );

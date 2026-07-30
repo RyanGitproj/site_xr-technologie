@@ -7,6 +7,7 @@ import { AuroraField } from "@/components/fx/AuroraField";
 import { BackgroundBeams } from "@/components/fx/BackgroundBeams";
 import { BeamBorder } from "@/components/fx/BeamBorder";
 import { ContainerScroll } from "@/components/fx/ContainerScroll";
+import { DeckRail } from "@/components/fx/DeckRail";
 import { DecryptNumber } from "@/components/fx/DecryptNumber";
 import { Embers } from "@/components/fx/Embers";
 import { EnterRise } from "@/components/fx/EnterRise";
@@ -109,6 +110,18 @@ const DEMO_STEPS = [
   { title: "Préparation", body: "Sélection des expériences et de l'habillage." },
   { title: "Jour J", body: "Installation et animation par notre équipe." },
   { title: "Bilan", body: "Chiffres de participation et recommandations." },
+] as const;
+
+/* Banc DeckRail : assez de cartes pour dépasser trois pages en desktop. */
+const DECK_LAB_CARDS = [
+  "L'arrivée",
+  "Vue aérienne",
+  "La visite guidée",
+  "Les coulisses",
+  "La rencontre",
+  "Le grand angle",
+  "Le détail",
+  "Le final",
 ] as const;
 
 function LabSection({
@@ -482,6 +495,20 @@ export default function FxLabPage() {
           </p>
           <LidarScanLabDemo />
         </div>
+      </LabSection>
+
+      <LabSection
+        title="DeckRail"
+        note="Rail de cartes en pile (30/07) : les cartes entières sont à l'identité, celles qui débordent glissent SOUS leur voisine, rétrécissent et pivotent, au fil du scroll. Scrollbar système supprimée, barre de contrôle sous le rail (flèches + points), glissé souris manuel (framer tourne en domAnimation : pas de feature drag), clic sur une carte en retrait = recentrage, défilement auto en va-et-vient tant que personne n'y touche. Trois cartes lisibles à partir de 1024 px, deux à 640, une + amorce en mobile."
+      >
+        <DeckRail label="Banc DeckRail" autoplay>
+          {DECK_LAB_CARDS.map((card, index) => (
+            <article key={card} className={styles.deckCard}>
+              <span className={styles.deckCardNum}>{String(index + 1).padStart(2, "0")}</span>
+              <span className={styles.deckCardTitle}>{card}</span>
+            </article>
+          ))}
+        </DeckRail>
       </LabSection>
 
       <LabSection

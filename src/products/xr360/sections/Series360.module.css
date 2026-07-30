@@ -4,18 +4,12 @@
 }
 
 /* Cartes compactes au pattern des cartes objectifs de l'accueil :
-   pastille numéro + titre + accroche sur photo voilée. Mobile : bande à
-   défilement horizontal avec snap. Desktop : 3 colonnes. */
+   pastille numéro + titre + accroche sur photo voilée. La série se parcourt
+   en rail de pile (DeckRail) sur TOUS les formats : trois épisodes lisibles
+   en desktop, un + amorce en mobile, le reste en retrait derrière. */
 .episodes {
   max-width: 72rem;
   margin: var(--stack-gap) auto 0;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: min(78vw, 19rem);
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 0.25rem;
 }
 
 /* STRICTEMENT le pattern des cartes objectifs de l'accueil (mêmes
@@ -143,30 +137,8 @@
   color: var(--color-ink-muted);
 }
 
-.cell {
-  display: grid;
-  scroll-snap-align: start;
-}
-
 .ctaRow {
   margin-top: 2rem;
   display: flex;
   justify-content: center;
-}
-
-@media (min-width: 640px) {
-  .episodes {
-    grid-auto-flow: row;
-    grid-auto-columns: unset;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding-bottom: 0;
-  }
-}
-
-@media (min-width: 1024px) {
-  .episodes {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }

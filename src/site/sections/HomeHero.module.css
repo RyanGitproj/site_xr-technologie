@@ -80,23 +80,32 @@
   gap: clamp(1.25rem, 3svh, 2rem);
 }
 
-/* Les 3 portes d'entrée : cartes photo qui chevauchent le bas du hero
-   (moitié sur la photo, moitié sur la section suivante). En mobile :
-   bande à défilement horizontal avec snap. */
-.cards {
+/* Les 3 portes d'entrée : cartes photo qui chevauchent le bas du hero, en
+   rail de pile (DeckRail). Le débord est une LONGUEUR fixe et non plus 40 %
+   de la hauteur de la rangée : cette hauteur dépend maintenant du rail (et
+   de sa barre de contrôle en mobile), un débord proportionnel dériverait sur
+   les libellés de la section suivante. Marge de sécurité : le débord reste
+   sous le padding haut de la section suivante (--section-pad-y). */
+.cardsRow {
+  --home-cards-overlap: clamp(2rem, 5svh, 3.25rem);
   position: relative;
   z-index: 1;
   max-width: 72rem;
   margin-inline: auto;
   width: 100%;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: min(72vw, 17rem);
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 0.25rem;
-  transform: translateY(40%);
+  /* Cellule de grille du hero : sans ce plancher, sa largeur minimale devient
+     celle des trois portes bout à bout (945 px sur un écran de 390) et les
+     portes 2 et 3 sortent du cadre, hors d'atteinte. Mesuré. */
+  min-width: 0;
+  transform: translateY(var(--home-cards-overlap));
+}
+
+/* Les 3 portes tiennent de front dès 768 px (elles sont la promesse du
+   hero) : le rail n'y sert plus qu'à l'ordre du DOM. */
+@media (min-width: 768px) {
+  .cards {
+    --deck-slide: calc((100% - 2 * var(--deck-gap)) / 3);
+  }
 }
 
 .card {
@@ -106,7 +115,6 @@
   border: 1px solid color-mix(in srgb, var(--pole-accent) 45%, var(--glass-stroke));
   border-radius: var(--radius-tight);
   background: var(--color-bg-raised);
-  scroll-snap-align: start;
   transition: border-color var(--dur-fast) ease;
 }
 
@@ -164,17 +172,6 @@
 
 .card:hover .cardArrow {
   transform: translateX(3px);
-}
-
-@media (min-width: 768px) {
-  .cards {
-    grid-auto-flow: row;
-    grid-auto-columns: unset;
-    grid-template-columns: repeat(3, 1fr);
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding-bottom: 0;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

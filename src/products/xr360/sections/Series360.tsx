@@ -1,7 +1,8 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { AmbientPause } from "@/components/fx/AmbientPause";
-import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
+import { DeckRail } from "@/components/fx/DeckRail";
+import { EnterRise } from "@/components/fx/EnterRise";
 import { OutlineButton } from "@/components/ui/OutlineButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { series360 } from "@/products/xr360/config/content";
@@ -22,9 +23,12 @@ export function Series360() {
         subtitle={series360.subtitle}
       />
       <AmbientPause className={styles.episodesWrap}>
-        <RevealGroup className={styles.episodes}>
+        <DeckRail label={series360.title} autoplay className={styles.episodes}>
           {series360.episodes.map((episode, index) => (
-            <RevealItem key={episode.title} className={styles.cell}>
+            /* EnterRise et non RevealItem : il anime `translate`, donc il se
+               compose avec le `transform` de pile du rail (deux animateurs sur
+               le même transform se seraient écrasés). */
+            <EnterRise key={episode.title} delay={index * 0.06}>
               {/* Même pattern que les cartes objectifs de l'accueil :
                   pastille (numéro) + titre + accroche, photo voilée derrière. */}
               <article className={styles.episode} style={{ "--i": index } as CSSProperties}>
@@ -50,9 +54,9 @@ export function Series360() {
                   <p className={styles.episodeBody}>{episode.body}</p>
                 </span>
               </article>
-            </RevealItem>
+            </EnterRise>
           ))}
-        </RevealGroup>
+        </DeckRail>
       </AmbientPause>
       <div className={styles.ctaRow}>
         <OutlineButton scrollTo={series360.ctaTargetId}>{series360.cta}</OutlineButton>

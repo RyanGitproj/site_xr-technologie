@@ -201,6 +201,29 @@
   gap: 2rem;
 }
 
+/* Banc DeckRail : cartes neutres, seul l'effet de pile est jugé ici. */
+.deckCard {
+  display: grid;
+  align-content: end;
+  gap: 0.35rem;
+  min-height: 12rem;
+  padding: 1.1rem;
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-tight);
+  background: linear-gradient(160deg, var(--color-bg-raised), var(--color-bg-deep));
+}
+
+.deckCardNum {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.deckCardTitle {
+  font-weight: 600;
+}
+
 .figuresRow {
   display: flex;
   flex-wrap: wrap;

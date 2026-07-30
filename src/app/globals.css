@@ -124,6 +124,16 @@
     0 0 100px rgba(232, 40, 24, 0.18),
     inset 0 1px 0 rgba(255, 150, 90, 0.14);
 
+  /* Rail de cartes « deck » (DeckRail) : les cartes pleinement visibles sont
+     à l'identité, celles qui débordent glissent SOUS leur voisine, rétrécissent
+     et pivotent. Ces valeurs pilotent la profondeur de la pile ; les cartes
+     centrales ne les subissent jamais (facteur nul à profondeur 1). */
+  --deck-tuck: 42px; /* glissement vers le centre, sous la voisine */
+  --deck-tilt: 16deg; /* pivot de la carte en retrait               */
+  --deck-scale-min: 0.86;
+  --deck-fade-min: 0.38;
+  --deck-perspective: 1100px;
+
   --dur-fast: 180ms; /* micro-interactions */
   --dur-med: 420ms; /* reveals            */
   --dur-slow: 1200ms; /* focal, une fois    */

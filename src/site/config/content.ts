@@ -50,6 +50,8 @@ export const homeHero = {
   cta: "Choisir mon objectif",
   /** id de la section objectifs (scroll sans hash, comme le pôle VR). */
   ctaTargetId: "objectifs",
+  /** Nom du rail des portes pour les lecteurs d'écran. */
+  cardsLabel: "Nos trois portes d'entrée",
   /** Les 3 portes d'entrée (réf. p1 du PDF) : cartes photo qui chevauchent
       le bas du hero, chacune route vers son pôle (faire vivre → 360,
       former et convaincre → VR, numériser et suivre → LiDAR). */

@@ -1,10 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CookiePreferencesLink } from "@/components/tracking/CookiePreferencesLink";
 import { WhatsAppFooterLink } from "@/components/tracking/WhatsAppFooterLink";
 import { PRODUCTS } from "@/config/products";
 import { siteConfig } from "@/config/site";
 import { buildWhatsAppLink } from "@/lib/format/whatsapp";
-import { contactSection, polesSection, siteFooter } from "@/site/config/content";
+import { contactSection, polesSection, siteFooter, siteLogo } from "@/site/config/content";
 import styles from "./SiteFooter.module.css";
 
 /** Footer du site : pôles, contact, confidentialité. Sobre, socle neutre. */
@@ -18,7 +19,14 @@ export function SiteFooter() {
     <footer className={styles.footer}>
       <div className={styles.grid}>
         <div>
-          <p className={styles.wordmark}>{siteConfig.name}</p>
+          <Image
+            src={siteLogo.src}
+            alt={siteLogo.alt}
+            width={siteLogo.width}
+            height={siteLogo.height}
+            unoptimized
+            className={styles.brandLogo}
+          />
           <p className={styles.baseline}>{siteFooter.baseline}</p>
         </div>
         <div>

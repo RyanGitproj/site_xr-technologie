@@ -1,13 +1,22 @@
 /* Contenu propre à la navbar du socle site : la forme (bandeau plein cadre,
    compactage, filet de progression) vit dans HeaderShell.module.css. */
 
-.wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  white-space: nowrap;
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+/* Lockup officiel : la hauteur pilote, la largeur suit le ratio (~4,1:1).
+   Plus bas sur mobile : la barre 390px doit loger logo + accès pôles. */
+.logoImg {
+  height: 2rem;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .logoImg {
+    height: 2.5rem;
+  }
 }
 
 .nav {

@@ -18,13 +18,14 @@
   }
 }
 
-.wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-accent);
+/* Lockup officiel (remplace la marque texte) : hauteur pilote, ratio ~3,7:1.
+   Même halo clair que la navbar : le « XR 360° » bleu nuit du lockup se
+   perdrait sinon sur le fond sombre. */
+.brandLogo {
+  height: 3rem;
+  width: auto;
+  filter: drop-shadow(0 0 1px color-mix(in srgb, var(--color-ink) 55%, transparent))
+    drop-shadow(0 0 12px color-mix(in srgb, var(--color-ink) 30%, transparent));
 }
 
 .baseline {

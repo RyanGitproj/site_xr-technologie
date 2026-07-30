@@ -18,13 +18,10 @@
   }
 }
 
-.wordmark {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-accent);
+/* Lockup officiel (remplace la marque texte) : hauteur pilote, ratio ~3,5:1. */
+.brandLogo {
+  height: 3rem;
+  width: auto;
 }
 
 .baseline {

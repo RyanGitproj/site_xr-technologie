@@ -1,27 +1,22 @@
 /* Contenu propre à la navbar LiDAR : la forme (bandeau plein cadre,
    compactage, filet de progression) vit dans HeaderShell.module.css. */
 
-.wordmark {
-  display: grid;
-  line-height: 1.15;
-  white-space: nowrap;
+.logo {
+  display: flex;
+  align-items: center;
 }
 
-.wordmarkPole {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.05rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-accent);
+/* Lockup officiel : la hauteur pilote, la largeur suit le ratio (~3,5:1).
+   Plus bas sur mobile : la barre 390px doit loger logo + CTA sur une ligne. */
+.logoImg {
+  height: 2rem;
+  width: auto;
 }
 
-.wordmarkCompany {
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-ink-muted);
+@media (min-width: 768px) {
+  .logoImg {
+    height: 2.5rem;
+  }
 }
 
 .nav {

@@ -19,7 +19,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import type { ImageSlot } from "@/lib/images";
+import type { ImageSlot, VideoSlot } from "@/lib/images";
 
 /**
  * Contenu du funnel XR LiDAR Opérationnel (relevé 3D, reality capture).
@@ -29,6 +29,14 @@ import type { ImageSlot } from "@/lib/images";
  * essentielle, repris tels quels : engagement légal). Aucun prix : le
  * parcours est un brief mission (« Présenter mon site », CTA charte).
  */
+
+/** Lockup officiel XR LiDAR (docs/logo, détouré en alpha) : navbar et footer. */
+export const logoLidar: ImageSlot = {
+  src: "/images/logo-xr-lidar.webp",
+  alt: "XR LiDAR, reality capture",
+  width: 800,
+  height: 229,
+};
 
 /* Navigation interne par scrollTo (aucune ancre d'URL) : id = id de section. */
 export const navLidar = [
@@ -421,6 +429,22 @@ export const deliverablesLidar = {
     moment de la décision) ; la mention légale devient un renvoi vers le
     bloc limites (une seule occurrence du texte fidèle, dans la mission). */
 export const finalCtaLidar = {
+  /** Vitrine vidéo (docs/Video, montage promo portrait 4:5) : le nuage de
+      points au moment de la décision. Convertie par ffmpeg (VP9/WebM +
+      H.264/MP4, 900px, lazy après first paint), même système que la
+      vitrine VR. */
+  video: {
+    webm: "/videos/scan-lidar.webm",
+    mp4: "/videos/scan-lidar.mp4",
+    poster: {
+      src: "/videos/scan-lidar-poster.webp",
+      alt: "Nuage de points LiDAR coloré d'un bâtiment scanné, vu en coupe",
+      width: 900,
+      height: 1126,
+    },
+  } satisfies VideoSlot,
+  soundOnLabel: "Activer le son",
+  soundOffLabel: "Couper le son",
   kicker: "Passons à votre site",
   title: "De votre site aux données, il n'y a qu'un brief.",
   subtitle:

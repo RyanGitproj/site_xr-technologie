@@ -388,6 +388,15 @@ export const siteHeader = {
   upcomingBadge: "Bientôt",
 } as const;
 
+/** Lockup officiel XR Technologie (docs/logo, détouré en alpha) : navbar et
+    footer du socle site. */
+export const siteLogo: ImageSlot = {
+  src: "/images/logo-xr-technologie.webp",
+  alt: "XR Technologie, Antananarivo",
+  width: 800,
+  height: 194,
+};
+
 export const siteFooter = {
   baseline: "Expériences immersives, visites virtuelles et relevés 3D à Madagascar.",
   polesTitle: "Nos pôles",

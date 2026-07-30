@@ -1,9 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CookiePreferencesLink } from "@/components/tracking/CookiePreferencesLink";
 import { WhatsAppFooterLink } from "@/components/tracking/WhatsAppFooterLink";
 import { siteConfig } from "@/config/site";
 import { buildWhatsAppLink } from "@/lib/format/whatsapp";
-import { footer360 } from "@/products/xr360/config/content";
+import { footer360, logo360 } from "@/products/xr360/config/content";
 import styles from "./Footer360.module.css";
 
 /** Footer du funnel 360 : baseline, contact, retour discret vers le site. */
@@ -17,7 +18,14 @@ export function Footer360() {
     <footer className={styles.footer}>
       <div className={styles.grid}>
         <div>
-          <p className={styles.wordmark}>XR 360</p>
+          <Image
+            src={logo360.src}
+            alt={logo360.alt}
+            width={logo360.width}
+            height={logo360.height}
+            unoptimized
+            className={styles.brandLogo}
+          />
           <p className={styles.baseline}>{footer360.baseline}</p>
         </div>
         <div>

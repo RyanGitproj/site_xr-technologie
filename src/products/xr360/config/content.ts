@@ -22,7 +22,7 @@ import {
   Video,
   type LucideIcon,
 } from "lucide-react";
-import type { ImageSlot } from "@/lib/images";
+import type { ImageSlot, VideoSlot } from "@/lib/images";
 import type { Brief } from "@/products/xr360/lib/brief";
 
 /**
@@ -34,6 +34,14 @@ import type { Brief } from "@/products/xr360/lib/brief";
  * Prestations complémentaires (drone, Insta 360, montage YouTube, Google
  * Maps) EN ATTENTE de leurs brochures : liste extensible, voir TODO.md.
  */
+
+/** Lockup officiel XR 360 (docs/logo, détouré en alpha) : navbar et footer. */
+export const logo360: ImageSlot = {
+  src: "/images/logo-xr-360.webp",
+  alt: "XR 360, visite virtuelle",
+  width: 800,
+  height: 215,
+};
 
 /* Navigation interne par scrollTo (aucune ancre d'URL) : id = id de section. */
 export const nav360 = [
@@ -567,14 +575,21 @@ export const deliverables360 = {
 } as const;
 
 export const finalCta360 = {
-  /** Fond d'ambiance (lot D, chambre de lodge) : voilé fort, le texte
-      reste le sujet. */
-  image: {
-    src: "/images/funnel-v2/xr360-pano-chambre.webp",
-    alt: "",
-    width: 1920,
-    height: 960,
-  } as ImageSlot | null,
+  /** Vitrine vidéo (docs/Video, montage promo portrait 4:5) : remplace
+      l'ambiance lodge du lot D. Convertie par ffmpeg (VP9/WebM + H.264/MP4,
+      900px, lazy après first paint), même système que la vitrine VR. */
+  video: {
+    webm: "/videos/visite-360.webm",
+    mp4: "/videos/visite-360.mp4",
+    poster: {
+      src: "/videos/visite-360-poster.webp",
+      alt: "Démonstration de captation 360 : la rue entière en vue sphérique",
+      width: 900,
+      height: 1126,
+    },
+  } satisfies VideoSlot,
+  soundOnLabel: "Activer le son",
+  soundOffLabel: "Couper le son",
   title: "Votre lieu mérite plus qu'une photo.",
   lines: ["Faites-le visiter.", "Faites-le comprendre.", "Faites-le vivre à distance."],
   subtitle:

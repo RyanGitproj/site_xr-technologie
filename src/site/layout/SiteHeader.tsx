@@ -1,20 +1,28 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { HeaderShell } from "@/components/layout/HeaderShell";
 import { LIVE_PRODUCTS, PRODUCTS } from "@/config/products";
-import { siteConfig } from "@/config/site";
-import { contactSection, siteHeader } from "@/site/config/content";
+import { contactSection, siteHeader, siteLogo } from "@/site/config/content";
 import { scrollToSection } from "@/lib/scrollToSection";
 import styles from "./SiteHeader.module.css";
 
-/** Navbar du site dans la coquille commune : wordmark + pôles (les pôles à
-    venir sont annoncés sans lien) + contact. Navigation libre. */
+/** Navbar du site dans la coquille commune : lockup officiel + pôles (les
+    pôles à venir sont annoncés sans lien) + contact. Navigation libre. */
 export function SiteHeader() {
   return (
     <HeaderShell>
-      <Link href="/" className={styles.wordmark}>
-        {siteConfig.name}
+      <Link href="/" className={styles.logo}>
+        <Image
+          src={siteLogo.src}
+          alt={siteLogo.alt}
+          width={siteLogo.width}
+          height={siteLogo.height}
+          priority
+          unoptimized
+          className={styles.logoImg}
+        />
       </Link>
       <nav aria-label={siteHeader.navLabel} className={styles.nav}>
         {PRODUCTS.map((product) =>

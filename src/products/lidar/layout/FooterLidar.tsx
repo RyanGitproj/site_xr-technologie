@@ -1,9 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CookiePreferencesLink } from "@/components/tracking/CookiePreferencesLink";
 import { WhatsAppFooterLink } from "@/components/tracking/WhatsAppFooterLink";
 import { siteConfig } from "@/config/site";
 import { buildWhatsAppLink } from "@/lib/format/whatsapp";
-import { footerLidar } from "@/products/lidar/config/content";
+import { footerLidar, logoLidar } from "@/products/lidar/config/content";
 import styles from "./FooterLidar.module.css";
 
 /** Footer du funnel LiDAR : baseline, contact, retour discret vers le site. */
@@ -17,7 +18,14 @@ export function FooterLidar() {
     <footer className={styles.footer}>
       <div className={styles.grid}>
         <div>
-          <p className={styles.wordmark}>XR LiDAR Opérationnel</p>
+          <Image
+            src={logoLidar.src}
+            alt={logoLidar.alt}
+            width={logoLidar.width}
+            height={logoLidar.height}
+            unoptimized
+            className={styles.brandLogo}
+          />
           <p className={styles.baseline}>{footerLidar.baseline}</p>
         </div>
         <div>

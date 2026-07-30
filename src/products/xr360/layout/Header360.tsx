@@ -1,22 +1,29 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { HeaderShell } from "@/components/layout/HeaderShell";
 import { ShimmerCTA } from "@/components/fx/ShimmerCTA";
-import { siteConfig } from "@/config/site";
 import { scrollToSection } from "@/lib/scrollToSection";
-import { hero360, nav360 } from "@/products/xr360/config/content";
+import { hero360, logo360, nav360 } from "@/products/xr360/config/content";
 import styles from "./Header360.module.css";
 
-/** Navbar du funnel 360 dans la coquille commune : wordmark du pôle (lien
+/** Navbar du funnel 360 dans la coquille commune : lockup du pôle (lien
     accueil site, convention logo = accueil), nav interne par scrollTo, CTA
     signature « Créer une visite virtuelle ». Le funnel oriente, sans piéger. */
 export function Header360() {
   return (
     <HeaderShell>
-      <Link href="/" className={styles.wordmark}>
-        <span className={styles.wordmarkPole}>XR 360</span>
-        <span className={styles.wordmarkCompany}>{siteConfig.name}</span>
+      <Link href="/" className={styles.logo}>
+        <Image
+          src={logo360.src}
+          alt={logo360.alt}
+          width={logo360.width}
+          height={logo360.height}
+          priority
+          unoptimized
+          className={styles.logoImg}
+        />
       </Link>
       <nav aria-label="Navigation du funnel" className={styles.nav}>
         {nav360.map((link) => (

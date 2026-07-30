@@ -13,12 +13,13 @@ import { useWebGLSupport } from "./webglSupport";
 import styles from "./PoleObjectLazy.module.css";
 
 /** Un chunk dynamique PAR modèle : le GLB du casque (765 Ko) ne se charge
-    que pour la bande VR, les modèles procéduraux restent minuscules.
-    LiDAR : la bande ne montre pas l'objet mais son RÉSULTAT (le bâtiment
-    balayé qui devient nuage puis jumeau) — même contrat de props. */
+    que pour la bande VR, les scènes procédurales restent minuscules.
+    Chaque bande montre ce que son pôle PRODUIT (décision DA 30/07, panneaux
+    holographiques) : l'immersion, la visite 360, le scan — même contrat de
+    props pour les trois. */
 const SCENES = {
   vr: dynamic(() => import("./poleModels/Quest3PoleScene"), { ssr: false }),
-  xr360: dynamic(() => import("./poleModels/CameraPoleScene"), { ssr: false }),
+  xr360: dynamic(() => import("./poleModels/PanoPoleScene"), { ssr: false }),
   lidar: dynamic(() => import("./poleModels/ScanBandScene"), { ssr: false }),
 } as const;
 

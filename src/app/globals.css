@@ -9,6 +9,7 @@
 @import "../components/fx/fx-ambient.css" layer(components);
 @import "../components/fx/fx-cursor.css" layer(components);
 @import "../components/fx/fx-neon.css" layer(components);
+@import "../components/fx/holo-panel.css" layer(components);
 
 /* Replis à métriques ajustées (calibrés en navigateur : canvas TextMetrics
    webfont vs Arial, méthode next/font appliquée aux @fontsource). Sans eux,

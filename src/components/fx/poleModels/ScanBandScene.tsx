@@ -408,13 +408,14 @@ export default function ScanBandScene({
         />
       </Canvas>
 
-      {/* Repères de lecture du cycle : étape courante + avancement. */}
-      <div className={styles.hud}>
-        <p ref={captionRef} className={styles.caption} data-step="0">
+      {/* Bandeau de lecture COMMUN aux trois panneaux (holo-panel.css) : ici
+          il suit les étapes du cycle au lieu d'un libellé fixe. */}
+      <div className="holo-readout">
+        <p ref={captionRef} className="holo-caption" data-step="0">
           {STEPS[0]}
         </p>
-        <span className={styles.track}>
-          <span ref={barRef} className={styles.bar} />
+        <span className="holo-track">
+          <span ref={barRef} className="holo-bar" />
         </span>
       </div>
     </div>

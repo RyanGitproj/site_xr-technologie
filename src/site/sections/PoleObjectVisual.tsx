@@ -1,16 +1,17 @@
 import Image from "next/image";
+import { HoloPanel } from "@/components/fx/HoloPanel";
 import { PoleObjectLazy } from "@/components/fx/PoleObjectLazy";
 import type { ProductId } from "@/config/products";
 import { poleShowcase } from "@/site/config/content";
 import styles from "./PoleObjectVisual.module.css";
 
-/** Le VRAI objet du pôle en 3D dans sa bande (remplace les décors abstraits
-    du 27/07, dont l'orbe « Jupiter ») — sauf LiDAR, où la bande montre le
-    RÉSULTAT : le bâtiment balayé qui devient nuage puis jumeau. Repli :
-    packshot Codex (lot H) dès qu'il est branché dans la config, sinon halo
-    + anneau discrets. */
+/** Panneau holographique de la bande : les trois pôles partagent le MÊME
+    cadre (HoloPanel : arête néon, trame, balayage, équerres) et n'y changent
+    que la couleur et le contenu animé — immersion VR, visite 360, scan
+    LiDAR (décision DA 30/07, réf. « trois panneaux »). Repli : packshot
+    Codex (lot H), sinon halo + anneau discrets. */
 export function PoleObjectVisual({ productId }: { productId: ProductId }) {
-  const packshot = poleShowcase[productId].packshot;
+  const { packshot, panelLabel } = poleShowcase[productId];
 
   const fallback =
     packshot !== null ? (
@@ -31,5 +32,9 @@ export function PoleObjectVisual({ productId }: { productId: ProductId }) {
       </div>
     );
 
-  return <PoleObjectLazy model={productId} fallback={fallback} className={styles.root} />;
+  return (
+    <HoloPanel label={panelLabel ?? undefined} className={styles.panel}>
+      <PoleObjectLazy model={productId} fallback={fallback} className={styles.root} />
+    </HoloPanel>
+  );
 }

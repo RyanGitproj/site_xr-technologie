@@ -307,6 +307,9 @@ export type PoleHighlight = {
   hook: string;
   body: string;
   cta: string | null;
+  /** Bandeau de lecture du panneau holographique. null = la scène écrit
+      elle-même ses étapes (LiDAR : réel → balayage → nuage → jumeau). */
+  panelLabel: string | null;
   /** Packshot Codex (lot H) : repli 2D de l'objet 3D de la bande. null =
       halo CSS en attendant la livraison ; le brancher suffit, zéro code. */
   packshot: ImageSlot | null;
@@ -321,6 +324,7 @@ export const poleShowcase: Record<ProductId, PoleHighlight> = {
     hook: "La VR qui se déplace jusqu'à vous",
     body: "Vous réservez, nous installons, vos invités vivent l'expérience. Casques Meta Quest 3, animateurs XR et univers adaptés à votre public, chez vous ou sur votre lieu.",
     cta: "Découvrir XR VR",
+    panelLabel: "Casque Meta Quest 3",
     packshot: {
       src: "/images/funnel-v2/home-produit-casque-vr.webp",
       alt: "Casque de réalité virtuelle blanc",
@@ -332,6 +336,7 @@ export const poleShowcase: Record<ProductId, PoleHighlight> = {
     hook: "Votre lieu devient visitable à distance",
     body: "Vos futurs clients explorent votre établissement avant même de se déplacer : captation photo et vidéo 360, visite virtuelle interactive et diffusion sur tous les supports.",
     cta: "Découvrir XR 360",
+    panelLabel: "Visite 360 · chambre de lodge",
     packshot: {
       src: "/images/funnel-v2/home-produit-camera-360.webp",
       alt: "Caméra 360 sur perche",
@@ -343,6 +348,8 @@ export const poleShowcase: Record<ProductId, PoleHighlight> = {
     hook: "Décidez sur des données, pas sur des estimations",
     body: "Le relevé 3D transforme vos bâtiments en données fiables, prêtes pour vos architectes, bureaux d'études et équipes travaux.",
     cta: "Découvrir XR LiDAR",
+    /* La scène de scan écrit ses propres étapes dans le bandeau. */
+    panelLabel: null,
     packshot: {
       src: "/images/funnel-v2/home-produit-scanner-lidar.webp",
       alt: "Scanner 3D sur trépied",

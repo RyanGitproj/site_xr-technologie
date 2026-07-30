@@ -62,6 +62,16 @@
   .band:nth-child(even) .bandVisual {
     order: 1;
   }
+
+  /* Les panneaux se tournent vers le lecteur : le trio dessine un arc,
+     comme les trois écrans de la référence DA. */
+  .bandVisual {
+    --holo-tilt: -5deg;
+  }
+
+  .band:nth-child(even) .bandVisual {
+    --holo-tilt: 5deg;
+  }
 }
 
 .bandContent {
@@ -120,14 +130,10 @@
 
 /* Zone visuelle : le VRAI objet du pôle en 3D (PoleObjectVisual), qui
    remplace les décors abstraits du 27/07 (orbe, anneaux, réticule). */
+/* Les trois panneaux sont JUMEAUX : même hauteur pour les trois pôles, le
+   contenu seul change (règle DA « trois panneaux », 30/07). */
 .bandVisual {
   position: relative;
-  min-height: clamp(14rem, 30svh, 20rem);
-}
-
-/* LiDAR : la bande ne montre pas un objet mais une SCÈNE (le bâtiment
-   balayé qui devient nuage puis jumeau) — elle a besoin d'air. */
-.band[data-pole-accent="lidar"] .bandVisual {
   min-height: clamp(17rem, 36svh, 24rem);
 }
 

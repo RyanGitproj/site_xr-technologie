@@ -8,13 +8,15 @@ import { pipelineLidar } from "@/products/lidar/config/content";
 import { PipelineStages } from "./PipelineStages";
 import styles from "./PipelineScanStage.module.css";
 
-/** Fenêtres d'apparition des 3 phases (fractions du stage épinglé) :
-    synchronisées avec les rampes de la scène (onde 0.04→0.48, filaire
-    0.54→0.74). La phase 3 reste affichée jusqu'à la fin. */
+/** Fenêtres d'apparition des 3 phases, en fractions de la course ENTRÉE
+    COMPRISE (mode entry : p=0 dès que le stage entre par le bas, épinglage
+    à p=1/3) : le scan tourne déjà pendant l'arrivée de la section, phase 1
+    apparaît avant l'épinglage. Synchronisées avec les rampes de la scène
+    (onde 0.05→0.60, filaire 0.66→0.82). La phase 3 reste jusqu'à la fin. */
 const PHASES = [
-  { at: [0.04, 0.12, 0.26, 0.34], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
-  { at: [0.32, 0.4, 0.5, 0.58], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
-  { at: [0.56, 0.66, 1], y: [24, 0, 0], opacity: [0, 1, 1] },
+  { at: [0.1, 0.2, 0.46, 0.54], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
+  { at: [0.52, 0.6, 0.68, 0.76], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
+  { at: [0.74, 0.84, 1], y: [24, 0, 0], opacity: [0, 1, 1] },
 ] as const;
 
 /** Le nuage de points se télécharge pendant la lecture des sections du
@@ -36,8 +38,9 @@ function StageContent() {
         />
       </div>
 
-      {/* Affordance d'entrée : on comprend que le scroll pilote le scan. */}
-      <StageLayer at={[0, 0.08, 0.16]} y={[0, 0, -24]} opacity={[1, 1, 0]} className={styles.hint}>
+      {/* Affordance d'entrée : on comprend que le scroll pilote le scan.
+          Visible pendant toute l'arrivée, s'efface peu après l'épinglage. */}
+      <StageLayer at={[0, 0.4, 0.48]} y={[0, 0, -24]} opacity={[1, 1, 0]} className={styles.hint}>
         <p className={styles.hintText}>{pipelineLidar.stageHint}</p>
       </StageLayer>
 
@@ -61,7 +64,7 @@ function StageContent() {
 
       {/* HUD : équerres de visée AUX COINS, gyro léger. AUCUNE valeur
           chiffrée (règle charte : pas de promesse de précision). */}
-      <StageLayer at={[0.08, 0.16, 1]} opacity={[0, 1, 1]} tiltRange={8} className={styles.hud}>
+      <StageLayer at={[0.38, 0.46, 1]} opacity={[0, 1, 1]} tiltRange={8} className={styles.hud}>
         <span className={styles.corner} data-corner="tl" />
         <span className={styles.corner} data-corner="tr" />
         <span className={styles.corner} data-corner="bl" />
@@ -74,15 +77,17 @@ function StageContent() {
   );
 }
 
-/** Scrollytelling « le scan construit le jumeau » : 3 écrans épinglés, la
-    scène 3D est pilotée par la progression ; reduced-motion = les 3 cartes
-    images à plat (contenu complet, zéro canvas monté). Pas de
-    backdrop-filter dans le stage (contain: paint). */
+/** Scrollytelling « le scan construit le jumeau » : 3 écrans, progression
+    en mode entry (le scan se déclenche dès que la section entre dans le
+    viewport, demande client : ne pas attendre l'épinglage) puis 2 écrans
+    épinglés ; reduced-motion = les 3 cartes images à plat (contenu complet,
+    zéro canvas monté). Pas de backdrop-filter dans le stage (contain:
+    paint). */
 export function PipelineScanStage() {
   return (
     <>
       <ScenePreloader scenes={SCAN_SCENES} />
-      <ScrollStage screens={3} fallback={<PipelineStages />} className={styles.wrapper}>
+      <ScrollStage screens={3} entry fallback={<PipelineStages />} className={styles.wrapper}>
         <StageContent />
       </ScrollStage>
     </>

@@ -95,10 +95,12 @@ const POINTS_FRAGMENT = /* glsl */ `
 
 type RigProps = Omit<LidarScanSceneProps, "dpr" | "active" | "onReady">;
 
-/** Rig : l'onde révèle le nuage (0.04→0.48, dès l'épinglage : un départ
-    plus tardif laissait 24 svh de viewport vide), le filaire du jumeau se
-    fige (0.54→0.74), la caméra orbite pendant toute la traversée. Zéro
-    état React : uniforms et matériaux mutés dans useFrame. */
+/** Rig : l'onde révèle le nuage (0.03→0.60), le filaire du jumeau se fige
+    (0.66→0.82), la caméra orbite pendant toute la traversée. La progression
+    reçue démarre à l'ENTRÉE du stage dans le viewport (ScrollStage entry,
+    épinglage à p=1/3) : le scan tourne déjà pendant l'arrivée de la
+    section, demande client. Zéro état React : uniforms et matériaux mutés
+    dans useFrame. */
 function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
   const pointsRef = useRef<Points>(null);
   const wireRef = useRef<LineSegments>(null);
@@ -145,7 +147,7 @@ function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
     const gy = tiltY.get();
 
     /* Onde de scan → uniform des points + anneau au sol. */
-    const wave = ramp(p, 0.04, 0.48, 0, 1);
+    const wave = ramp(p, 0.03, 0.6, 0, 1);
     const material = pointsRef.current?.material as ShaderMaterial | undefined;
     if (material) {
       material.uniforms.uProgress.value = wave;
@@ -153,17 +155,17 @@ function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
     }
     const sweep = sweepRef.current;
     if (sweep) {
-      const scale = ramp(p, 0.04, 0.48, 0.4, 15);
+      const scale = ramp(p, 0.03, 0.6, 0.4, 15);
       sweep.scale.setScalar(scale);
       const mat = sweep.material as MeshBasicMaterial;
-      mat.opacity = 0.4 * ramp(p, 0.02, 0.08, 0, 1) * (1 - ramp(p, 0.48, 0.6, 0, 1));
+      mat.opacity = 0.4 * ramp(p, 0.02, 0.07, 0, 1) * (1 - ramp(p, 0.6, 0.7, 0, 1));
     }
 
     /* Le jumeau se fige. */
     const wire = wireRef.current;
     if (wire) {
       const mat = wire.material as LineBasicMaterial;
-      mat.opacity = ramp(p, 0.54, 0.74, 0, 0.85);
+      mat.opacity = ramp(p, 0.66, 0.82, 0, 0.85);
     }
 
     /* Orbite caméra (état du callback : jamais mutée en portée de rendu).
@@ -193,12 +195,23 @@ function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
       [framing.targetX, framing.targetY, 0],
       margin,
     );
+    /* Pan vertical d'entrée : pendant l'arrivée du stage (p < 1/3, mode
+       entry), seule sa partie HAUTE est visible ; viser plus bas remonte la
+       pièce dans cette zone, donc le sol qui s'illumine est vu dès les
+       premiers centimètres de scroll. L'ampleur suit la hauteur monde du
+       cadre (tanV × distance : ~36 % du cadre) pour rester juste quel que
+       soit le format ; l'offset s'annule à l'épinglage. */
+    const entryShift =
+      ramp(p, 0, 0.34, 0.85, 0) *
+      Math.tan(((framing.fovDeg / 2) * Math.PI) / 180) *
+      distance;
+    const targetY = framing.targetY - entryShift;
     camera.position.set(
       framing.targetX + Math.sin(azimut) * Math.cos(elevation) * distance,
-      framing.targetY + Math.sin(elevation) * distance + gy * 0.4,
+      targetY + Math.sin(elevation) * distance + gy * 0.4,
       Math.cos(azimut) * Math.cos(elevation) * distance,
     );
-    camera.lookAt(framing.targetX, framing.targetY, 0);
+    camera.lookAt(framing.targetX, targetY, 0);
   });
 
   return (

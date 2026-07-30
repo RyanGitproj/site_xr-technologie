@@ -13,7 +13,8 @@ const SCREENS_MIN = 2;
 const SCREENS_MAX = 4;
 
 type ScrollStageContextValue = {
-  /** Progression 0-1 du récit (0 = scène qui s'épingle, 1 = relâchée). */
+  /** Progression 0-1 du récit (0 = épinglage, ou entrée dans le viewport
+      avec `entry` ; 1 = relâchée). */
   progress: MotionValue<number>;
   /** Gyroscope lissé -1..1 (0 tant que non accordé/supporté). */
   tiltX: MotionValue<number>;
@@ -37,6 +38,11 @@ type ScrollStageProps = {
   /** Version statique COMPLÈTE (tout le contenu, hauteur naturelle) rendue
       seule sous prefers-reduced-motion : rien ne manque, rien n'est imposé. */
   fallback: React.ReactNode;
+  /** La progression démarre dès que le stage ENTRE par le bas du viewport,
+      au lieu d'attendre l'épinglage : le récit joue déjà pendant l'arrivée
+      de la section. L'épinglage tombe alors à p = 1/screens (le premier
+      écran de la course est l'entrée) : caler les `at` en conséquence. */
+  entry?: boolean;
   className?: string;
   /** Classe de l'écran épinglé (fond, composition). */
   stageClassName?: string;
@@ -54,6 +60,7 @@ type ScrollStageProps = {
 export function ScrollStage({
   screens = SCREENS_DEFAULT,
   fallback,
+  entry = false,
   className,
   stageClassName,
   children,
@@ -63,7 +70,7 @@ export function ScrollStage({
   const [active, setActive] = useState(false);
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
-    offset: ["start start", "end end"],
+    offset: entry ? ["start end", "end end"] : ["start start", "end end"],
   });
   const tilt = useDeviceTilt();
 

@@ -30,6 +30,11 @@
   height: 100%;
   overflow-x: auto;
   scrollbar-width: none;
+  /* Au repos, la première et la dernière ancre doivent être pleinement
+     lisibles : le padding égal à la zone de fondu les sort du dégradé, la
+     marge négative rend l'espace pris pour conserver l'alignement. */
+  padding-inline: 0.9rem;
+  margin-inline: -0.9rem;
   mask-image: linear-gradient(
     to right,
     transparent,

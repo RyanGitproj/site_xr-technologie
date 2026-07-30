@@ -88,7 +88,14 @@ export function PackCard({
               </ul>
             </div>
           )}
-          <OutlineButton scrollTo={formAnchor} onClick={onChoose} className={styles.cta}>
+          {/* Pas de trait lumineux ici : le rail affiche jusqu'à dix packs, et
+              dix comètes qui tournent en même temps se neutralisent. */}
+          <OutlineButton
+            beam={false}
+            scrollTo={formAnchor}
+            onClick={onChoose}
+            className={styles.cta}
+          >
             {cta}
           </OutlineButton>
         </GlassPanel>

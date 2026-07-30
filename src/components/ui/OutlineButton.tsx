@@ -11,13 +11,26 @@ type OutlineButtonProps = {
   scrollTo?: string;
   /** Effet de bord additionnel au clic (ex. event dataLayer). */
   onClick?: () => void;
+  /**
+   * Trait lumineux qui parcourt le contour (par défaut). À couper quand
+   * plusieurs boutons cohabitent dans une même liste (rail de packs) : autant
+   * de comètes qui tournent, c'est du bruit et du repaint pour rien.
+   */
+  beam?: boolean;
   className?: string;
   children: React.ReactNode;
 };
 
 /** Bouton secondaire sur verre (canal WhatsApp, CTA des packs). */
-export function OutlineButton({ href, scrollTo, onClick, className, children }: OutlineButtonProps) {
-  const classes = cx(styles.button, className);
+export function OutlineButton({
+  href,
+  scrollTo,
+  onClick,
+  beam = true,
+  className,
+  children,
+}: OutlineButtonProps) {
+  const classes = cx(styles.button, beam && "beam-edge beam-edge--ticket", className);
   if (href !== undefined) {
     return (
       <a href={href} className={classes} onClick={onClick}>

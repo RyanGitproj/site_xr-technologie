@@ -1,4 +1,4 @@
-# xr-discovery
+# site_xr-technologie
 
 Landing page **XR VR Discovery** : animation VR clé en main (Meta Quest 3) pour
 centres commerciaux & retail à Antananarivo.

@@ -1,6 +1,7 @@
 "use client";
 
 import { LidarScanSceneLazy } from "@/components/fx/LidarScanSceneLazy";
+import { ScenePreloader } from "@/components/fx/ScenePreloader";
 import { ScrollStage, useScrollStage } from "@/components/fx/ScrollStage";
 import { StageLayer } from "@/components/fx/StageLayer";
 import { pipelineLidar } from "@/products/lidar/config/content";
@@ -15,6 +16,10 @@ const PHASES = [
   { at: [0.36, 0.44, 0.56, 0.64], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
   { at: [0.62, 0.72, 1], y: [24, 0, 0], opacity: [0, 1, 1] },
 ] as const;
+
+/** Le nuage de points se télécharge pendant la lecture des sections du
+    dessus : la scène est prête quand le stage s'épingle. */
+const SCAN_SCENES = ["lidar-scan"] as const;
 
 function StageContent() {
   const stage = useScrollStage();
@@ -75,8 +80,11 @@ function StageContent() {
     backdrop-filter dans le stage (contain: paint). */
 export function PipelineScanStage() {
   return (
-    <ScrollStage screens={3} fallback={<PipelineStages />} className={styles.wrapper}>
-      <StageContent />
-    </ScrollStage>
+    <>
+      <ScenePreloader scenes={SCAN_SCENES} />
+      <ScrollStage screens={3} fallback={<PipelineStages />} className={styles.wrapper}>
+        <StageContent />
+      </ScrollStage>
+    </>
   );
 }

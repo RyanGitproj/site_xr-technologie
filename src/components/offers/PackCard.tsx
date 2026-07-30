@@ -1,4 +1,5 @@
-import { Check } from "lucide-react";
+import Image from "next/image";
+import { Check, Plus } from "lucide-react";
 import { DecryptNumber } from "@/components/fx/DecryptNumber";
 import { GeoFrame } from "@/components/fx/GeoFrame";
 import { GlassPanel } from "@/components/fx/GlassPanel";
@@ -6,14 +7,18 @@ import { TiltCard } from "@/components/fx/TiltCard";
 import { OutlineButton } from "@/components/ui/OutlineButton";
 import { Pill } from "@/components/ui/Pill";
 import { cx } from "@/lib/cx";
-import type { OfferPack } from "@/products/vr/config/offers";
+import type { OfferPack } from "./types";
 import styles from "./PackCard.module.css";
 
 type PackCardProps = {
   pack: OfferPack;
   pricePrefix: string;
   cta: string;
-  /** Effet de bord du CTA (sélection secteur + pack, tracking) ; le scroll
+  /** Id de la section formulaire de la page (« devis », « brief »). */
+  formAnchor: string;
+  /** Libellé du bloc d'options chiffrées, quand le pack en porte. */
+  optionsLabel?: string;
+  /** Effet de bord du CTA (présélection groupe + pack, tracking) ; le scroll
       vers le formulaire est porté par le bouton lui-même. */
   onChoose: () => void;
 };
@@ -23,7 +28,14 @@ type PackCardProps = {
  * chamfer élargi + trace + glow, prix en DecryptNumber (révélation
  * déchiffrement, car un compteur croissant ferait « grimper » le prix).
  */
-export function PackCard({ pack, pricePrefix, cta, onChoose }: PackCardProps) {
+export function PackCard({
+  pack,
+  pricePrefix,
+  cta,
+  formAnchor,
+  optionsLabel,
+  onChoose,
+}: PackCardProps) {
   const featured = pack.featured === true;
   return (
     <TiltCard className={styles.tilt}>
@@ -35,6 +47,18 @@ export function PackCard({ pack, pricePrefix, cta, onChoose }: PackCardProps) {
         className={styles.geo}
       >
         <GlassPanel className={cx(styles.panel, featured && styles.panelFeatured)}>
+          {pack.visual !== undefined && (
+            <div className={styles.visual}>
+              <span aria-hidden="true" className={styles.visualHalo} />
+              <Image
+                src={pack.visual.src}
+                alt={pack.visual.alt}
+                fill
+                sizes="(max-width: 1024px) 90vw, 340px"
+                className={styles.visualImg}
+              />
+            </div>
+          )}
           <h3 className={styles.packName}>{pack.name}</h3>
           <p className={styles.tagline}>{pack.tagline}</p>
           <p className={styles.priceBlock}>
@@ -51,7 +75,27 @@ export function PackCard({ pack, pricePrefix, cta, onChoose }: PackCardProps) {
               </li>
             ))}
           </ul>
-          <OutlineButton scrollTo="devis" onClick={onChoose} className={styles.cta}>
+          {pack.options !== undefined && optionsLabel !== undefined && (
+            <div className={styles.options}>
+              <p className={styles.optionsLabel}>{optionsLabel}</p>
+              <ul className={styles.optionList}>
+                {pack.options.map((option) => (
+                  <li key={option} className={styles.option}>
+                    <Plus aria-hidden="true" className={styles.optionIcon} />
+                    {option}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {/* Pas de trait lumineux ici : le rail affiche jusqu'à dix packs, et
+              dix comètes qui tournent en même temps se neutralisent. */}
+          <OutlineButton
+            beam={false}
+            scrollTo={formAnchor}
+            onClick={onChoose}
+            className={styles.cta}
+          >
             {cta}
           </OutlineButton>
         </GlassPanel>

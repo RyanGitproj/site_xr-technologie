@@ -9,12 +9,16 @@ import type { Attribution, Brief } from "@/products/lidar/lib/brief";
  */
 export function toBriefRow(brief: Brief, attribution: Attribution | null): BriefRow {
   return {
+    famille: brief.famille,
+    offre: orNull(brief.offre),
     type_site: brief.typeSite,
     localisation: brief.localisation,
     surface_estimee: orNull(brief.surface),
     objectif: brief.objectif,
     livrables: brief.livrables,
     logiciels: orNull(brief.logiciels),
+    budget: brief.budget,
+    periode: brief.periode,
     precisions: orNull(brief.precisions),
     nom: brief.nom,
     entreprise: orNull(brief.entreprise),

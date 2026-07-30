@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense, useRef } from "react";
+import { Suspense, useCallback, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, PerspectiveCamera } from "@react-three/drei";
 import type { MotionValue } from "framer-motion";
 import type { Group } from "three";
 import { ramp } from "@/lib/motion/sceneRamp";
 import { Quest3Gltf } from "./Quest3Gltf";
+import { SceneReady } from "./SceneReady";
 import styles from "./HeadsetScene.module.css";
 
 const AMBER = "#ffc24d";
@@ -29,7 +30,7 @@ type Choreography = {
  * Aucun état React : mutation directe de l'objet three. Le relais plein écran
  * (voile + embrasement CSS) prend la suite après ~0.66.
  */
-function Rig({ progress, tiltX, tiltY }: Choreography) {
+function Rig({ progress, tiltX, tiltY, onReady }: Choreography & { onReady: () => void }) {
   const group = useRef<Group>(null);
 
   useFrame((state) => {
@@ -49,7 +50,10 @@ function Rig({ progress, tiltX, tiltY }: Choreography) {
 
   return (
     <group ref={group}>
+      {/* La sonde vit DANS la frontière Suspense : elle ne signale la scène
+          prête qu'une fois le GLB résolu, jamais avant. */}
       <Suspense fallback={null}>
+        <SceneReady onReady={onReady} />
         <Quest3Gltf />
       </Suspense>
     </group>
@@ -59,8 +63,10 @@ function Rig({ progress, tiltX, tiltY }: Choreography) {
 type HeadsetSceneProps = Choreography & {
   /** DPR max (mobile : 1 ; desktop : 1.5). */
   dpr?: number;
-  /** Rend uniquement quand actif (hors écran → frameloop coupé, zéro GPU). */
+  /** Anime uniquement quand actif (hors écran → une frame, zéro GPU ensuite). */
   active?: boolean;
+  /** Première frame dessinée : le wrapper efface alors son image de repli. */
+  onReady: () => void;
 };
 
 /**
@@ -70,12 +76,28 @@ type HeadsetSceneProps = Choreography & {
  * LiquidBackground / l'univers respirent derrière. Lazy-montée près du
  * viewport (voir HeadsetSceneLazy).
  */
-export function HeadsetScene({ progress, tiltX, tiltY, dpr = 1.5, active = true }: HeadsetSceneProps) {
+export function HeadsetScene({
+  progress,
+  tiltX,
+  tiltY,
+  dpr = 1.5,
+  active = true,
+  onReady,
+}: HeadsetSceneProps) {
+  const [painted, setPainted] = useState(false);
+  const handleReady = useCallback(() => {
+    setPainted(true);
+    onReady();
+  }, [onReady]);
+
   return (
     <div className={styles.root} aria-hidden="true">
       <Canvas
         dpr={[1, dpr]}
-        frameloop={active ? "always" : "never"}
+        /* Tant que le casque n'a pas peint, la scène rend même hors écran :
+           sinon il n'existe à l'image qu'une fois la plongée épinglée. Une
+           fois peint, retour à la règle : zéro GPU hors écran. */
+        frameloop={active || !painted ? "always" : "never"}
         gl={{
           // GPU dédié (et non l'iGPU basse conso) ; MSAA sur desktop (dpr≥1.5),
           // coupé sur mobile (dpr 1) ; refus du rendu logiciel (SwiftShader) →
@@ -99,7 +121,7 @@ export function HeadsetScene({ progress, tiltX, tiltY, dpr = 1.5, active = true 
           <Lightformer intensity={2.4} color={RED} position={[3, -1, 3]} scale={[5, 5, 1]} />
           <Lightformer intensity={1.2} color="#fff4e8" position={[0, 3, 2]} scale={[3, 2, 1]} />
         </Environment>
-        <Rig progress={progress} tiltX={tiltX} tiltY={tiltY} />
+        <Rig progress={progress} tiltX={tiltX} tiltY={tiltY} onReady={handleReady} />
       </Canvas>
     </div>
   );

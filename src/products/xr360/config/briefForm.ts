@@ -9,6 +9,7 @@ import {
   MoreHorizontal,
   Share2,
   Store,
+  TreePalm,
   UtensilsCrossed,
   type LucideIcon,
 } from "lucide-react";
@@ -18,8 +19,8 @@ import type { Brief } from "@/products/xr360/lib/brief";
     lib/brief.ts : ids kebab-case = colonnes DB). */
 
 export const FORM_STEPS = [
-  { title: "Votre lieu", fields: ["typeLieu"] },
-  { title: "Votre projet", fields: ["objectif", "supports", "message"] },
+  { title: "Votre lieu", fields: ["typeLieu", "offre"] },
+  { title: "Votre projet", fields: ["objectif", "supports", "budget", "periode", "message"] },
   { title: "Vos coordonnées", fields: ["nom", "telephone", "email"] },
 ] as const satisfies readonly { title: string; fields: readonly (keyof Brief)[] }[];
 
@@ -28,9 +29,10 @@ export const TYPE_LIEU_LABELS: Record<Brief["typeLieu"], string> = {
   immobilier: "Immobilier",
   restaurant: "Restaurant",
   "commerce-showroom": "Commerce & showroom",
+  "site-touristique": "Site touristique",
   "ecole-formation": "École & formation",
-  "site-culturel-patrimonial": "Site culturel & patrimonial",
   entreprise: "Entreprise",
+  "site-culturel-patrimonial": "Site culturel & patrimonial",
   autre: "Autre lieu",
 };
 
@@ -39,11 +41,15 @@ export const TYPE_LIEU_ICONS: Record<Brief["typeLieu"], LucideIcon> = {
   immobilier: Building2,
   restaurant: UtensilsCrossed,
   "commerce-showroom": Store,
+  "site-touristique": TreePalm,
   "ecole-formation": GraduationCap,
-  "site-culturel-patrimonial": Landmark,
   entreprise: Building2,
+  "site-culturel-patrimonial": Landmark,
   autre: MoreHorizontal,
 };
+
+/** Option « offre » vide : le visiteur ne s'engage sur aucun format. */
+export const OFFRE_NONE_LABEL = "Je ne sais pas encore";
 
 export const OBJECTIF_LABELS: Record<Brief["objectif"], string> = {
   "faire-decouvrir": "Faire découvrir mon lieu à distance",
@@ -67,11 +73,23 @@ export const SUPPORT_ICONS: Record<Brief["supports"][number], LucideIcon> = {
   "casque-vr": Headset,
 };
 
+export const BUDGET_LABELS: Record<Brief["budget"], string> = {
+  "moins-1m": "Moins de 1 M Ar",
+  "1-2m": "1 à 2 M Ar",
+  "2-4m": "2 à 4 M Ar",
+  "plus-4m": "Plus de 4 M Ar",
+  "a-definir": "À définir ensemble",
+};
+
 export const FIELD_LABELS = {
   typeLieu: "Quel lieu souhaitez-vous faire visiter ?",
+  offre: "Offre envisagée",
   objectif: "Quel est votre objectif principal ?",
   supports: "Où diffuser la visite ?",
   supportsHint: "Plusieurs choix possibles ; nous vous conseillons si vous hésitez.",
+  budget: "Budget",
+  periode: "Période envisagée",
+  periodePlaceholder: "Ex. : avant la haute saison",
   message: "Parlez-nous de votre lieu",
   messagePlaceholder: "Espaces à valoriser, surfaces, contraintes, délais…",
   nom: "Votre nom",

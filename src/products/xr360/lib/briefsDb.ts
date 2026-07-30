@@ -5,13 +5,17 @@ import type { AttributionColumns } from "@/lib/leads/attributionColumns";
 
 /**
  * Ligne de `public.funnel_xr360_leads`, miroir de
- * supabase/migrations/20260727_xr360_leads.sql, hors colonnes gérées par la
- * base (id, created_at, lead_status). Optionnels absents = null.
+ * supabase/migrations/20260727_xr360_leads.sql + 20260730_xr360_offres.sql,
+ * hors colonnes gérées par la base (id, created_at, lead_status).
+ * Optionnels absents = null.
  */
 export type BriefRow = {
   type_lieu: string;
+  offre: string | null;
   objectif: string;
   supports: readonly string[];
+  budget: string;
+  periode: string;
   message: string | null;
   nom: string;
   telephone: string;

@@ -1,21 +1,26 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import type { Offer360Id } from "@/products/xr360/config/content";
+import type { Xr360OfferId } from "@/products/xr360/config/offers";
 
 /**
- * Sélection « Choisir ce niveau » partagée entre la section Offres et le
- * brief (présélection des supports + mention de l'offre dans le message).
- * Même pattern module-scope que le pôle VR (selection.ts) : deux
- * consommateurs client montés en permanence, pas besoin de context.
+ * Sélection « Choisir cette offre » partagée entre la section Offres et le
+ * brief (présélection type de lieu + offre). Même pattern module-scope que
+ * le pôle VR (selection.ts) : deux consommateurs client montés en
+ * permanence, pas besoin de context.
  * null tant qu'aucun CTA d'offre n'a été cliqué (brief vierge).
  */
 
-let selection: Offer360Id | null = null;
+export type Xr360Selection = {
+  typeLieu: Xr360OfferId;
+  offre: string;
+};
+
+let selection: Xr360Selection | null = null;
 const listeners = new Set<() => void>();
 
-export function chooseOffer360(offerId: Offer360Id): void {
-  selection = offerId;
+export function chooseXr360Offer(typeLieu: Xr360OfferId, offre: string): void {
+  selection = { typeLieu, offre };
   for (const listener of listeners) listener();
 }
 
@@ -27,6 +32,6 @@ function subscribe(listener: () => void): () => void {
 const getSnapshot = () => selection;
 const getServerSnapshot = () => null;
 
-export function useOffer360Selection(): Offer360Id | null {
+export function useXr360Selection(): Xr360Selection | null {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

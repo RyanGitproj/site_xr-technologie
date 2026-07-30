@@ -14,13 +14,18 @@ import {
 import type { Brief } from "@/products/lidar/lib/brief";
 
 /** Libellés français du brief LiDAR (les valeurs vivent dans lib/brief.ts :
-    ids kebab-case = colonnes DB). */
+    ids kebab-case = colonnes DB ; le couple famille/offre vient du
+    catalogue config/offers.ts). */
 
 export const FORM_STEPS = [
+  { title: "Votre besoin", fields: ["famille", "offre"] },
   { title: "Votre site", fields: ["typeSite", "localisation", "surface"] },
-  { title: "Votre mission", fields: ["objectif", "livrables", "logiciels", "precisions"] },
+  { title: "Votre mission", fields: ["objectif", "livrables", "logiciels", "budget", "periode", "precisions"] },
   { title: "Vos coordonnées", fields: ["nom", "entreprise", "telephone", "email"] },
 ] as const satisfies readonly { title: string; fields: readonly (keyof Brief)[] }[];
+
+/** Option « offre » vide : le visiteur ne s'engage sur aucune solution. */
+export const OFFRE_NONE_LABEL = "Je ne sais pas encore";
 
 export const TYPE_SITE_LABELS: Record<Brief["typeSite"], string> = {
   batiment: "Bâtiment ou local",
@@ -45,6 +50,7 @@ export const OBJECTIF_LABELS: Record<Brief["objectif"], string> = {
   "avant-travaux": "Préparer des travaux ou une rénovation",
   "documentation-chantier": "Documenter ou suivre un chantier",
   "patrimoine-conservation": "Conserver un état numérique du site",
+  "valorisation-commerciale": "Faire visiter et valoriser mon établissement",
   autre: "Autre objectif",
 };
 
@@ -64,7 +70,17 @@ export const LIVRABLE_ICONS: Record<Brief["livrables"][number], LucideIcon> = {
   "a-definir": MoreHorizontal,
 };
 
+export const BUDGET_LABELS: Record<Brief["budget"], string> = {
+  "moins-1m": "Moins de 1 M Ar",
+  "1-3m": "1 à 3 M Ar",
+  "3-7m": "3 à 7 M Ar",
+  "plus-7m": "Plus de 7 M Ar",
+  "a-definir": "À définir ensemble",
+};
+
 export const FIELD_LABELS = {
+  famille: "De quoi avez-vous besoin ?",
+  offre: "Solution envisagée",
   typeSite: "Quel type de site faut-il relever ?",
   localisation: "Où se trouve le site ?",
   localisationPlaceholder: "Ex. : Antananarivo, Analakely",
@@ -75,6 +91,9 @@ export const FIELD_LABELS = {
   livrablesHint: "Plusieurs choix possibles ; les formats sont confirmés avant la mission.",
   logiciels: "Logiciels utilisés",
   logicielsPlaceholder: "Ex. : AutoCAD, Revit, ArchiCAD",
+  budget: "Budget",
+  periode: "Période envisagée",
+  periodePlaceholder: "Ex. : avant fin septembre",
   precisions: "Zones concernées, contraintes, précisions",
   precisionsPlaceholder: "Ex. : intérieur + façades, accès de nuit uniquement…",
   nom: "Votre nom",
@@ -92,5 +111,5 @@ export const briefFormSection = {
   kicker: "Présenter mon site",
   title: "Préparons votre mission",
   subtitle:
-    "Type de site, localisation, objectif, livrables : plus le besoin est clair, plus les données seront utiles et exploitables. Notre équipe évalue votre demande et revient vers vous rapidement.",
+    "Votre besoin, votre site, votre mission, vos coordonnées : plus le besoin est clair, plus les données seront utiles et exploitables. Notre équipe évalue votre demande et revient vers vous rapidement.",
 } as const;

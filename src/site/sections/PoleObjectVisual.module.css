@@ -1,3 +1,9 @@
+/* Le panneau occupe la zone visuelle ; la scène le remplit. */
+.panel {
+  position: absolute;
+  inset: 0;
+}
+
 .root {
   position: absolute;
   inset: 0;

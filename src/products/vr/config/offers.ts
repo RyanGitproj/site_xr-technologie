@@ -1,18 +1,23 @@
 import {
   Briefcase,
   Building2,
+  Gamepad2,
   GraduationCap,
   HeartHandshake,
   Home,
   Megaphone,
+  Music,
   Plane,
   School,
-  type LucideIcon,
 } from "lucide-react";
+import { allPackIds, getGroup, groupLabels, groupPriceFrom } from "@/components/offers/catalog";
+import type { OfferGroup, OfferPack } from "@/components/offers/types";
 
 /**
- * Les 8 offres sectorielles et leurs 21 packs. SOURCE DE VÉRITÉ : les
- * brochures officielles docs/Offres/*.pdf (prix, contenus, badges).
+ * Les 10 offres sectorielles et leurs 30 packs. SOURCE DE VÉRITÉ : les
+ * brochures officielles docs/Offres/*.pdf pour les 8 premières, et
+ * docs/Nouvelle_brochure/*.pdf pour « Jeux & divertissement » et
+ * « Musique & rythme » (prix, contenus, badges).
  * Les ids (offres ET packs) alimentent l'enum Zod du formulaire et les
  * colonnes `secteur`/`pack` de funnel_xr_discovery_leads : NE JAMAIS les
  * renommer après mise en prod. Prix toujours « à partir de », en ariary.
@@ -27,32 +32,15 @@ export const OFFER_IDS = [
   "fondations-associations",
   "immobilier-showrooms",
   "marques-evenementiel",
+  "jeux-divertissement",
+  "musique-rythme",
 ] as const;
 
 export type OfferId = (typeof OFFER_IDS)[number];
 
-export type OfferPack = {
-  id: string;
-  name: string;
-  tagline: string;
-  /** Prix « à partir de », en ariary. */
-  price: number;
-  features: readonly string[];
-  featured?: boolean;
-  badge?: string;
-};
+export type Offer = OfferGroup<OfferId>;
 
-export type Offer = {
-  id: OfferId;
-  /** Nom complet : sert de libellé au formulaire et à la lecture des leads. */
-  name: string;
-  /** Libellé compact des tuiles du sélecteur. */
-  shortName: string;
-  icon: LucideIcon;
-  /** Accroche brochure, affichée au-dessus des packs de l'offre active. */
-  tagline: string;
-  packs: readonly [OfferPack, OfferPack, OfferPack];
-};
+export type { OfferPack };
 
 export const OFFERS: readonly Offer[] = [
   {
@@ -426,27 +414,113 @@ export const OFFERS: readonly Offer[] = [
       },
     ],
   },
+  {
+    id: "jeux-divertissement",
+    name: "Jeux & divertissement",
+    shortName: "Jeux & fun",
+    icon: Gamepad2,
+    tagline: "Le jeu ne se regarde plus. Il se vit.",
+    packs: [
+      {
+        id: "vr-fun",
+        name: "VR Fun",
+        tagline: "Découverte et plaisir immédiat.",
+        price: 950_000,
+        features: [
+          "2 h d'animation",
+          "4 casques VR",
+          "1 animateur XR",
+          "Jeux adaptés au public, rotation organisée",
+        ],
+      },
+      {
+        id: "vr-challenge",
+        name: "VR Challenge",
+        tagline: "Défis, adrénaline et esprit d'équipe.",
+        price: 2_200_000,
+        featured: true,
+        badge: "Le plus demandé",
+        features: [
+          "Demi-journée d'animation",
+          "6 casques VR",
+          "2 animateurs XR",
+          "Défis individuels ou par équipe, mini classement",
+        ],
+      },
+      {
+        id: "vr-gaming-arena",
+        name: "VR Gaming Arena",
+        tagline: "Une expérience VR complète.",
+        price: 4_900_000,
+        features: [
+          "Journée complète d'animation",
+          "10 casques VR",
+          "2 animateurs XR",
+          "Espace de jeu complet, tournoi et photo souvenir",
+        ],
+      },
+    ],
+  },
+  {
+    id: "musique-rythme",
+    name: "Musique & rythme",
+    shortName: "Musique",
+    icon: Music,
+    tagline: "La musique commence. Votre corps réagit.",
+    packs: [
+      {
+        id: "music-discovery",
+        name: "Music Discovery",
+        tagline: "La première immersion musicale, courte et facile à organiser.",
+        price: 700_000,
+        features: [
+          "2 h d'animation",
+          "2 casques Meta Quest 3",
+          "1 animateur XR",
+          "Défis de rythme et comparaison des scores",
+        ],
+      },
+      {
+        id: "music-challenge",
+        name: "Music Challenge",
+        tagline: "Plus de joueurs, plus de défis, plus d'énergie.",
+        price: 1_900_000,
+        featured: true,
+        badge: "Le plus choisi",
+        features: [
+          "Demi-journée d'animation",
+          "6 casques Meta Quest 3",
+          "2 animateurs XR",
+          "Niveaux progressifs, duels et mini-tournoi",
+        ],
+      },
+      {
+        id: "music-live-arena",
+        name: "Music Live Arena",
+        tagline: "L'expérience musicale VR complète.",
+        price: 4_500_000,
+        features: [
+          "Journée complète d'animation",
+          "10 casques Meta Quest 3",
+          "2 animateurs XR",
+          "Plusieurs univers musicaux, tournois et classement final",
+        ],
+      },
+    ],
+  },
 ];
 
-const OFFERS_BY_ID = new Map(OFFERS.map((offer) => [offer.id, offer]));
-
 export function getOffer(id: OfferId): Offer {
-  const offer = OFFERS_BY_ID.get(id);
-  if (offer === undefined) throw new Error(`Offre inconnue : ${id}`);
-  return offer;
+  return getGroup(OFFERS, id);
 }
 
 /** Prix d'appel d'une offre (tuiles du sélecteur) : le pack le moins cher. */
 export function offerPriceFrom(offer: Offer): number {
-  return Math.min(...offer.packs.map((pack) => pack.price));
+  return groupPriceFrom(offer);
 }
 
 /** Libellés du champ « secteur » du formulaire, dérivés et jamais dupliqués. */
-export const OFFER_LABELS = Object.fromEntries(
-  OFFERS.map((offer) => [offer.id, offer.name]),
-) as Record<OfferId, string>;
+export const OFFER_LABELS = groupLabels(OFFERS);
 
 /** Ids de packs (unicité globale, invariant testé) : enum Zod du champ « pack ». */
-export const ALL_PACK_IDS: readonly string[] = OFFERS.flatMap((offer) =>
-  offer.packs.map((pack) => pack.id),
-);
+export const ALL_PACK_IDS: readonly string[] = allPackIds(OFFERS);

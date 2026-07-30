@@ -4,8 +4,11 @@ import type { Brief } from "./brief";
 
 const brief: Brief = {
   typeLieu: "hotel-hebergement",
+  offre: "",
   objectif: "attirer-reservations",
   supports: ["site-internet", "casque-vr"],
+  budget: "1-2m",
+  periode: "avant la haute saison",
   message: "",
   nom: "Rakoto",
   telephone: "+261340000000",
@@ -13,13 +16,21 @@ const brief: Brief = {
 };
 
 describe("toBriefRow", () => {
-  it("mappe le brief en snake_case, message vide → null", () => {
+  it("mappe le brief en snake_case, optionnels vides → null", () => {
     const row = toBriefRow(brief, null);
     expect(row.type_lieu).toBe("hotel-hebergement");
+    expect(row.offre).toBeNull();
     expect(row.objectif).toBe("attirer-reservations");
     expect(row.supports).toEqual(["site-internet", "casque-vr"]);
+    expect(row.budget).toBe("1-2m");
+    expect(row.periode).toBe("avant la haute saison");
     expect(row.message).toBeNull();
     expect(row.nom).toBe("Rakoto");
+  });
+
+  it("porte l'offre choisie telle quelle", () => {
+    const row = toBriefRow({ ...brief, offre: "visite-pro" }, null);
+    expect(row.offre).toBe("visite-pro");
   });
 
   it("sans attribution : colonnes null et is_organic true", () => {

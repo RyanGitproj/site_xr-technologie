@@ -51,3 +51,87 @@
     background: var(--glass-stroke); /* liseré statique */
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Variantes SANS wrapper : le trait parcourt le contour de l'élément
+   lui-même (CTA outline, liens tracés). `.beam-border` impose un div autour
+   et un anneau rectangulaire ; ici l'anneau prend la forme de l'élément, et
+   la comète reste discrète (blanc/acier du thème) car ces boutons sont
+   secondaires — le spectacle appartient toujours au ShimmerCTA.
+   --------------------------------------------------------------------------- */
+
+.beam-edge {
+  position: relative;
+}
+
+.beam-edge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0deg 255deg,
+    color-mix(in srgb, var(--color-fx-3) 55%, transparent) 300deg,
+    var(--color-fx-2) 336deg,
+    var(--color-fx-1) 350deg,
+    transparent 360deg
+  );
+  animation: beam-rotate 6s linear infinite;
+  pointer-events: none;
+}
+
+/* Contour ARRONDI (liens tracés type WhatsApp) : anneau par masque, le rayon
+   suit celui de l'élément. */
+.beam-edge:not(.beam-edge--ticket)::before {
+  padding: 1.5px;
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Contour TICKET (coins coupés à 11 px, cf. OutlineButton) : le masque ne
+   sait pas suivre une découpe, on trace donc l'anneau en deux contours —
+   octogone extérieur puis octogone intérieur à 1,5 px — que le fill-rule
+   evenodd transforme en anneau creux. Sans support du fill-rule, la
+   déclaration entière tombe : le bouton garde son liseré statique au lieu de
+   se faire recouvrir par le dégradé. */
+@supports (clip-path: polygon(evenodd, 0 0, 1px 0, 0 1px)) {
+  .beam-edge--ticket::before {
+    clip-path: polygon(
+      evenodd,
+      11px 0,
+      calc(100% - 11px) 0,
+      100% 11px,
+      100% calc(100% - 11px),
+      calc(100% - 11px) 100%,
+      11px 100%,
+      0 calc(100% - 11px),
+      0 11px,
+      1.5px 12px,
+      12px 1.5px,
+      calc(100% - 12px) 1.5px,
+      calc(100% - 1.5px) 12px,
+      calc(100% - 1.5px) calc(100% - 12px),
+      calc(100% - 12px) calc(100% - 1.5px),
+      12px calc(100% - 1.5px),
+      1.5px calc(100% - 12px)
+    );
+  }
+}
+
+@supports not (clip-path: polygon(evenodd, 0 0, 1px 0, 0 1px)) {
+  .beam-edge--ticket::before {
+    display: none;
+  }
+}
+
+/* Sans mouvement : le contour reste allumé, il ne tourne plus. */
+@media (prefers-reduced-motion: reduce) {
+  .beam-edge::before {
+    animation: none;
+    background: var(--edge-lit);
+  }
+}

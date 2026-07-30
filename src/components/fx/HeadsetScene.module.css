@@ -11,12 +11,19 @@
 }
 
 /* Fallback 2D (WebGL absent / chargement / reduced-motion en amont) :
-   l'image Codex du casque, centrée. */
+   l'image Codex du casque, centrée. Elle reste SOUS le canvas et ne s'efface
+   qu'à la première frame dessinée, sinon le canvas transparent laisse un
+   trou pendant le téléchargement du chunk puis du GLB. */
 .fallback2d {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
+  transition: opacity var(--dur-med) var(--ease-out);
+}
+
+.fallback2d[data-painted="true"] {
+  opacity: 0;
 }
 
 .fallback2d img {

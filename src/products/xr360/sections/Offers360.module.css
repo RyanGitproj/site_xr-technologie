@@ -3,128 +3,31 @@
   padding: var(--section-pad-y) clamp(1.25rem, 4vw, 3rem);
 }
 
-.grid {
-  max-width: 68rem;
-  margin: var(--stack-gap) auto 0;
-  display: grid;
-  gap: 1.25rem;
-  align-items: stretch;
-}
-
-.cell {
-  display: grid;
-}
-
-.card {
-  position: relative;
-  height: 100%;
-  padding: 1.5rem;
-  display: grid;
-  gap: 0.9rem;
-  align-content: start;
-}
-
-/* Coin accent (restyle refonte, langage PDF) : tick lumineux haut-droit. */
-.card::after {
-  content: "";
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  width: 1rem;
-  height: 1rem;
-  border-top: 2px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
-  border-right: 2px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
-  border-top-right-radius: var(--radius-card);
-  pointer-events: none;
-}
-
-/* Offre mise en avant : l'arête du verre passe à l'accent (GlassPanel
-   borde avec --glass-edge), sans changer le fond. */
-.cardFeatured {
-  --glass-edge: color-mix(in srgb, var(--color-accent) 55%, transparent);
-}
-
-/* Composition devices (lot J, PNG alpha) : la panoplie posée en tête de
-   carte sur un halo cyan discret. */
-.visual {
-  position: relative;
-  aspect-ratio: 3 / 2;
-  margin: -0.25rem -0.25rem 0;
-}
-
-.visualHalo {
-  position: absolute;
-  left: 50%;
-  top: 55%;
-  translate: -50% -50%;
-  width: 80%;
-  aspect-ratio: 1.6;
-  border-radius: 50%;
-  background: radial-gradient(
-    50% 50% at 50% 50%,
-    color-mix(in srgb, var(--color-accent) 14%, transparent),
-    transparent 70%
-  );
-}
-
-.visualImg {
-  object-fit: contain;
-  padding: 0.4rem;
-}
-
-.offerName {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 700;
-}
-
-.tagline {
-  font-size: 0.88rem;
-  color: var(--color-ink-muted);
-}
-
-.features {
-  display: grid;
-  gap: 0.45rem;
-  padding: 0;
-  list-style: none;
-}
-
-.feature {
-  display: flex;
-  align-items: baseline;
-  gap: 0.55rem;
-  font-size: 0.9rem;
-}
-
-.feature::before {
-  content: "";
-  flex-shrink: 0;
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: 50%;
-  background: var(--color-accent);
-}
-
-.price {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
-
-.choose {
-  justify-self: start;
+.explorer {
+  max-width: 72rem;
+  margin-inline: auto;
 }
 
 .footer {
-  max-width: 68rem;
+  max-width: 72rem;
   margin: 2rem auto 0;
   display: grid;
   gap: 1.25rem;
   justify-items: center;
+}
+
+/* Options brochure sans prix : une ligne sobre, pas une grille de cards
+   (elles complètent l'offre choisie, elles ne rivalisent pas avec elle). */
+.optionsLine {
+  max-width: 52rem;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--color-ink-muted);
+  text-wrap: balance;
+}
+
+.optionsTitle {
+  color: var(--color-ink);
 }
 
 .reassurance {
@@ -184,10 +87,4 @@
 
 .noteLink:hover {
   text-decoration: underline;
-}
-
-@media (min-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }

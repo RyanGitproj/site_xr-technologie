@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { LucideIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {
   CheckboxCardGroup,
@@ -13,20 +13,26 @@ import {
 } from "@/components/forms/fields";
 import { StepIndicator } from "@/components/forms/StepIndicator";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { formatAriary } from "@/lib/format/ariary";
 import { readAttribution } from "@/lib/tracking/attribution";
 import { stashLeadContentName } from "@/lib/tracking/fpixel";
 import { pushDataLayerEventOnce } from "@/lib/tracking/gtm";
 import { submitBrief } from "@/products/lidar/actions/submitBrief";
 import {
+  BUDGET_LABELS,
   FIELD_LABELS,
   FORM_STEPS,
   LIVRABLE_ICONS,
   LIVRABLE_LABELS,
   OBJECTIF_LABELS,
+  OFFRE_NONE_LABEL,
   TYPE_SITE_ICONS,
   TYPE_SITE_LABELS,
 } from "@/products/lidar/config/briefForm";
+import { offersLidar } from "@/products/lidar/config/content";
+import { LIDAR_OFFERS, getLidarOffer } from "@/products/lidar/config/offers";
 import { briefSchema, type Brief } from "@/products/lidar/lib/brief";
+import { useLidarSelection } from "@/products/lidar/lib/selection";
 import { cx } from "@/lib/cx";
 import styles from "@/components/forms/formShell.module.css";
 
@@ -41,13 +47,22 @@ function toOptions<V extends string>(
   }));
 }
 
+/** Options famille : accent couleur + icône des tuiles de la section Offres. */
+const FAMILLE_OPTIONS = LIDAR_OFFERS.map((offer) => ({
+  value: offer.id,
+  label: offer.name,
+  accent: offer.id,
+  icon: offer.icon,
+}));
+
 /** Garde anti double-clic (pattern éprouvé des funnels VR/360). */
 const NAV_GUARD_MS = 500;
 
 /**
- * Brief LiDAR en 3 étapes : site (type, localisation, surface), mission
- * (objectif, livrables, logiciels, précisions), coordonnées. Même schéma
- * Zod que le serveur ; attribution premier-touchpoint jointe au submit.
+ * Brief LiDAR en 4 étapes : besoin (famille + solution), site (type,
+ * localisation, surface), mission (objectif, livrables, logiciels, budget,
+ * période, précisions), coordonnées. Même schéma Zod que le serveur ;
+ * attribution premier-touchpoint jointe au submit.
  */
 export function BriefFormLidar() {
   const [step, setStep] = useState(0);
@@ -60,12 +75,33 @@ export function BriefFormLidar() {
     handleSubmit,
     trigger,
     control,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<Brief>({
     resolver: standardSchemaResolver(briefSchema),
     mode: "onSubmit",
-    defaultValues: { surface: "", livrables: [], logiciels: "", precisions: "", entreprise: "", email: "" },
+    defaultValues: {
+      offre: "",
+      surface: "",
+      livrables: [],
+      logiciels: "",
+      periode: "",
+      precisions: "",
+      entreprise: "",
+      email: "",
+    },
   });
+
+  // Présélection depuis « Choisir cette solution » (section Offres) : chaque
+  // nouveau clic écrase la sélection, les champs restent modifiables ensuite.
+  // shouldValidate efface une éventuelle erreur « besoin requis » affichée.
+  const selection = useLidarSelection();
+  useEffect(() => {
+    if (selection === null) return;
+    setValue("famille", selection.famille, { shouldValidate: true });
+    setValue("offre", selection.offre, { shouldValidate: true });
+  }, [selection, setValue]);
 
   const isLastStep = step === FORM_STEPS.length - 1;
   const lastNavAt = useRef(0);
@@ -85,8 +121,8 @@ export function BriefFormLidar() {
 
   function onSubmit(brief: Brief) {
     setServerError(null);
-    // Mémorise le type de site pour enrichir le Lead Meta sur /lidar/merci.
-    stashLeadContentName(TYPE_SITE_LABELS[brief.typeSite]);
+    // Mémorise la famille d'offre pour enrichir le Lead Meta sur /lidar/merci.
+    stashLeadContentName(getLidarOffer(brief.famille).name);
     startTransition(async () => {
       const result = await submitBrief(brief, readAttribution());
       if (result !== undefined && !result.ok) setServerError(result.error);
@@ -101,6 +137,35 @@ export function BriefFormLidar() {
         if (errors[field] !== undefined) void trigger(field);
       },
     });
+
+  /** Changement de famille : une solution déjà cochée qui n'appartient pas à
+      la nouvelle famille est remise à « je ne sais pas encore » : reset
+      synchrone dans le onChange, aucune course avec le préremplissage. */
+  const registerFamille = register("famille", {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+      const nextFamille = event.target.value as Brief["famille"];
+      const currentOffre = getValues("offre");
+      const offreStillValid =
+        currentOffre === "" ||
+        getLidarOffer(nextFamille).packs.some((pack) => pack.id === currentOffre);
+      if (!offreStillValid) setValue("offre", "");
+      if (errors.famille !== undefined) void trigger("famille");
+    },
+  });
+
+  // Options de solution de la famille courante (aucune famille : champ masqué).
+  const familleValue: Brief["famille"] | undefined = useWatch({ control, name: "famille" });
+  const offreOptions =
+    familleValue === undefined
+      ? null
+      : [
+          ...getLidarOffer(familleValue).packs.map((pack) => ({
+            value: pack.id,
+            label: `${pack.name} · ${offersLidar.pricePrefix} ${formatAriary(pack.price)}`,
+            accent: familleValue,
+          })),
+          { value: "", label: OFFRE_NONE_LABEL, accent: familleValue },
+        ];
 
   return (
     <form
@@ -125,8 +190,28 @@ export function BriefFormLidar() {
         {FORM_STEPS[step].title}
       </h3>
 
-      <div className={cx(styles.fields, step === 2 && styles.fieldsTwoCol)}>
+      <div className={cx(styles.fields, step === 3 && styles.fieldsTwoCol)}>
         {step === 0 && (
+          <>
+            <RadioCardGroup
+              legend={FIELD_LABELS.famille}
+              options={FAMILLE_OPTIONS}
+              registration={registerFamille}
+              error={fieldError("famille")}
+              required
+            />
+            {offreOptions !== null && (
+              <RadioCardGroup
+                legend={FIELD_LABELS.offre}
+                options={offreOptions}
+                registration={registerField("offre")}
+                error={fieldError("offre")}
+              />
+            )}
+          </>
+        )}
+
+        {step === 1 && (
           <>
             <RadioCardGroup
               legend={FIELD_LABELS.typeSite}
@@ -152,7 +237,7 @@ export function BriefFormLidar() {
           </>
         )}
 
-        {step === 1 && (
+        {step === 2 && (
           <>
             <RadioCardGroup
               legend={FIELD_LABELS.objectif}
@@ -175,6 +260,21 @@ export function BriefFormLidar() {
               registration={registerField("logiciels")}
               error={fieldError("logiciels")}
             />
+            <RadioCardGroup
+              legend={FIELD_LABELS.budget}
+              options={toOptions(BUDGET_LABELS)}
+              registration={registerField("budget")}
+              error={fieldError("budget")}
+              required
+              columns={3}
+            />
+            <TextField
+              label={FIELD_LABELS.periode}
+              placeholder={FIELD_LABELS.periodePlaceholder}
+              registration={registerField("periode")}
+              error={fieldError("periode")}
+              required
+            />
             <TextAreaField
               label={FIELD_LABELS.precisions}
               placeholder={FIELD_LABELS.precisionsPlaceholder}
@@ -184,7 +284,7 @@ export function BriefFormLidar() {
           </>
         )}
 
-        {step === 2 && (
+        {step === 3 && (
           <>
             <TextField
               label={FIELD_LABELS.nom}

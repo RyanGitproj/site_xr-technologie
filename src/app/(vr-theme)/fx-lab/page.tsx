@@ -162,7 +162,9 @@ function HeadsetLabDemo() {
   return (
     <>
       <div className={cx(styles.demo, styles.headsetDemo)}>
-        <HeadsetScene progress={progress} tiltX={tiltX} tiltY={tiltY} />
+        {/* Scène montée nue (sans HeadsetSceneLazy) : pas d'image de repli à
+            effacer au premier paint, le onReady du banc est donc un no-op. */}
+        <HeadsetScene progress={progress} tiltX={tiltX} tiltY={tiltY} onReady={() => {}} />
       </div>
       <label className={styles.headsetSlider}>
         progression {value.toFixed(2)}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { PerspectiveCamera } from "@react-three/drei";
 import {
@@ -28,8 +28,9 @@ import {
   scanBounds,
   scanFitDistance,
 } from "@/lib/lidar/scanModel";
-import type { PolePointer } from "./PoleObjectScene";
+import type { PoleModelSceneProps, PolePointer } from "./PoleObjectScene";
 import ScannerModel from "./ScannerModel";
+import { SceneReady } from "../SceneReady";
 import styles from "./ScanBandScene.module.css";
 
 /**
@@ -367,27 +368,29 @@ function Rig({ accent, pointerRef, pointCount, captionRef, barRef }: RigProps) {
   );
 }
 
-type ScanBandSceneProps = {
-  accent: string;
-  pointerRef: React.RefObject<PolePointer>;
-  dpr?: number;
-  active?: boolean;
-};
-
 export default function ScanBandScene({
   accent,
   pointerRef,
   dpr = 1.5,
   active = true,
-}: ScanBandSceneProps) {
+  onReady,
+}: PoleModelSceneProps) {
   const captionRef = useRef<HTMLParagraphElement>(null);
   const barRef = useRef<HTMLSpanElement>(null);
+  const [painted, setPainted] = useState(false);
+  const handleReady = useCallback(() => {
+    setPainted(true);
+    onReady();
+  }, [onReady]);
 
   return (
     <div className={styles.root} aria-hidden="true">
       <Canvas
         dpr={[1, dpr]}
-        frameloop={active ? "always" : "never"}
+        /* Tant que la scène n'a pas peint, elle rend même hors écran (contrat
+           PoleObjectLazy : le repli 2D s'efface à la première frame). Une
+           fois peinte, retour à la règle : zéro GPU hors écran. */
+        frameloop={active || !painted ? "always" : "never"}
         gl={{
           antialias: dpr >= 1.5,
           alpha: true,
@@ -397,6 +400,7 @@ export default function ScanBandScene({
         onCreated={({ gl }) => gl.setClearAlpha(0)}
       >
         <PerspectiveCamera makeDefault fov={FOV} near={0.5} far={120} position={[0, 6, 20]} />
+        <SceneReady onReady={handleReady} />
         <ambientLight intensity={0.5} />
         <directionalLight position={[4, 7, 5]} intensity={0.9} color="#dfe8ee" />
         <Rig

@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import dynamic from "next/dynamic";
 import type { ProductId } from "@/config/products";
 import { usePointerFine } from "@/lib/motion/usePointerFine";
@@ -25,7 +32,7 @@ const SCENES = {
 
 type PoleObjectLazyProps = {
   model: ProductId;
-  /** Repli complet (reduced-motion, WebGL absent, chunk en vol) : halo CSS
+  /** Repli (reduced-motion, WebGL absent, chunk ou modèle en vol) : halo CSS
       aujourd'hui, packshot Codex (lot H) demain, sans toucher ce composant. */
   fallback: ReactNode;
   className?: string;
@@ -36,6 +43,11 @@ type PoleObjectLazyProps = {
  * frameloop coupé hors écran, accent lu du token `--pole-accent` posé par
  * la bande (tokens-only : aucun hex de thème côté scène). Sous
  * reduced-motion : repli direct, AUCUN three.js chargé.
+ *
+ * Le repli 2D n'est pas remplacé mais RECOUVERT : il reste sous la scène
+ * jusqu'à sa première frame dessinée (`onReady`), sans quoi le canvas
+ * transparent laisse un trou pendant le téléchargement du chunk puis du
+ * modèle.
  */
 export function PoleObjectLazy({ model, fallback, className }: PoleObjectLazyProps) {
   const reduce = useReducedMotionPref();
@@ -43,7 +55,9 @@ export function PoleObjectLazy({ model, fallback, className }: PoleObjectLazyPro
   const fine = usePointerFine();
   const { ref, mounted, active } = useSceneGate<HTMLDivElement>();
   const [accent, setAccent] = useState<string | null>(null);
+  const [painted, setPainted] = useState(false);
   const pointerRef = useRef<PolePointer>({ x: 0, y: 0 });
+  const onReady = useCallback(() => setPainted(true), []);
 
   useEffect(() => {
     const el = ref.current;
@@ -73,16 +87,18 @@ export function PoleObjectLazy({ model, fallback, className }: PoleObjectLazyPro
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
     >
+      <div className={styles.fallback} data-painted={painted ? "true" : undefined}>
+        {fallback}
+      </div>
       {live ? (
         <Scene
           accent={accent}
           pointerRef={pointerRef}
           dpr={fine ? 1.5 : 1}
           active={active}
+          onReady={onReady}
         />
-      ) : (
-        fallback
-      )}
+      ) : null}
     </div>
   );
 }

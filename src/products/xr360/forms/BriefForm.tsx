@@ -2,27 +2,31 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import type { LucideIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { CheckboxCardGroup, PhoneField, RadioCardGroup, TextAreaField, TextField } from "@/components/forms/fields";
 import { StepIndicator } from "@/components/forms/StepIndicator";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { formatAriary } from "@/lib/format/ariary";
 import { readAttribution } from "@/lib/tracking/attribution";
 import { stashLeadContentName } from "@/lib/tracking/fpixel";
 import { pushDataLayerEventOnce } from "@/lib/tracking/gtm";
 import { submitBrief } from "@/products/xr360/actions/submitBrief";
 import {
+  BUDGET_LABELS,
   FIELD_LABELS,
   FORM_STEPS,
   OBJECTIF_LABELS,
+  OFFRE_NONE_LABEL,
   SUPPORT_ICONS,
   SUPPORT_LABELS,
   TYPE_LIEU_ICONS,
   TYPE_LIEU_LABELS,
 } from "@/products/xr360/config/briefForm";
 import { offers360 } from "@/products/xr360/config/content";
+import { XR360_BASE_PACKS, XR360_OFFER_IDS } from "@/products/xr360/config/offers";
 import { briefSchema, type Brief } from "@/products/xr360/lib/brief";
-import { useOffer360Selection } from "@/products/xr360/lib/selection";
+import { useXr360Selection } from "@/products/xr360/lib/selection";
 import { cx } from "@/lib/cx";
 import styles from "@/components/forms/formShell.module.css";
 
@@ -37,14 +41,22 @@ function toOptions<V extends string>(
   }));
 }
 
+/** Options lieu : chaque cible du catalogue porte son accent couleur (mêmes
+    tuiles que la section Offres) ; « autre » reste sur l'accent du pôle. */
+const TYPE_LIEU_OPTIONS = toOptions(TYPE_LIEU_LABELS, TYPE_LIEU_ICONS).map((option) => ({
+  ...option,
+  ...((XR360_OFFER_IDS as readonly string[]).includes(option.value) && { accent: option.value }),
+}));
+
 /** Garde anti double-clic (pattern éprouvé du funnel VR/CVM-MLR) : toute
     soumission dans cette fenêtre après une navigation d'étape est ignorée. */
 const NAV_GUARD_MS = 500;
 
 /**
- * Brief 360 en 3 étapes : lieu (type), projet (objectif, supports,
- * message), coordonnées. Même schéma Zod que le serveur ; l'attribution
- * premier-touchpoint (UTM/pub) est jointe à la soumission.
+ * Brief 360 en 3 étapes : lieu (type + offre envisagée), projet (objectif,
+ * supports, budget, période, message), coordonnées. Même schéma Zod que le
+ * serveur ; l'attribution premier-touchpoint (UTM/pub) est jointe à la
+ * soumission.
  */
 export function BriefForm() {
   const [step, setStep] = useState(0);
@@ -58,33 +70,24 @@ export function BriefForm() {
     trigger,
     control,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm<Brief>({
     resolver: standardSchemaResolver(briefSchema),
     // onSubmit : rien ne s'affiche avant « Continuer » (trigger par étape),
     // puis re-validation au change des champs déjà en erreur (cf. LeadForm).
     mode: "onSubmit",
-    defaultValues: { supports: [], message: "", email: "" },
+    defaultValues: { offre: "", supports: [], periode: "", message: "", email: "" },
   });
 
-  // Présélection « Choisir ce niveau » (section Offres) : supports adaptés
-  // à l'offre + mention dans le message, SANS écraser un texte déjà saisi
-  // (seul le texte auto précédent est remplaçable).
-  const offerId = useOffer360Selection();
-  const lastAutoMessage = useRef<string | null>(null);
+  // Présélection depuis « Choisir cette offre » (section Offres) : chaque
+  // nouveau clic écrase la sélection, les champs restent modifiables ensuite.
+  // shouldValidate efface une éventuelle erreur « lieu requis » affichée.
+  const selection = useXr360Selection();
   useEffect(() => {
-    if (offerId === null) return;
-    const offer = offers360.items.find((item) => item.id === offerId);
-    if (offer === undefined) return;
-    setValue("supports", [...offer.supports]);
-    const autoMessage = `Offre envisagée : ${offer.name}.`;
-    const currentMessage = getValues("message");
-    if (currentMessage === "" || currentMessage === lastAutoMessage.current) {
-      setValue("message", autoMessage);
-      lastAutoMessage.current = autoMessage;
-    }
-  }, [offerId, setValue, getValues]);
+    if (selection === null) return;
+    setValue("typeLieu", selection.typeLieu, { shouldValidate: true });
+    setValue("offre", selection.offre, { shouldValidate: true });
+  }, [selection, setValue]);
 
   const isLastStep = step === FORM_STEPS.length - 1;
   const lastNavAt = useRef(0);
@@ -123,6 +126,22 @@ export function BriefForm() {
       },
     });
 
+  // Options d'offre : les 3 mêmes pour toutes les cibles (contrairement à
+  // VR), teintées par l'accent du lieu choisi quand il en a un.
+  const typeLieuValue: Brief["typeLieu"] | undefined = useWatch({ control, name: "typeLieu" });
+  const lieuAccent =
+    typeLieuValue !== undefined && (XR360_OFFER_IDS as readonly string[]).includes(typeLieuValue)
+      ? typeLieuValue
+      : undefined;
+  const offreOptions = [
+    ...XR360_BASE_PACKS.map((pack) => ({
+      value: pack.id,
+      label: `${pack.name} · ${offers360.pricePrefix} ${formatAriary(pack.price)}`,
+      accent: lieuAccent,
+    })),
+    { value: "", label: OFFRE_NONE_LABEL, accent: lieuAccent },
+  ];
+
   return (
     <form
       onSubmit={(event) => {
@@ -150,14 +169,22 @@ export function BriefForm() {
 
       <div className={cx(styles.fields, step === 2 && styles.fieldsTwoCol)}>
         {step === 0 && (
-          <RadioCardGroup
-            legend={FIELD_LABELS.typeLieu}
-            options={toOptions(TYPE_LIEU_LABELS, TYPE_LIEU_ICONS)}
-            registration={registerField("typeLieu")}
-            error={fieldError("typeLieu")}
-            required
-            columns={3}
-          />
+          <>
+            <RadioCardGroup
+              legend={FIELD_LABELS.typeLieu}
+              options={TYPE_LIEU_OPTIONS}
+              registration={registerField("typeLieu")}
+              error={fieldError("typeLieu")}
+              required
+              columns={3}
+            />
+            <RadioCardGroup
+              legend={FIELD_LABELS.offre}
+              options={offreOptions}
+              registration={registerField("offre")}
+              error={fieldError("offre")}
+            />
+          </>
         )}
 
         {step === 1 && (
@@ -175,6 +202,21 @@ export function BriefForm() {
               options={toOptions(SUPPORT_LABELS, SUPPORT_ICONS)}
               registration={registerField("supports")}
               error={fieldError("supports")}
+            />
+            <RadioCardGroup
+              legend={FIELD_LABELS.budget}
+              options={toOptions(BUDGET_LABELS)}
+              registration={registerField("budget")}
+              error={fieldError("budget")}
+              required
+              columns={3}
+            />
+            <TextField
+              label={FIELD_LABELS.periode}
+              placeholder={FIELD_LABELS.periodePlaceholder}
+              registration={registerField("periode")}
+              error={fieldError("periode")}
+              required
             />
             <TextAreaField
               label={FIELD_LABELS.message}

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { GlassPanel } from "@/components/fx/GlassPanel";
 import { ParallaxLayer } from "@/components/fx/ParallaxLayer";
 import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
+import { ScenePreloader } from "@/components/fx/ScenePreloader";
+import { POLE_SCENES } from "@/components/fx/scenePreload";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PRODUCTS } from "@/config/products";
 import { cx } from "@/lib/cx";
@@ -17,6 +19,9 @@ import styles from "./PolesShowcase.module.css";
 export function PolesShowcase() {
   return (
     <section id={polesSection.id} className={styles.section}>
+      {/* Les 3 objets se téléchargent pendant que le lecteur est encore en
+          haut : ils sont là quand la bande arrive, sans passage par le halo. */}
+      <ScenePreloader scenes={POLE_SCENES} />
       <SectionHeading kicker={polesSection.kicker} title={polesSection.title} />
       <div className={styles.bands}>
         {PRODUCTS.map((product) => {

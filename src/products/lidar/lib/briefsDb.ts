@@ -5,16 +5,21 @@ import type { AttributionColumns } from "@/lib/leads/attributionColumns";
 
 /**
  * Ligne de `public.funnel_xrlidar_leads`, miroir de
- * supabase/migrations/20260727_xrlidar_leads.sql, hors colonnes gérées par
- * la base (id, created_at, lead_status). Optionnels absents = null.
+ * supabase/migrations/20260727_xrlidar_leads.sql +
+ * 20260730_xrlidar_offres.sql, hors colonnes gérées par la base
+ * (id, created_at, lead_status). Optionnels absents = null.
  */
 export type BriefRow = {
+  famille: string;
+  offre: string | null;
   type_site: string;
   localisation: string;
   surface_estimee: string | null;
   objectif: string;
   livrables: readonly string[];
   logiciels: string | null;
+  budget: string;
+  periode: string;
   precisions: string | null;
   nom: string;
   entreprise: string | null;

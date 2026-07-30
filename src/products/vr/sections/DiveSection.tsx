@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Embers } from "@/components/fx/Embers";
 import { HeadsetSceneLazy } from "@/components/fx/HeadsetSceneLazy";
+import { ScenePreloader } from "@/components/fx/ScenePreloader";
 import { ScrollStage, useScrollStage } from "@/components/fx/ScrollStage";
 import { ShimmerCTA } from "@/components/fx/ShimmerCTA";
 import { StageLayer } from "@/components/fx/StageLayer";
@@ -37,6 +38,10 @@ const STORY = {
   intro: { at: [0, 0.14, 0.32], y: [0, 0, -40], opacity: [1, 1, 0] },
   reveal: { at: [0.78, 0.92], y: [32, 0], opacity: [0, 1] },
 } as const;
+
+/** Le casque 3D se télécharge pendant la lecture du hero : il est là quand
+    la plongée s'épingle, sans passage par l'image de repli. */
+const DIVE_SCENES = ["vr-headset"] as const;
 
 /** Scène 3D branchée sur la progression + le gyro du ScrollStage. */
 function HeadsetLayer() {
@@ -127,6 +132,7 @@ function StaticFallback() {
 export function DiveSection() {
   return (
     <section className={cx("fx-section", styles.section)}>
+      <ScenePreloader scenes={DIVE_SCENES} />
       <ScrollStage screens={3} fallback={<StaticFallback />} stageClassName={styles.stageBg}>
         {/* Mascotte en filigrane, tout au fond derrière le casque 3D */}
         <StageLayer {...STORY.mascotte} className={styles.mascotteLayer}>

@@ -4,3 +4,15 @@
   height: 100%;
   min-height: inherit;
 }
+
+/* Le repli tient l'espace SOUS le canvas (déclaré après lui dans le flux) et
+   s'efface seulement quand la scène a peint : jamais de trou à l'écran. */
+.fallback {
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--dur-med) var(--ease-out);
+}
+
+.fallback[data-painted="true"] {
+  opacity: 0;
+}

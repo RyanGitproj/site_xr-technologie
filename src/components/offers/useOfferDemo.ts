@@ -12,10 +12,6 @@ const CYCLE_MS = 3_500;
 /** Laisse le fondu de sortie de TapHint se jouer avant de démonter la main. */
 const EXIT_MS = 300;
 
-/** Posée UNIQUEMENT au premier geste utilisateur : la démo ne rejoue plus de
-    la session. Best-effort (navigation privée : rejouable, non bloquant). */
-const DEMO_DISMISSED_KEY = "xr_offres_demo";
-
 type HandPosition = { x: number; y: number };
 
 export type OfferDemoState = {
@@ -27,24 +23,24 @@ export type OfferDemoState = {
 
 const IDLE: OfferDemoState = { visible: false, tapCount: 0, position: null };
 
-function readDismissed(): boolean {
+function readDismissed(storageKey: string): boolean {
   try {
-    return sessionStorage.getItem(DEMO_DISMISSED_KEY) !== null;
+    return sessionStorage.getItem(storageKey) !== null;
   } catch {
     return false;
   }
 }
 
-function markDismissed(): void {
+function markDismissed(storageKey: string): void {
   try {
-    sessionStorage.setItem(DEMO_DISMISSED_KEY, "1");
+    sessionStorage.setItem(storageKey, "1");
   } catch {
     // sessionStorage indisponible : non bloquant.
   }
 }
 
 /**
- * Démo guidée du sélecteur d'offres, en boucle « visite des 8 offres » : la
+ * Démo guidée du sélecteur d'offres, en boucle « visite des offres » : la
  * main TapHint fait le tour des tuiles (un tap ≈ 3,5 s, activation réelle :
  * les packs changent sous les yeux du visiteur) tant qu'aucune interaction
  * n'a eu lieu. Pause quand les tuiles sortent de l'écran ou pendant
@@ -57,6 +53,7 @@ export function useOfferDemo({
   enabled,
   suspended,
   tileCount,
+  storageKey,
   getTile,
   onDemoSelect,
 }: {
@@ -66,10 +63,13 @@ export function useOfferDemo({
   /** true = pause (survol du sélecteur ou des packs) ; reprise à false. */
   suspended: boolean;
   tileCount: number;
-  /** Tuile par index d'offre (callbacks STABLES, useCallback côté appelant). */
-  getTile: (offerIndex: number) => HTMLButtonElement | undefined;
-  /** Activation d'une offre SANS event de tracking ni écriture du store. */
-  onDemoSelect: (offerIndex: number) => void;
+  /** Clé sessionStorage PROPRE AU PÔLE : fermer la démo sur une page ne doit
+      pas condamner silencieusement celle des deux autres. */
+  storageKey: string;
+  /** Tuile par index de groupe (callbacks STABLES, useCallback côté appelant). */
+  getTile: (groupIndex: number) => HTMLButtonElement | undefined;
+  /** Activation d'un groupe SANS event de tracking ni écriture du store. */
+  onDemoSelect: (groupIndex: number) => void;
 }): { state: OfferDemoState; cancel: () => void } {
   const [state, setState] = useState<OfferDemoState>(IDLE);
   const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -84,7 +84,7 @@ export function useOfferDemo({
   };
 
   useEffect(() => {
-    if (!inView || !enabled || suspended || dismissed.current || readDismissed()) return;
+    if (!inView || !enabled || suspended || dismissed.current || readDismissed(storageKey)) return;
 
     const schedule = (fn: () => void, ms: number) => {
       timeouts.current.push(setTimeout(fn, ms));
@@ -123,7 +123,7 @@ export function useOfferDemo({
       setState((s) => (s.position === null ? s : { ...s, visible: false }));
       timeouts.current.push(setTimeout(() => setState(IDLE), EXIT_MS));
     };
-  }, [inView, enabled, suspended, tileCount, getTile, onDemoSelect]);
+  }, [inView, enabled, suspended, tileCount, storageKey, getTile, onDemoSelect]);
 
   /** Premier geste utilisateur : la main disparaît IMMÉDIATEMENT (pas de
       fondu : le retrait instantané répond au geste) et la démo est condamnée
@@ -133,8 +133,8 @@ export function useOfferDemo({
     setState((s) => (s.position === null ? s : IDLE));
     if (dismissed.current) return;
     dismissed.current = true;
-    markDismissed();
-  }, []);
+    markDismissed(storageKey);
+  }, [storageKey]);
 
   return { state, cancel };
 }

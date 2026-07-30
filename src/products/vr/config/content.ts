@@ -123,10 +123,10 @@ export const benefitsSection = {
   },
 } as const;
 
-/** Section Offres : le catalogue (8 offres × 3 packs) vit dans config/offers.ts. */
+/** Section Offres : le catalogue (10 offres × 3 packs) vit dans config/offers.ts. */
 export const offersSection = {
   kicker: "Nos offres",
-  title: "Huit univers, trois formats chacun",
+  title: "Dix univers, trois formats chacun",
   subtitle:
     "Choisissez votre secteur, chaque offre se décline en trois packs. Tarifs « à partir de », sur devis selon lieu, durée et options.",
   selectorLabel: "Choisissez votre secteur",

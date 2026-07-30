@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { PerspectiveCamera, useTexture } from "@react-three/drei";
 import {
@@ -10,7 +10,8 @@ import {
   type PerspectiveCamera as PerspectiveCameraImpl,
 } from "three";
 import { PANO_FOV_DEG, PANO_RADIUS, SPHERE_PITCH_LIMIT } from "@/lib/pano/panoMath";
-import type { PolePointer } from "./PoleObjectScene";
+import type { PoleModelSceneProps, PolePointer } from "./PoleObjectScene";
+import { SceneReady } from "../SceneReady";
 import styles from "./PoleObjectScene.module.css";
 
 /**
@@ -83,17 +84,21 @@ export default function PanoPoleScene({
   pointerRef,
   dpr = 1.5,
   active = true,
-}: {
-  accent: string;
-  pointerRef: React.RefObject<PolePointer>;
-  dpr?: number;
-  active?: boolean;
-}) {
+  onReady,
+}: PoleModelSceneProps) {
+  const [painted, setPainted] = useState(false);
+  const handleReady = useCallback(() => {
+    setPainted(true);
+    onReady();
+  }, [onReady]);
+
   return (
     <div className={styles.canvas} aria-hidden="true">
       <Canvas
         dpr={[1, dpr]}
-        frameloop={active ? "always" : "never"}
+        /* Tant que la scène n'a pas peint, elle rend même hors écran (contrat
+           PoleObjectLazy : le repli 2D s'efface à la première frame). */
+        frameloop={active || !painted ? "always" : "never"}
         gl={{
           antialias: false,
           alpha: true,
@@ -103,8 +108,11 @@ export default function PanoPoleScene({
         onCreated={({ gl }) => gl.setClearAlpha(0)}
       >
         <PerspectiveCamera makeDefault fov={PANO_FOV_DEG} position={[0, 0, 0]} near={0.1} far={20} />
-        {/* La photo suspend le rendu le temps de son upload GPU. */}
+        {/* La sonde vit DANS la frontière Suspense : le panorama suspend le
+            rendu le temps de son upload GPU, et le repli 2D ne doit s'effacer
+            qu'une fois la photo réellement à l'écran. */}
         <Suspense fallback={null}>
+          <SceneReady onReady={handleReady} />
           <Rig pointerRef={pointerRef} />
         </Suspense>
       </Canvas>

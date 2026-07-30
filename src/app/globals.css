@@ -81,9 +81,9 @@
   --color-accent-cool: #2fbfa8; /* turquoise (= --color-fx-spark) */
   --color-accent-cool-2: #c18cff; /* violet */
 
-  /* Code couleur des 8 offres (ids = OFFER_IDS de config/offers.ts, test
-     gardien dans offers.test.ts). Braise + accents étendus de même
-     intensité ; appliqués en TOUCHES via --offer-accent (map ci-dessous),
+  /* Code couleur des 10 offres VR (ids = OFFER_IDS de products/vr/config/
+     offers.ts, test gardien dans offers.test.ts). Braise + accents étendus de
+     même intensité ; appliqués en TOUCHES via --offer-accent (map ci-dessous),
      jamais en fond. Contraste ≥ 4,5:1 sur --color-bg-deep (texte). */
   --color-offer-centres-commerciaux: var(--color-accent-hot);
   --color-offer-entreprise-rh-cse: #ffc24d;
@@ -93,6 +93,29 @@
   --color-offer-fondations-associations: #ff7fa8;
   --color-offer-immobilier-showrooms: #f2544a;
   --color-offer-marques-evenementiel: #e46bde;
+  /* Offres 30/07 : indigo et violet-magenta, seuls créneaux encore libres de
+     la roue (le bleu franc et le vert appartiennent aux pôles 360 et LiDAR). */
+  --color-offer-jeux-divertissement: #7d83ff;
+  --color-offer-musique-rythme: #d24bff;
+
+  /* Code couleur des 2 familles LiDAR (ids = LIDAR_OFFER_IDS de
+     products/lidar/config/offers.ts). Elles restent DANS le vert du pôle :
+     la charte interdit d'emprunter le code d'un autre pôle, un accent par
+     famille ne doit donc jouer que sur la nuance. */
+  --color-offer-commerciale: #6bf2c0;
+  --color-offer-technique: #00e07f;
+
+  /* Code couleur des 8 cibles XR 360 (ids = XR360_OFFER_IDS de
+     products/xr360/config/offers.ts). Arc cyan → azur → indigo : même
+     logique, on parcourt la famille froide du pôle sans en sortir. */
+  --color-offer-hotel-hebergement: #49dff2;
+  --color-offer-immobilier: #00cfe8;
+  --color-offer-restaurant: #5ae0c8;
+  --color-offer-commerce-showroom: #7ec4ff;
+  --color-offer-site-touristique: #34c8f0;
+  --color-offer-ecole-formation: #8ea8ff;
+  --color-offer-entreprise: #5b8cff;
+  --color-offer-site-culturel-patrimonial: #a89aff;
 
   --radius-card: 20px;
   --radius-cta: 14px; /* boutons : rectangle arrondi, car la pilule fait déborder beam/glow */
@@ -299,6 +322,56 @@
 
 [data-offer-accent="marques-evenementiel"] {
   --offer-accent: var(--color-offer-marques-evenementiel);
+}
+
+[data-offer-accent="jeux-divertissement"] {
+  --offer-accent: var(--color-offer-jeux-divertissement);
+}
+
+[data-offer-accent="musique-rythme"] {
+  --offer-accent: var(--color-offer-musique-rythme);
+}
+
+/* Familles LiDAR. */
+[data-offer-accent="commerciale"] {
+  --offer-accent: var(--color-offer-commerciale);
+}
+
+[data-offer-accent="technique"] {
+  --offer-accent: var(--color-offer-technique);
+}
+
+/* Cibles XR 360. */
+[data-offer-accent="hotel-hebergement"] {
+  --offer-accent: var(--color-offer-hotel-hebergement);
+}
+
+[data-offer-accent="immobilier"] {
+  --offer-accent: var(--color-offer-immobilier);
+}
+
+[data-offer-accent="restaurant"] {
+  --offer-accent: var(--color-offer-restaurant);
+}
+
+[data-offer-accent="commerce-showroom"] {
+  --offer-accent: var(--color-offer-commerce-showroom);
+}
+
+[data-offer-accent="site-touristique"] {
+  --offer-accent: var(--color-offer-site-touristique);
+}
+
+[data-offer-accent="ecole-formation"] {
+  --offer-accent: var(--color-offer-ecole-formation);
+}
+
+[data-offer-accent="entreprise"] {
+  --offer-accent: var(--color-offer-entreprise);
+}
+
+[data-offer-accent="site-culturel-patrimonial"] {
+  --offer-accent: var(--color-offer-site-culturel-patrimonial);
 }
 
 /* Humeur d'une section : data-mood pose --section-accent, consommé par le

@@ -1,5 +1,6 @@
 import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
 import { Pano360Window } from "@/components/fx/Pano360Window";
+import { ScenePreloader } from "@/components/fx/ScenePreloader";
 import { OutlineButton } from "@/components/ui/OutlineButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { demo360 } from "@/products/xr360/config/content";
@@ -10,6 +11,11 @@ import styles from "./Demo360.module.css";
     au-dessus (ex-section Lieux), features et visite pilote en dessous.
     L'iframe de la VRAIE visite (embedUrl) reste prioritaire le jour où la
     captation studio existe. Jamais de fausse visite présentée comme réelle. */
+/** La fenêtre 360 se télécharge pendant la lecture du hero : le panorama
+    tourne dès que la section arrive (uniquement si c'est bien elle qui est
+    montée, pas l'iframe de la vraie visite). */
+const PANO_SCENES = ["pano-360"] as const;
+
 export function Demo360() {
   return (
     <section id={demo360.id} className={styles.section}>
@@ -34,11 +40,14 @@ export function Demo360() {
                 className={styles.viewerFrame}
               />
             ) : (
-              <Pano360Window
-                scenes={demo360.panoScenes}
-                hint={demo360.panoHint}
-                gyroLabel={demo360.panoGyroCta}
-              />
+              <>
+                <ScenePreloader scenes={PANO_SCENES} />
+                <Pano360Window
+                  scenes={demo360.panoScenes}
+                  hint={demo360.panoHint}
+                  gyroLabel={demo360.panoGyroCta}
+                />
+              </>
             )}
             <span className={styles.mention}>{demo360.mention}</span>
           </div>

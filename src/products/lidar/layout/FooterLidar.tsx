@@ -51,6 +51,9 @@ export function FooterLidar() {
           <Link href="/" className={styles.link}>
             {footerLidar.homeLabel}
           </Link>
+          <Link href="/mentions-legales" className={styles.link}>
+            {footerLidar.legalLabel}
+          </Link>
           <Link href="/confidentialite" className={styles.link}>
             {footerLidar.privacyLabel}
           </Link>

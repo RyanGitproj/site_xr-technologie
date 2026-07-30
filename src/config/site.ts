@@ -10,4 +10,14 @@ export const siteConfig = {
   /** Numéro WhatsApp de réception des leads, format international sans « + ». */
   whatsappNumber: "261389230368",
   contactEmail: "contact@xr-technologie.com",
+  /** Identité légale (fiche CCIFM fournie par Ryan le 30/07/2026). Sert aux
+      mentions légales et à la politique de confidentialité. */
+  legal: {
+    legalForm: "SARL au capital de 100 000 ariary",
+    address: "LOT PR 109 Ter Ambodivoanjo, Antananarivo 101, Madagascar",
+    phoneDisplay: "+261 38 92 303 68",
+    nif: "5019666749",
+    stat: "85497 11 2026 0 10557",
+    rcs: "2026B00550",
+  },
 } as const;

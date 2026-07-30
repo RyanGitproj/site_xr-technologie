@@ -169,7 +169,16 @@
      (svh, stable face à la barre d'URL et au clavier mobile), bornés en
      rem : compression auto sur écrans bas (1366×768), jamais géants en
      1440p+. */
-  --header-h: 4rem; /* synchro : Header.module.css .bar + ANCHOR_OFFSET_PX (SmoothScroll) */
+  /* Chrome fixe haut. --header-h = OFFSET TOTAL sous lequel le contenu
+     commence (heros, sections 100svh, scroll-margin, scroll-padding-top).
+     Les pages produit ajoutent la sous-barre de pôle : leur <header> porte
+     data-subnav et la règle html:has() plus bas étend l'offset. Rangées :
+     synchro HeaderShell.module.css (.bar / .subRow). */
+  --header-bar-h: 4rem;
+  --header-bar-h-compact: 3.25rem;
+  --subnav-h: 3rem;
+  --subnav-h-compact: 2.5rem;
+  --header-h: var(--header-bar-h);
   --section-pad-y: clamp(3rem, 7svh, 5.5rem);
   --stack-gap: clamp(1.75rem, 4svh, 3.5rem); /* heading → grille */
   --media-h: clamp(8rem, 20svh, 14rem); /* médias de card en mode cover */
@@ -207,6 +216,15 @@
 
 [data-pole-accent="lidar"] {
   --pole-accent: var(--color-pole-lidar);
+}
+
+/* Pages produit : la sous-barre de pôle existe ⇔ le header la déclare
+   (data-subnav, posé par HeaderShell). Marqueur auto-porté plutôt que
+   data-page-theme : /vr n'en pose pas (thème défaut :root) et la home en
+   pose un sans sous-barre. Redéfini sur html, l'offset corrige d'un coup
+   scroll-padding-top (saut natif + Lenis) et tous les consommateurs. */
+html:has(header[data-subnav]) {
+  --header-h: calc(var(--header-bar-h) + var(--subnav-h));
 }
 
 /* Socle corporate « site » (accueil, et pages transverses à terme) : bleu
@@ -423,9 +441,9 @@
   html {
     -webkit-text-size-adjust: 100%;
 
-    /* Les cibles d'ancre s'arrêtent sous la navbar fixe (--header-h), ce qui
-       sert le saut natif (reduced-motion / sans JS) ; le chemin Lenis applique
-       le même décalage via ANCHOR_OFFSET_PX (SmoothScroll). */
+    /* Les cibles d'ancre s'arrêtent sous le chrome fixe (--header-h, sous-barre
+       de pôle comprise via html:has(header[data-subnav])), ce qui sert le saut
+       natif (reduced-motion / sans JS) ; Lenis lit lui-même cette valeur. */
     scroll-padding-top: var(--header-h);
   }
 

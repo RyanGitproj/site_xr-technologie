@@ -21,8 +21,10 @@ import {
 import { ramp } from "@/lib/motion/sceneRamp";
 import {
   SCANNER_POSITION,
+  SCAN_FIT_ASPECT_MIN,
   buildPointCloud,
   buildWireframe,
+  scanFitDistance,
   scanFraming,
 } from "@/lib/lidar/scanModel";
 import ScannerModel from "./poleModels/ScannerModel";
@@ -93,9 +95,10 @@ const POINTS_FRAGMENT = /* glsl */ `
 
 type RigProps = Omit<LidarScanSceneProps, "dpr" | "active" | "onReady">;
 
-/** Rig : l'onde révèle le nuage (0.12→0.55), le filaire du jumeau se fige
-    (0.60→0.78), la caméra orbite pendant toute la traversée. Zéro état
-    React : uniforms et matériaux mutés dans useFrame. */
+/** Rig : l'onde révèle le nuage (0.04→0.48, dès l'épinglage : un départ
+    plus tardif laissait 24 svh de viewport vide), le filaire du jumeau se
+    fige (0.54→0.74), la caméra orbite pendant toute la traversée. Zéro
+    état React : uniforms et matériaux mutés dans useFrame. */
 function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
   const pointsRef = useRef<Points>(null);
   const wireRef = useRef<LineSegments>(null);
@@ -142,7 +145,7 @@ function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
     const gy = tiltY.get();
 
     /* Onde de scan → uniform des points + anneau au sol. */
-    const wave = ramp(p, 0.12, 0.55, 0, 1);
+    const wave = ramp(p, 0.04, 0.48, 0, 1);
     const material = pointsRef.current?.material as ShaderMaterial | undefined;
     if (material) {
       material.uniforms.uProgress.value = wave;
@@ -150,35 +153,50 @@ function Rig({ progress, tiltX, tiltY, palette, pointCount }: RigProps) {
     }
     const sweep = sweepRef.current;
     if (sweep) {
-      const scale = ramp(p, 0.12, 0.55, 0.4, 15);
+      const scale = ramp(p, 0.04, 0.48, 0.4, 15);
       sweep.scale.setScalar(scale);
       const mat = sweep.material as MeshBasicMaterial;
-      mat.opacity = 0.4 * ramp(p, 0.08, 0.14, 0, 1) * (1 - ramp(p, 0.55, 0.68, 0, 1));
+      mat.opacity = 0.4 * ramp(p, 0.02, 0.08, 0, 1) * (1 - ramp(p, 0.48, 0.6, 0, 1));
     }
 
     /* Le jumeau se fige. */
     const wire = wireRef.current;
     if (wire) {
       const mat = wire.material as LineBasicMaterial;
-      mat.opacity = ramp(p, 0.6, 0.78, 0, 0.85);
+      mat.opacity = ramp(p, 0.54, 0.74, 0, 0.85);
     }
 
     /* Orbite caméra (état du callback : jamais mutée en portée de rendu).
-       Le cadrage s'adapte à la FORME du canvas : en portrait le champ
-       horizontal se referme et le scanner sortait du cadre. */
-    const framing = scanFraming(state.size.width / state.size.height, p);
+       scanFraming adapte fov et cible à la FORME du canvas (recentrage
+       scanner en portrait) ; la distance est RÉSOLUE sur la boîte englobante
+       (scanFitDistance, comme la bande accueil) au lieu d'un rayon à l'œil :
+       la pièce remplit le cadre dès p=0 au lieu de flotter au fond. L'aspect
+       du fit est plancher à SCAN_FIT_ASPECT_MIN : sous ce ratio les côtés de
+       la pièce (12 m de large) débordent volontairement, sinon le fit
+       horizontal ferait reculer la caméra et recréerait le vide. */
+    const aspect = state.size.width / state.size.height;
+    const framing = scanFraming(aspect, p);
     const camera = state.camera as PerspectiveCameraImpl;
     if (Math.abs(camera.fov - framing.fovDeg) > 0.01) {
       camera.fov = framing.fovDeg;
       camera.updateProjectionMatrix();
     }
     const azimut = ramp(p, 0, 1, -40 * DEG, 38 * DEG) + gx * 0.06;
-    const radius = ramp(p, 0, 0.7, 15, 10.5) * framing.radiusScale;
-    const height = ramp(p, 0, 0.7, 5.2, 3.4) + gy * 0.4;
+    /* Élévation et marge reproduisent l'approche de l'ancien rayon 15→10.5. */
+    const elevation = ramp(p, 0, 0.7, 0.27, 0.22);
+    const margin = ramp(p, 0, 0.7, 1.06, 0.92);
+    const distance = scanFitDistance(
+      azimut,
+      elevation,
+      framing.fovDeg,
+      Math.max(aspect, SCAN_FIT_ASPECT_MIN),
+      [framing.targetX, framing.targetY, 0],
+      margin,
+    );
     camera.position.set(
-      framing.targetX + Math.sin(azimut) * radius,
-      height,
-      Math.cos(azimut) * radius,
+      framing.targetX + Math.sin(azimut) * Math.cos(elevation) * distance,
+      framing.targetY + Math.sin(elevation) * distance + gy * 0.4,
+      Math.cos(azimut) * Math.cos(elevation) * distance,
     );
     camera.lookAt(framing.targetX, framing.targetY, 0);
   });

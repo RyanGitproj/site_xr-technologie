@@ -1,4 +1,5 @@
-/* Coque thème « site » : la page est transverse, fond du socle neutre. */
+/* Coque thème « site » des pages légales transverses (/confidentialite,
+   /mentions-legales) : fond du socle neutre, panneau de verre unique. */
 .shell {
   position: relative;
   min-height: 100svh;

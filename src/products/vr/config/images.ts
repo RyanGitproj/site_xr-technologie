@@ -25,7 +25,7 @@ export const casqueVideo: VideoSlot = {
   },
 };
 
-/** Logo officiel (lockup mascotte + wordmark, alpha) pour la navbar et le footer. */
+/** Logo officiel (lockup mascotte + wordmark, alpha) : sous-barre et footer. */
 export const logoImage: ImageSlot = {
   src: "/images/logo-xr-vr-discovery.webp",
   alt: "XR VR Discovery, Antananarivo",

@@ -61,6 +61,9 @@ export function Footer() {
       <div className={styles.legal}>
         <p className={styles.mentions}>{footerContent.mentions}</p>
         <div className={styles.legalLinks}>
+          <Link href="/mentions-legales" className={styles.link}>
+            {footerContent.legalLabel}
+          </Link>
           <Link href="/confidentialite" className={styles.link}>
             {footerContent.privacyLabel}
           </Link>

@@ -1,72 +1,36 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
+import { HeaderBrand } from "@/components/layout/HeaderBrand";
 import { HeaderShell } from "@/components/layout/HeaderShell";
-import { LIVE_PRODUCTS, PRODUCTS } from "@/config/products";
-import { contactSection, siteHeader, siteLogo } from "@/site/config/content";
+import { ProductNav } from "@/components/layout/ProductNav";
+import { contactSection, siteHeader } from "@/site/config/content";
 import { scrollToSection } from "@/lib/scrollToSection";
 import styles from "./SiteHeader.module.css";
 
-/** Navbar du site dans la coquille commune : lockup officiel + pôles (les
-    pôles à venir sont annoncés sans lien) + contact. Navigation libre. */
-export function SiteHeader() {
+type SiteHeaderProps = {
+  /** false : pages sans section contact (ex. /confidentialite), où le
+      bouton serait un défilement vers nulle part. */
+  withContact?: boolean;
+};
+
+/** Navbar du socle site : lockup + menu unifié dans la coquille commune,
+    plus l'accès contact quand la page porte la section. */
+export function SiteHeader({ withContact = true }: SiteHeaderProps) {
   return (
-    <HeaderShell>
-      <Link href="/" className={styles.logo}>
-        <Image
-          src={siteLogo.src}
-          alt={siteLogo.alt}
-          width={siteLogo.width}
-          height={siteLogo.height}
-          priority
-          unoptimized
-          className={styles.logoImg}
-        />
-      </Link>
-      <nav aria-label={siteHeader.navLabel} className={styles.nav}>
-        {PRODUCTS.map((product) =>
-          product.status === "live" ? (
-            <Link
-              key={product.id}
-              href={product.route}
-              className={styles.navLink}
-              data-pole-accent={product.id}
-            >
-              {product.name}
-            </Link>
-          ) : (
-            <span key={product.id} className={styles.navUpcoming}>
-              {product.name}
-              <span className={styles.badge}>{siteHeader.upcomingBadge}</span>
-            </span>
-          ),
-        )}
-        <button
-          type="button"
-          className={styles.navLink}
-          onClick={() => scrollToSection(contactSection.id)}
-        >
-          {siteHeader.contactLabel}
-        </button>
-      </nav>
-      {/* Mobile : la nav complète vit dans le footer ; le header garde les
-          trois accès de pôle en libellé court (les noms officiels
-          déborderaient d'une barre 390px), le nom complet restant lisible
-          par les lecteurs d'écran. */}
-      <div className={styles.mobileActions}>
-        {LIVE_PRODUCTS.map((product) => (
-          <Link
-            key={product.id}
-            href={product.route}
-            className={styles.navLink}
-            aria-label={product.name}
-            data-pole-accent={product.id}
+    <HeaderShell
+      brand={<HeaderBrand />}
+      nav={<ProductNav />}
+      actions={
+        withContact ? (
+          <button
+            type="button"
+            className={styles.contact}
+            onClick={() => scrollToSection(contactSection.id)}
           >
-            {product.shortName}
-          </Link>
-        ))}
-      </div>
-    </HeaderShell>
+            {siteHeader.contactLabel}
+          </button>
+        ) : undefined
+      }
+    />
   );
 }

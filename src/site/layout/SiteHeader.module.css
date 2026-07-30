@@ -1,77 +1,20 @@
-/* Contenu propre à la navbar du socle site : la forme (bandeau plein cadre,
-   compactage, filet de progression) vit dans HeaderShell.module.css. */
+/* Seul contenu propre à la navbar du socle : l'accès contact. La forme vit
+   dans HeaderShell.module.css, le menu dans ProductNav.module.css. */
 
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-/* Lockup officiel : la hauteur pilote, la largeur suit le ratio (~4,1:1).
-   Plus bas sur mobile : la barre 390px doit loger logo + accès pôles. */
-.logoImg {
-  height: 2rem;
-  width: auto;
-}
-
-@media (min-width: 768px) {
-  .logoImg {
-    height: 2.5rem;
-  }
-}
-
-.nav {
-  display: none;
-  align-items: center;
-  gap: clamp(1rem, 2.5vw, 2rem);
-}
-
-.navLink {
+.contact {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-ink-muted);
   transition: color var(--dur-fast) var(--ease-out);
 }
 
-/* Le pôle colore son lien au survol : sa seule présence sur le socle. */
-.navLink:hover,
-.navLink:focus-visible {
-  color: var(--pole-accent, var(--color-ink));
+.contact:hover,
+.contact:focus-visible {
+  color: var(--color-ink);
 }
 
-.navUpcoming {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--color-ink-muted);
-  opacity: 0.7;
-}
-
-.badge {
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.1rem 0.45rem;
-  border: 1px solid var(--glass-edge);
-  border-radius: var(--radius-pill);
-  color: var(--color-ink-muted);
-}
-
-.mobileActions {
-  display: flex;
-  align-items: center;
-  gap: clamp(0.7rem, 3vw, 1rem);
-  white-space: nowrap;
-}
-
-@media (min-width: 900px) {
-  .nav {
-    display: flex;
-  }
-
-  .mobileActions {
-    display: none;
+@media (prefers-reduced-motion: reduce) {
+  .contact {
+    transition: none;
   }
 }

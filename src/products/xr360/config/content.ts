@@ -34,7 +34,7 @@ import type { ImageSlot, VideoSlot } from "@/lib/images";
  * Maps) EN ATTENTE de leurs brochures : liste extensible, voir TODO.md.
  */
 
-/** Lockup officiel XR 360 (docs/logo, détouré en alpha) : navbar et footer. */
+/** Lockup officiel XR 360 (docs/logo, détouré en alpha) : sous-barre et footer. */
 export const logo360: ImageSlot = {
   src: "/images/logo-xr-360.webp",
   alt: "XR 360, visite virtuelle",
@@ -544,5 +544,6 @@ export const footer360 = {
   contactTitle: "Contact",
   homeLabel: "XR Technologie, tous les pôles",
   privacyLabel: "Politique de confidentialité",
+  legalLabel: "Mentions légales",
   mentions: "© 2026 XR Technologie · Antananarivo, Madagascar",
 } as const;

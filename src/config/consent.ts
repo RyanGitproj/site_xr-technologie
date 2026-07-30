@@ -15,6 +15,8 @@ export const cookieConsent = {
   manageLabel: "Gérer mes cookies",
 } as const;
 
+import { siteConfig } from "./site";
+
 export type PolicySection = {
   heading: string;
   paragraphs: readonly string[];
@@ -25,14 +27,15 @@ export type PolicySection = {
     (mesure) et Meta Pixel (publicité) déposés seulement après consentement. */
 export const privacyPolicy = {
   title: "Politique de confidentialité",
-  updated: "Dernière mise à jour : 21 juillet 2026",
+  updated: "Dernière mise à jour : 30 juillet 2026",
   intro:
     "Cette page explique quelles données personnelles nous collectons sur le site XR VR Discovery, pourquoi, et comment vous gardez la main sur vos choix, notamment en matière de cookies.",
   sections: [
     {
       heading: "Responsable du traitement",
       paragraphs: [
-        "XR Technologie, basée à Antananarivo (Madagascar), est responsable des données personnelles collectées via ce site.",
+        `Le responsable du traitement est ${siteConfig.name}, ${siteConfig.legal.legalForm}, dont le siège est situé ${siteConfig.legal.address} (NIF ${siteConfig.legal.nif}, RCS ${siteConfig.legal.rcs}).`,
+        `Vous pouvez la joindre par e-mail à ${siteConfig.contactEmail} ou par téléphone au ${siteConfig.legal.phoneDisplay}.`,
       ],
     },
     {
@@ -64,13 +67,13 @@ export const privacyPolicy = {
     {
       heading: "Durées de conservation",
       paragraphs: [
-        "Les demandes de devis sont conservées le temps nécessaire au traitement de votre projet, puis archivées ou supprimées. Les cookies de mesure et de publicité ont une durée de vie limitée, propre à chaque outil, et votre consentement vous est redemandé périodiquement.",
+        "Les données liées à votre demande de devis (coordonnées, projet, attribution) sont conservées 3 ans à compter de notre dernier échange, puis supprimées. Les cookies de mesure et de publicité ont une durée de vie limitée, propre à chaque outil, et votre consentement vous est redemandé périodiquement.",
       ],
     },
     {
       heading: "Vos droits",
       paragraphs: [
-        "Vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition sur vos données. Vous pouvez également retirer votre consentement aux cookies à tout moment.",
+        "Conformément à la loi malgache n° 2014-038 sur la protection des données à caractère personnel et, si vous résidez dans l'Union européenne, au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition sur vos données. Vous pouvez également retirer votre consentement aux cookies à tout moment.",
       ],
     },
   ] satisfies readonly PolicySection[],

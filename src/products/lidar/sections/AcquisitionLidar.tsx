@@ -33,6 +33,25 @@ export function AcquisitionLidar() {
                       className={styles.photo}
                     />
                     <span aria-hidden="true" className={styles.veil} />
+                    {mode.spotlight !== undefined && (
+                      <span
+                        aria-hidden="true"
+                        className={styles.spotlight}
+                        style={{
+                          left: mode.spotlight.x,
+                          top: mode.spotlight.y,
+                        }}
+                      >
+                        <Image
+                          src={mode.image.src}
+                          alt=""
+                          fill
+                          sizes="7rem"
+                          className={styles.spotlightPhoto}
+                          style={{ objectPosition: `${mode.spotlight.x} ${mode.spotlight.y}` }}
+                        />
+                      </span>
+                    )}
                   </>
                 )}
                 <mode.icon aria-hidden="true" className={styles.icon} />

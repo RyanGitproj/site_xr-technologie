@@ -9,12 +9,12 @@ import { PipelineStages } from "./PipelineStages";
 import styles from "./PipelineScanStage.module.css";
 
 /** Fenêtres d'apparition des 3 phases (fractions du stage épinglé) :
-    synchronisées avec les rampes de la scène (onde 0.12→0.55, filaire
-    0.60→0.78). La phase 3 reste affichée jusqu'à la fin. */
+    synchronisées avec les rampes de la scène (onde 0.04→0.48, filaire
+    0.54→0.74). La phase 3 reste affichée jusqu'à la fin. */
 const PHASES = [
-  { at: [0.06, 0.14, 0.3, 0.38], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
-  { at: [0.36, 0.44, 0.56, 0.64], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
-  { at: [0.62, 0.72, 1], y: [24, 0, 0], opacity: [0, 1, 1] },
+  { at: [0.04, 0.12, 0.26, 0.34], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
+  { at: [0.32, 0.4, 0.5, 0.58], y: [24, 0, 0, -18], opacity: [0, 1, 1, 0] },
+  { at: [0.56, 0.66, 1], y: [24, 0, 0], opacity: [0, 1, 1] },
 ] as const;
 
 /** Le nuage de points se télécharge pendant la lecture des sections du
@@ -61,7 +61,7 @@ function StageContent() {
 
       {/* HUD : équerres de visée AUX COINS, gyro léger. AUCUNE valeur
           chiffrée (règle charte : pas de promesse de précision). */}
-      <StageLayer at={[0.12, 0.2, 1]} opacity={[0, 1, 1]} tiltRange={8} className={styles.hud}>
+      <StageLayer at={[0.08, 0.16, 1]} opacity={[0, 1, 1]} tiltRange={8} className={styles.hud}>
         <span className={styles.corner} data-corner="tl" />
         <span className={styles.corner} data-corner="tr" />
         <span className={styles.corner} data-corner="bl" />

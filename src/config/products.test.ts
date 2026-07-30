@@ -14,10 +14,16 @@ describe("catalogue des pôles", () => {
     expect(new Set(routes).size).toBe(PRODUCTS.length);
   });
 
-  it("libellés courts distincts (navbar mobile)", () => {
+  it("libellés courts distincts (navbar tablette)", () => {
     const shortNames = PRODUCTS.map((product) => product.shortName);
     expect(new Set(shortNames).size).toBe(PRODUCTS.length);
     expect(shortNames.every((label) => label.length <= 6)).toBe(true);
+  });
+
+  it("libellés de nav unifiée distincts et contenus (une rangée desktop)", () => {
+    const navLabels = PRODUCTS.map((product) => product.navLabel);
+    expect(new Set(navLabels).size).toBe(PRODUCTS.length);
+    expect(navLabels.every((label) => label.length > 0 && label.length <= 13)).toBe(true);
   });
 
   it("LIVE_PRODUCTS ne contient que les pôles en ligne", () => {
@@ -75,6 +81,16 @@ describe("catalogue des pôles", () => {
         `html:has([data-page-theme="${themeId}"])`,
       );
     }
+  });
+
+  it("l'offset header suit la sous-barre des pages produit", () => {
+    const globalsCss = readFileSync(join(__dirname, "..", "app", "globals.css"), "utf8");
+    // Les rangées sont tokenisées et la présence de la sous-barre (data-subnav,
+    // posé par HeaderShell) étend --header-h sur html : ancres et heros suivent.
+    expect(globalsCss).toContain("--header-bar-h:");
+    expect(globalsCss).toContain("--subnav-h:");
+    expect(globalsCss).toContain("html:has(header[data-subnav])");
+    expect(globalsCss).toContain("scroll-padding-top: var(--header-h)");
   });
 
   it("le thème socle « site » (accueil) existe dans globals.css", () => {

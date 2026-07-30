@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { CookiePreferencesLink } from "@/components/tracking/CookiePreferencesLink";
 import { WhatsAppFooterLink } from "@/components/tracking/WhatsAppFooterLink";
+import { siteLogo } from "@/config/brand";
 import { PRODUCTS } from "@/config/products";
 import { siteConfig } from "@/config/site";
 import { buildWhatsAppLink } from "@/lib/format/whatsapp";
-import { contactSection, polesSection, siteFooter, siteLogo } from "@/site/config/content";
+import { contactSection, polesSection, siteFooter } from "@/site/config/content";
 import styles from "./SiteFooter.module.css";
 
 /** Footer du site : pôles, contact, confidentialité. Sobre, socle neutre. */
@@ -67,6 +68,9 @@ export function SiteFooter() {
       <div className={styles.legal}>
         <p className={styles.muted}>{siteFooter.mentions}</p>
         <div className={styles.legalLinks}>
+          <Link href="/mentions-legales" className={styles.link}>
+            {siteFooter.legalLabel}
+          </Link>
           <Link href="/confidentialite" className={styles.link}>
             {siteFooter.privacyLabel}
           </Link>

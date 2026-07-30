@@ -51,6 +51,9 @@ export function Footer360() {
           <Link href="/" className={styles.link}>
             {footer360.homeLabel}
           </Link>
+          <Link href="/mentions-legales" className={styles.link}>
+            {footer360.legalLabel}
+          </Link>
           <Link href="/confidentialite" className={styles.link}>
             {footer360.privacyLabel}
           </Link>

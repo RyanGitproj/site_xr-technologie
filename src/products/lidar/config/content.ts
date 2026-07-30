@@ -30,7 +30,7 @@ import type { ImageSlot, VideoSlot } from "@/lib/images";
  * parcours est un brief mission (« Présenter mon site », CTA charte).
  */
 
-/** Lockup officiel XR LiDAR (docs/logo, détouré en alpha) : navbar et footer. */
+/** Lockup officiel XR LiDAR (docs/logo, détouré en alpha) : sous-barre et footer. */
 export const logoLidar: ImageSlot = {
   src: "/images/logo-xr-lidar.webp",
   alt: "XR LiDAR, reality capture",
@@ -130,11 +130,12 @@ export const acquisitionLidar = {
         width: 1600,
         height: 1067,
       } as ImageSlot | null,
+      spotlight: { x: "76%", y: "39%" },
     },
     {
       icon: Smartphone,
       title: "Capture mobile",
-      hardware: "iPhone 15 Pro LiDAR",
+      hardware: "Scan 3D mobile",
       note: null,
       body: "La captation légère des zones difficiles d'accès ou des besoins rapides, en complément du scanner.",
       image: {
@@ -143,6 +144,7 @@ export const acquisitionLidar = {
         width: 1600,
         height: 1067,
       } as ImageSlot | null,
+      spotlight: { x: "72%", y: "47%" },
     },
     {
       icon: Plane,
@@ -156,6 +158,7 @@ export const acquisitionLidar = {
         width: 1600,
         height: 1067,
       } as ImageSlot | null,
+      spotlight: { x: "73%", y: "25%" },
     },
   ] satisfies readonly {
     icon: LucideIcon;
@@ -164,6 +167,7 @@ export const acquisitionLidar = {
     note: string | null;
     body: string;
     image: ImageSlot | null;
+    spotlight?: { x: string; y: string };
   }[],
 } as const;
 
@@ -500,6 +504,7 @@ export const footerLidar = {
   contactTitle: "Contact",
   homeLabel: "XR Technologie, tous les pôles",
   privacyLabel: "Politique de confidentialité",
+  legalLabel: "Mentions légales",
   mentions: "© 2026 XR Technologie · Antananarivo, Madagascar",
 } as const;
 

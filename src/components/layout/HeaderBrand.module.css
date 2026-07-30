@@ -1,0 +1,17 @@
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+/* Lockup officiel : la hauteur pilote, la largeur suit le ratio (~4,1:1).
+   Plus bas sur mobile : la barre 390px loge lockup + CTA + hamburger. */
+.logoImg {
+  height: 1.75rem;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .logoImg {
+    height: 2.5rem;
+  }
+}

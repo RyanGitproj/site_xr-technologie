@@ -51,12 +51,44 @@
   );
 }
 
+.spotlight {
+  position: absolute;
+  z-index: 1;
+  width: clamp(5.5rem, 25%, 7rem);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 88%, white 12%);
+  border-radius: 50%;
+  background: var(--color-bg-deep);
+  box-shadow:
+    0 0 0 0.2rem color-mix(in srgb, var(--color-accent) 18%, transparent),
+    0 0 1.5rem color-mix(in srgb, var(--color-accent) 32%, transparent);
+  pointer-events: none;
+}
+
+.spotlight::after {
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, white 22%, transparent);
+  border-radius: inherit;
+  background: radial-gradient(circle at 35% 28%, rgb(255 255 255 / 20%), transparent 42%);
+  content: "";
+}
+
+.spotlightPhoto {
+  object-fit: cover;
+  transform: scale(1.8);
+  filter: brightness(1.42) contrast(1.2) saturate(1.12);
+}
+
 .modePhoto .icon,
 .modePhoto .modeTitle,
 .modePhoto .hardware,
 .modePhoto .note,
 .modePhoto .body {
   position: relative;
+  z-index: 2;
 }
 
 .icon {

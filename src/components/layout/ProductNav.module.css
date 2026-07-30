@@ -1,0 +1,259 @@
+/* Menu unifié Accueil + pôles : nav en ligne ≥768px (navLabel ≥1024px,
+   shortName en tablette), hamburger + panneau de verre en dessous. L'entrée
+   active porte un filet 2px aux couleurs du pôle (écho du ScrollProgress
+   sur l'arête basse de la barre) ; Accueil retombe sur l'accent de marque. */
+
+.inlineNav {
+  display: none;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+.link {
+  position: relative;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* Filet indicateur : tracé pour l'actif, esquissé au survol dans la couleur
+   du pôle survolé (l'œil apprend le code couleur de la charte). */
+.link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0.1rem;
+  inset-block-end: -0.45rem;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--pole-accent, var(--color-accent));
+  opacity: 0;
+  transform: scaleX(0);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--color-ink);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  opacity: 0.45;
+  transform: scaleX(1);
+}
+
+.link[aria-current="page"] {
+  color: var(--color-ink);
+}
+
+.link[aria-current="page"]::after {
+  opacity: 1;
+  transform: scaleX(1);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--pole-accent, var(--color-accent)) 45%, transparent);
+  animation: indicator-in var(--dur-med) var(--ease-out) both;
+}
+
+@keyframes indicator-in {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Régimes de libellés : navLabel quand la rangée respire, shortName en
+   tablette (nom complet en aria-label), navLabel dans le panneau mobile. */
+.inlineNav .labelFull {
+  display: none;
+}
+
+.menuNav .labelShort {
+  display: none;
+}
+
+.upcoming {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink-muted);
+  opacity: 0.7;
+}
+
+.badge {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink-muted);
+}
+
+/* Hamburger (mobile) : deux traits qui se croisent, transform uniquement. */
+.toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--color-ink);
+}
+
+.toggleIcon {
+  position: relative;
+  display: block;
+  width: 1.25rem;
+  height: 0.875rem;
+}
+
+.toggleIcon::before,
+.toggleIcon::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  border-radius: 1px;
+  background: currentcolor;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.toggleIcon::before {
+  top: 0;
+}
+
+.toggleIcon::after {
+  bottom: 0;
+}
+
+.toggleOpen .toggleIcon::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.toggleOpen .toggleIcon::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Panneau mobile : sous la barre, hors du GlassPanel parent (voir
+   HeaderShell), fermé = invisible ET hors de l'arbre d'accessibilité. */
+.menu {
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    visibility 0s linear var(--dur-fast);
+}
+
+.menuOpen {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* Verre plein cadre : la barre au-dessus porte déjà le filet de progression,
+   le panneau ne garde que son arête basse. */
+.menuPanel {
+  border-radius: 0;
+  border-inline: none;
+  border-top: none;
+}
+
+.menuNav {
+  display: flex;
+  flex-direction: column;
+  margin-inline: auto;
+  max-width: 72rem;
+  padding-block: 0.5rem 0.75rem;
+  padding-inline: clamp(0.75rem, 2.5vw, 1.5rem);
+}
+
+.menuNav .link {
+  padding-block: 0.65rem;
+  padding-inline-start: 0.85rem;
+  font-size: 1rem;
+}
+
+.menuNav .upcoming {
+  padding-block: 0.65rem;
+  padding-inline-start: 0.85rem;
+  font-size: 1rem;
+}
+
+/* Dans le panneau, le filet devient vertical, à gauche de l'entrée. */
+.menuNav .link::after {
+  inset-inline: 0 auto;
+  inset-block: 0.5rem;
+  width: 2px;
+  height: auto;
+  transform: scaleY(0);
+}
+
+.menuNav .link:hover::after,
+.menuNav .link:focus-visible::after {
+  transform: scaleY(1);
+}
+
+.menuNav .link[aria-current="page"]::after {
+  transform: scaleY(1);
+  animation-name: indicator-in-y;
+}
+
+@keyframes indicator-in-y {
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (min-width: 768px) {
+  .inlineNav {
+    display: flex;
+  }
+
+  .toggle,
+  .menu {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .inlineNav .labelFull {
+    display: inline;
+  }
+
+  .inlineNav .labelShort {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link,
+  .link::after,
+  .toggleIcon::before,
+  .toggleIcon::after,
+  .menu,
+  .menuOpen {
+    transition: none;
+  }
+
+  .link[aria-current="page"]::after {
+    animation: none;
+  }
+}

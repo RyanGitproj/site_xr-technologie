@@ -12,10 +12,13 @@ export type Product = {
   id: ProductId;
   /** Nom officiel du pôle (charte). */
   name: string;
-  /** Libellé court des surfaces contraintes (navbar mobile) : le nom
+  /** Libellé court des surfaces contraintes (navbar tablette) : le nom
       officiel y déborderait à trois pôles. Toujours doublé du nom complet
       en aria-label. */
   shortName: string;
+  /** Libellé de la nav unifiée (desktop et menu mobile) : plus court que le
+      nom officiel, plus parlant que shortName. */
+  navLabel: string;
   /** Sous-titre descriptif (charte). */
   descriptor: string;
   /** Signature en trois verbes (charte). */
@@ -31,6 +34,7 @@ export const PRODUCTS: readonly Product[] = [
     id: "vr",
     name: "XR VR Madagascar",
     shortName: "VR",
+    navLabel: "VR Discovery",
     descriptor: "Réalité virtuelle mobile",
     baseline: "Vivre. Apprendre. Ressentir.",
     route: "/vr",
@@ -40,6 +44,7 @@ export const PRODUCTS: readonly Product[] = [
     id: "xr360",
     name: "XR 360",
     shortName: "360",
+    navLabel: "XR 360",
     descriptor: "Visite virtuelle & valorisation immersive",
     baseline: "Montrer. Visiter. Valoriser.",
     route: "/360",
@@ -49,6 +54,7 @@ export const PRODUCTS: readonly Product[] = [
     id: "lidar",
     name: "XR LiDAR Opérationnel",
     shortName: "LiDAR",
+    navLabel: "LiDAR",
     descriptor: "Relevé 3D · Reality capture",
     baseline: "Mesurer. Documenter. Exploiter.",
     route: "/lidar",

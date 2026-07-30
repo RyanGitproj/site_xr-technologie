@@ -239,6 +239,7 @@ export const footerContent = {
   universes: OFFERS.map((offer) => offer.name),
   contactTitle: "Contact",
   privacyLabel: "Politique de confidentialité",
+  legalLabel: "Mentions légales",
   mentions: "© 2026 XR Technologie · Antananarivo, Madagascar",
 } as const;
 

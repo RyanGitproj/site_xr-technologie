@@ -1,6 +1,8 @@
 /* Coquille commune des 4 navbars (référence : la navbar VR). Le verre
    occupe TOUTE la largeur et touche le haut de l'écran : jamais de navbar
-   flottante avec une bande de fond au-dessus. */
+   flottante avec une bande de fond au-dessus. Les pages produit ajoutent la
+   sous-barre de pôle (.subRow) dans le MÊME verre : arête basse unique, le
+   filet de progression et le menu mobile se calent dessous tout seuls. */
 
 .header {
   position: fixed;
@@ -16,25 +18,65 @@
   border-top: none;
 }
 
-/* Le contenu, lui, reste dans la colonne de lecture. */
+/* Le contenu reste dans la colonne de lecture. Mobile : lockup à gauche,
+   action puis hamburger à droite (le menu des pôles vit dans le panneau
+   déroulant) ; desktop : le menu s'intercale au centre. */
 .bar {
   margin-inline: auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  grid-template-areas: "brand . actions nav";
   max-width: 72rem;
-  height: var(--header-h);
+  height: var(--header-bar-h);
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-inline: clamp(1rem, 2.5vw, 1.5rem);
+  gap: 0.5rem;
+  padding-inline: clamp(0.75rem, 2.5vw, 1.5rem);
   transition: height 300ms var(--ease-out);
 }
 
-.compact {
-  height: 3.25rem;
+/* Compact au scroll : les deux rangées se resserrent ensemble. */
+.compact .bar {
+  height: var(--header-bar-h-compact);
+}
+
+.subRow {
+  height: var(--subnav-h);
+  transition: height 300ms var(--ease-out);
+}
+
+.compact .subRow {
+  height: var(--subnav-h-compact);
+}
+
+.brand {
+  grid-area: brand;
+  min-width: 0;
+}
+
+.nav {
+  grid-area: nav;
+}
+
+.actions {
+  grid-area: actions;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .bar {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "brand nav actions";
+    gap: 1rem;
+  }
+
+  .nav {
+    justify-self: center;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bar {
+  .bar,
+  .subRow {
     transition: none;
   }
 }

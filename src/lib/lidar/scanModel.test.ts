@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   SCANNER_POSITION,
+  SCAN_FIT_ASPECT_MIN,
   SCAN_REFERENCE_ASPECT,
   SCAN_STRUCTURE,
   buildPointCloud,
@@ -17,32 +18,36 @@ describe("scanFraming", () => {
     for (const aspect of [SCAN_REFERENCE_ASPECT, 1.78, 2.4]) {
       const f = scanFraming(aspect, 0.5);
       expect(f.fovDeg).toBe(42);
-      expect(f.radiusScale).toBe(1);
       expect(f.targetX).toBe(0);
       expect(f.targetY).toBe(1.1);
     }
   });
 
   /** Le défaut corrigé : en portrait, le scanner (x = -3.2) tombait hors du
-      champ horizontal. On re-projette ici la demi-largeur visible au niveau
-      de la cible pour vérifier qu'il y rentre, avec de la marge. */
-  const halfWidthAt = (aspect: number, progress: number, radius: number) => {
-    const f = scanFraming(aspect, progress);
-    const vHalf = ((f.fovDeg / 2) * Math.PI) / 180;
-    return Math.tan(vHalf) * aspect * radius * f.radiusScale;
-  };
-
+      champ horizontal. On rejoue le cadrage réel de la scène /lidar (fit
+      d'aspect plancher à SCAN_FIT_ASPECT_MIN, côtés rognés volontairement)
+      et on re-projette la demi-largeur visible au niveau de la cible pour
+      vérifier que le scanner y rentre, avec de la marge. */
   it("garde le scanner dans le cadre en portrait (390×844)", () => {
     const aspect = 390 / 844;
-    for (const [progress, radius] of [
-      [0, 15],
-      [0.5, 11.5],
-      [1, 10.5],
+    for (const [progress, azimut] of [
+      [0, -0.7],
+      [0.5, -0.02],
+      [1, 0.66],
     ] as const) {
       const f = scanFraming(aspect, progress);
-      const half = halfWidthAt(aspect, progress, radius);
-      const distance = Math.abs(SCANNER_POSITION[0] - f.targetX);
-      expect(distance, `progress ${progress}`).toBeLessThan(half - 0.4);
+      const distance = scanFitDistance(
+        azimut,
+        0.25,
+        f.fovDeg,
+        Math.max(aspect, SCAN_FIT_ASPECT_MIN),
+        [f.targetX, f.targetY, 0],
+        1,
+      );
+      const vHalf = ((f.fovDeg / 2) * Math.PI) / 180;
+      const half = Math.tan(vHalf) * aspect * distance;
+      const offset = Math.abs(SCANNER_POSITION[0] - f.targetX);
+      expect(offset, `progress ${progress}`).toBeLessThan(half - 0.4);
     }
   });
 

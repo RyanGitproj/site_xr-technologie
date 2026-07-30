@@ -61,32 +61,35 @@ export const SCAN_STRUCTURE: readonly ScanRect[] = [
 export const SCAN_REFERENCE_ASPECT = 1.4;
 /** Portrait plein (390×844 ≈ 0,46) : cadrage rapproché, recentré scanner. */
 export const SCAN_PORTRAIT_ASPECT = 0.62;
+/** Plancher d'aspect passé à scanFitDistance par la scène /lidar : sous ce
+    ratio le fit reste vertical et les côtés de la pièce (12 m de large)
+    débordent volontairement du cadre — un fit horizontal strict ferait
+    reculer la caméra et la pièce flotterait au milieu du vide. */
+export const SCAN_FIT_ASPECT_MIN = 1.05;
 
 export type ScanFraming = {
   fovDeg: number;
-  /** Multiplicateur du rayon d'orbite (< 1 : on se rapproche). */
-  radiusScale: number;
   /** Cible du regard : elle glisse vers le scanner en portrait. */
   targetX: number;
   targetY: number;
 };
 
 /**
- * Cadrage de la scène de scan selon la forme du canvas et l'avancement.
- * Paysage : valeurs d'origine à l'identique. Portrait : champ élargi, on se
- * rapproche au début (le scanner reste entier dans le cadre) puis on recule
- * à la fin pour laisser voir le jumeau.
+ * Cadrage de la scène de scan selon la forme du canvas et l'avancement :
+ * fov et cible du regard (la distance, elle, est résolue sur la boîte
+ * englobante par scanFitDistance). Paysage : valeurs d'origine. Portrait :
+ * champ élargi, cible recentrée sur le scanner au début puis relâchée vers
+ * le centre pour laisser voir le jumeau.
  */
 export function scanFraming(aspect: number, progress: number): ScanFraming {
   const span = SCAN_REFERENCE_ASPECT - SCAN_PORTRAIT_ASPECT;
   const raw = (SCAN_REFERENCE_ASPECT - aspect) / span;
   const t = raw < 0 ? 0 : raw > 1 ? 1 : raw;
   const p = progress < 0 ? 0 : progress > 1 ? 1 : progress;
-  if (t === 0) return { fovDeg: 42, radiusScale: 1, targetX: 0, targetY: 1.1 };
+  if (t === 0) return { fovDeg: 42, targetX: 0, targetY: 1.1 };
 
   return {
     fovDeg: 42 + 18 * t,
-    radiusScale: 1 + t * (0.9 + 0.55 * p - 1),
     targetX: -1.8 * t * (1 - 0.55 * p),
     targetY: 1.1 + 0.3 * t,
   };

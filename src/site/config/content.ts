@@ -389,25 +389,17 @@ export const contactSection = {
   whatsappMessage: "Bonjour XR Technologie ! J'ai une question sur vos prestations.",
 } as const;
 
+/** La nav (Accueil + pôles) vit dans config/nav.ts + config/products.ts ;
+    le lockup dans config/brand.ts : partagés par toutes les navbars. */
 export const siteHeader = {
-  navLabel: "Navigation du site",
   contactLabel: "Contact",
-  upcomingBadge: "Bientôt",
 } as const;
-
-/** Lockup officiel XR Technologie (docs/logo, détouré en alpha) : navbar et
-    footer du socle site. */
-export const siteLogo: ImageSlot = {
-  src: "/images/logo-xr-technologie.webp",
-  alt: "XR Technologie, Antananarivo",
-  width: 800,
-  height: 194,
-};
 
 export const siteFooter = {
   baseline: "Expériences immersives, visites virtuelles et relevés 3D à Madagascar.",
   polesTitle: "Nos pôles",
   contactTitle: "Contact",
   privacyLabel: "Politique de confidentialité",
+  legalLabel: "Mentions légales",
   mentions: "© 2026 XR Technologie · Antananarivo, Madagascar",
 } as const;

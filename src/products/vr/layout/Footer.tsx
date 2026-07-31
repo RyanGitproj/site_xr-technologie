@@ -50,6 +50,11 @@ export function Footer() {
               </WhatsAppFooterLink>
             </li>
             <li>
+              <a href={`tel:+${siteConfig.whatsappNumber}`} className={styles.link}>
+                {siteConfig.legal.phoneDisplay}
+              </a>
+            </li>
+            <li>
               <a href={`mailto:${siteConfig.contactEmail}`} className={styles.link}>
                 {siteConfig.contactEmail}
               </a>

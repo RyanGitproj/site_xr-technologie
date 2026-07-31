@@ -38,12 +38,6 @@ function StageContent() {
         />
       </div>
 
-      {/* Affordance d'entrée : on comprend que le scroll pilote le scan.
-          Visible pendant toute l'arrivée, s'efface peu après l'épinglage. */}
-      <StageLayer at={[0, 0.4, 0.48]} y={[0, 0, -24]} opacity={[1, 1, 0]} className={styles.hint}>
-        <p className={styles.hintText}>{pipelineLidar.stageHint}</p>
-      </StageLayer>
-
       {/* Les 3 phases du pipeline, calées sur la scène. */}
       {pipelineLidar.stages.map((phase, index) => (
         <StageLayer

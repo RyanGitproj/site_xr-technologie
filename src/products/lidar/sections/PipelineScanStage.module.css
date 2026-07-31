@@ -18,21 +18,6 @@
     var(--color-bg-deep);
 }
 
-.hint {
-  display: grid;
-  place-items: end center;
-  padding-bottom: 12svh;
-}
-
-.hintText {
-  padding: 0.45rem 0.95rem;
-  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
-  border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--color-bg-deep) 82%, transparent);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
 /* Légende de phase : posée à gauche, sur fill opaque (pas de verre). */
 .phase {
   display: grid;

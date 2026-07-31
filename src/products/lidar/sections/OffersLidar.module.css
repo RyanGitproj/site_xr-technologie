@@ -10,39 +10,3 @@
 
 /* Périmètre : note compacte, liseré XR 360 via data-pole-accent (la
    passerelle porte la couleur du pôle cible, même recette que sur /360). */
-.note {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.7rem;
-  max-width: 52rem;
-  margin: 2rem auto 0;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid color-mix(in srgb, var(--pole-accent, var(--color-accent)) 30%, var(--glass-stroke));
-  border-left-width: 3px;
-  border-radius: var(--radius-tight);
-  background: color-mix(in srgb, var(--color-bg-raised) 55%, transparent);
-  font-size: 0.88rem;
-  color: var(--color-ink-muted);
-}
-
-.noteIcon {
-  flex-shrink: 0;
-  width: 1.1rem;
-  height: 1.1rem;
-  translate: 0 0.15rem;
-  color: var(--pole-accent, var(--color-accent));
-}
-
-.noteTitle {
-  color: var(--color-ink);
-}
-
-.noteLink {
-  color: var(--pole-accent, var(--color-accent));
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.noteLink:hover {
-  text-decoration: underline;
-}

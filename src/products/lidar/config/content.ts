@@ -30,7 +30,7 @@ import type { ImageSlot, VideoSlot } from "@/lib/images";
  * parcours est un brief mission (« Présenter mon site », CTA charte).
  */
 
-/** Lockup officiel XR LiDAR (docs/logo, détouré en alpha) : sous-barre et footer. */
+/** Lockup officiel XR LiDAR (docs/logo, détouré en alpha) : navbar et footer. */
 export const logoLidar: ImageSlot = {
   src: "/images/logo-xr-lidar.webp",
   alt: "XR LiDAR, reality capture",
@@ -222,8 +222,6 @@ export const pipelineLidar = {
       },
     },
   ] as readonly PipelineStage[],
-  /** Affordance du scrollytelling (UI, pas une promesse produit). */
-  stageHint: "Faites défiler : le scan construit le jumeau",
   /** Flux de données (ex-section « Parlez le langage de l'existant »,
       fusionnée ici : la sortie concrète du jumeau, dite UNE fois). */
   flow: {

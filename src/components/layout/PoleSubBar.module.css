@@ -48,11 +48,26 @@
   height: 100%;
   overflow-x: auto;
   scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  /* Le snapport doit respecter le padding de fondu, sinon le snap recale la
+     1re ancre sur le bord du scrollport, en plein dans le dégradé. */
+  scroll-padding-inline: 0.9rem;
+  overscroll-behavior-x: contain;
   /* Au repos, la première et la dernière ancre doivent être pleinement
      lisibles : le padding égal à la zone de fondu les sort du dégradé, la
-     marge négative rend l'espace pris pour conserver l'alignement. */
+     marge négative rend l'espace pris pour conserver l'alignement. Débord
+     côté gauche UNIQUEMENT (dans le padding de la capsule) : à droite, la
+     fenêtre de scroll s'arrête à la piste de grid, sinon les ancres
+     passeraient sous le CTA (la gouttière ne fait que 0.75rem). */
   padding-inline: 0.9rem;
-  margin-inline: -0.9rem;
+  margin-inline: -0.9rem 0;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 0.9rem,
+    #000 calc(100% - 0.9rem),
+    transparent
+  );
   mask-image: linear-gradient(
     to right,
     transparent,
@@ -69,6 +84,7 @@
 /* Jamais compressé ni enroulé : c'est la rangée qui défile. */
 .anchor {
   flex: none;
+  scroll-snap-align: start;
   white-space: nowrap;
   font-size: 0.8125rem;
   font-weight: 500;
@@ -99,6 +115,23 @@
   padding-inline: 1.25rem;
   font-size: 0.8125rem;
   white-space: nowrap;
+}
+
+/* Mobile : chaque pixel de la capsule va aux ancres. Padding resserré,
+   respiration latérale réduite, CTA compacté (toujours lisible, toujours
+   épinglé) : sur 360px on passe d'~1 ancre visible à 2 pleines + une
+   amorcée, l'amorce servant d'indice de défilement. */
+@media (max-width: 640px) {
+  .subBar {
+    --subbar-pad: 1rem;
+
+    max-width: calc(100% - 1rem);
+  }
+
+  .cta :global(.shimmer-cta) {
+    padding-inline: 0.95rem;
+    font-size: 0.75rem;
+  }
 }
 
 @media (min-width: 1024px) {

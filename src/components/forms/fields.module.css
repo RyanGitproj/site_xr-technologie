@@ -132,9 +132,9 @@
   outline-offset: 2px;
 }
 
-/* Astérisque des champs obligatoires. */
+/* Astérisque des champs obligatoires (variante vive : lisible en lidar). */
 .required {
-  color: var(--color-accent);
+  color: var(--color-accent-hot);
 }
 
 /* Téléphone international : le conteneur de la lib (.PhoneInput, flex) porte

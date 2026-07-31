@@ -165,7 +165,7 @@
   height: 1.9rem;
   border: 1px solid var(--pole-accent);
   border-radius: 50%;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
   background: color-mix(in srgb, var(--color-bg-deep) 55%, transparent);
   transition: transform var(--dur-fast) ease;
 }
@@ -201,6 +201,6 @@
 }
 
 .highlight {
-  color: var(--pole-accent, var(--color-ink));
+  color: var(--pole-accent-ink, var(--color-ink));
 }
 

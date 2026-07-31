@@ -14,7 +14,7 @@
    trame GridPulse, arête et glow du verre) suit, le fond reste neutre. */
 .band {
   --color-accent: var(--pole-accent);
-  --color-accent-hot: var(--pole-accent);
+  --color-accent-hot: var(--pole-accent-ink, var(--pole-accent));
   --glass-stroke: color-mix(in srgb, var(--pole-accent) 24%, transparent);
   --edge-lit: color-mix(in srgb, var(--pole-accent) 55%, transparent);
   --glow-soft: 0 0 40px color-mix(in srgb, var(--pole-accent) 24%, transparent);
@@ -85,7 +85,7 @@
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
 }
 
 .poleName {
@@ -120,7 +120,7 @@
 
 .cta {
   font-weight: 500;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
 }
 
 .upcoming {

@@ -31,7 +31,7 @@
 .icon {
   width: 1.15rem;
   height: 1.15rem;
-  color: var(--color-accent);
+  color: var(--color-accent-hot);
   filter: drop-shadow(0 0 6px color-mix(in srgb, var(--color-accent) 55%, transparent));
 }
 

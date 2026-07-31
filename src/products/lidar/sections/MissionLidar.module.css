@@ -51,7 +51,7 @@
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--color-accent);
+  color: var(--color-accent-hot);
 }
 
 .content {
@@ -64,7 +64,7 @@
 .icon {
   width: 1.3rem;
   height: 1.3rem;
-  color: var(--color-accent);
+  color: var(--color-accent-hot);
 }
 
 .stepTitle {
@@ -110,7 +110,7 @@
 .chevron {
   width: 1.1rem;
   height: 1.1rem;
-  color: var(--color-accent);
+  color: var(--color-accent-hot);
   transition: rotate var(--dur-fast) var(--ease-out);
 }
 

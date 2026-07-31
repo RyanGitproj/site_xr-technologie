@@ -92,11 +92,12 @@
   transition: color var(--dur-fast) var(--ease-out);
 }
 
-/* Accent du pôle : var(--color-accent) EST la couleur du pôle sur ces pages
-   (thème ambiant ; /vr = défaut :root). */
+/* Accent du pôle : la variante vive du thème ambiant (accent-hot), seule
+   garantie lisible en petit corps sur les trois pôles (le vert LiDAR de
+   base est une couleur de matière, pas de texte). */
 .anchor:hover,
 .anchor:focus-visible {
-  color: var(--color-accent);
+  color: var(--color-accent-hot);
 }
 
 /* Le CTA est l'embout droit de la bulle (le renflement du croquis boss) :

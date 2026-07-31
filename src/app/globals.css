@@ -102,8 +102,8 @@
      products/lidar/config/offers.ts). Elles restent DANS le vert du pôle :
      la charte interdit d'emprunter le code d'un autre pôle, un accent par
      famille ne doit donc jouer que sur la nuance. */
-  --color-offer-commerciale: #6bf2c0;
-  --color-offer-technique: #00e07f;
+  --color-offer-commerciale: #66e6a0;
+  --color-offer-technique: #00b355;
 
   /* Code couleur des 8 cibles XR 360 (ids = XR360_OFFER_IDS de
      products/xr360/config/offers.ts). Arc cyan → azur → indigo : même
@@ -205,19 +205,26 @@
 :root {
   --color-pole-vr: #f5661e;
   --color-pole-xr360: #00cfe8;
-  --color-pole-lidar: #00e5a8;
+  --color-pole-lidar: #008e3a;
+  /* Le vert officiel LiDAR fait ~3,4:1 sur les fonds sombres : il sert de
+     matière (bordures, halos, 3D), le TEXTE passe par la variante claire
+     --pole-accent-ink (≥ 4,5:1). VR et 360 sont déjà lisibles : ink = accent. */
+  --color-pole-lidar-ink: #2ddc74;
 }
 
 [data-pole-accent="vr"] {
   --pole-accent: var(--color-pole-vr);
+  --pole-accent-ink: var(--color-pole-vr);
 }
 
 [data-pole-accent="xr360"] {
   --pole-accent: var(--color-pole-xr360);
+  --pole-accent-ink: var(--color-pole-xr360);
 }
 
 [data-pole-accent="lidar"] {
   --pole-accent: var(--color-pole-lidar);
+  --pole-accent-ink: var(--color-pole-lidar-ink);
 }
 
 /* Pages produit : la sous-barre de pôle existe ⇔ le header la déclare
@@ -300,20 +307,20 @@ header[data-subnav] {
   --color-bg-raised: #0b2638;
   --color-ink: #edf3f2;
   --color-ink-muted: #94a5ae;
-  --color-accent: #00e5a8;
-  --color-accent-hot: #4df2c6;
+  --color-accent: #008e3a;
+  --color-accent-hot: #2ddc74;
   --color-accent-deep: var(--palette-lidar-accent-deep);
-  --color-fx-1: #4df2c6;
-  --color-fx-2: #00e5a8;
+  --color-fx-1: #2ddc74;
+  --color-fx-2: #008e3a;
   --color-fx-3: #00a8c6;
-  --color-fx-4: #0e7f95;
+  --color-fx-4: #016a30;
   --color-fx-spark: #00a8c6;
   --glass-fill: rgba(9, 20, 26, 0.2);
-  --glass-stroke: rgba(0, 229, 168, 0.24);
-  --edge-lit: rgba(0, 229, 168, 0.62);
-  --glow-soft: 0 0 40px rgba(0, 229, 168, 0.3);
-  --glow-strong: 0 0 80px rgba(0, 229, 168, 0.45);
-  --fx-aurora-1: rgba(0, 229, 168, 0.4);
+  --glass-stroke: rgba(45, 220, 116, 0.2);
+  --edge-lit: rgba(45, 220, 116, 0.6);
+  --glow-soft: 0 0 40px rgba(0, 142, 58, 0.35);
+  --glow-strong: 0 0 80px rgba(0, 142, 58, 0.55);
+  --fx-aurora-1: rgba(0, 142, 58, 0.4);
   --fx-aurora-2: rgba(0, 168, 198, 0.3);
   --fx-aurora-3: rgba(11, 38, 56, 0.5);
 }

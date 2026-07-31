@@ -40,8 +40,8 @@ export function LidarScanSceneLazy({ progress, tiltX, tiltY, fallback }: LidarSc
     const el = ref.current;
     if (!el) return;
     setPalette({
-      base: readCssColor(el, "--color-accent", "#00e5a8"),
-      hot: readCssColor(el, "--color-accent-hot", "#4df2c6"),
+      base: readCssColor(el, "--color-accent", "#008e3a"),
+      hot: readCssColor(el, "--color-accent-hot", "#2ddc74"),
       tech: readCssColor(el, "--color-accent-deep", "#00a8c6"),
     });
   }, [ref]);

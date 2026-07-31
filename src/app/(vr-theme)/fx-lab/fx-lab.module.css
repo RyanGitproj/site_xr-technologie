@@ -565,7 +565,7 @@
   height: 2.6rem;
   border: 1px solid color-mix(in srgb, var(--pole-accent) 60%, transparent);
   border-radius: 50%;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
 }
 
 .v2ObjectiveTitle {
@@ -585,7 +585,7 @@
 .v2ObjectiveArrow {
   margin-left: auto;
   flex-shrink: 0;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
 }
 
 /* Carte secteur : photo à venir (lots Codex), placeholder dégradé. Le
@@ -835,7 +835,7 @@
   font-family: var(--font-display);
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
 }
 
 @media (min-width: 768px) {

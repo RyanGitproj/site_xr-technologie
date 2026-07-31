@@ -127,7 +127,7 @@
 
 .holo-caption[data-step="2"],
 .holo-caption[data-step="3"] {
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
 }
 
 .holo-track {

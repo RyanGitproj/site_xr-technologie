@@ -74,7 +74,7 @@
   background: color-mix(in srgb, var(--color-bg-deep) 78%, transparent);
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
   transition: background-color var(--dur-fast) ease, border-color var(--dur-fast) ease;
 }
 

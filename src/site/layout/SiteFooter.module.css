@@ -54,7 +54,7 @@
 
 .link:hover,
 .link:focus-visible {
-  color: var(--pole-accent, var(--color-ink));
+  color: var(--pole-accent-ink, var(--color-ink));
 }
 
 .muted {

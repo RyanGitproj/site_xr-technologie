@@ -81,7 +81,7 @@
   height: 2.6rem;
   border: 1px solid color-mix(in srgb, var(--pole-accent) 60%, transparent);
   border-radius: 50%;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
 }
 
 .title {
@@ -101,7 +101,7 @@
 .arrow {
   margin-left: auto;
   flex-shrink: 0;
-  color: var(--pole-accent);
+  color: var(--pole-accent-ink, var(--pole-accent));
   transition: transform var(--dur-fast) ease;
 }
 

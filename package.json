@@ -2,14 +2,6 @@
   "name": "xr-vr-discovery-landing",
   "version": "0.1.0",
   "private": true,
-  "browserslist": [
-    "chrome >= 110",
-    "and_chr >= 110",
-    "edge >= 110",
-    "firefox >= 115",
-    "safari >= 16",
-    "ios_saf >= 16"
-  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

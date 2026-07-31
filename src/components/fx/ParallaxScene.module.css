@@ -1,7 +1,14 @@
 /* Module partagé ParallaxScene + ParallaxLayer (Immersion v2.1). */
 
+/* La position se lit dans une custom property : un consommateur qui pose sa
+   scène en décor absolu (heros) la scope via --parallax-scene-position.
+   JAMAIS de « position » en dur écrasée par la classe du consommateur : à
+   spécificité égale entre deux modules, le gagnant dépend de l'ordre de
+   concaténation des chunks CSS, que le bundler rebat à chaque déplacement de
+   code (mesuré le 31/07 : la sortie des formulaires du bundle a inversé
+   l'ordre et sorti les heros /360 et /lidar du flux en prod). */
 .scene {
-  position: relative;
+  position: var(--parallax-scene-position, relative);
 }
 
 /* Calque du flux : wrapper transform DÉDIÉ, jamais fusionné avec un élément

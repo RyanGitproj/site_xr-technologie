@@ -23,6 +23,10 @@
 /* Conteneur du calque parallax du fond : occupe tout le hero, le contenu
    et les cartes portes restent hors calques. */
 .decorScene {
+  /* Les deux déclarations : la custom property gagne quel que soit l'ordre
+     des chunks (la règle .scene la consomme), le position direct documente
+     l'intention (voir ParallaxScene.module.css). */
+  --parallax-scene-position: absolute;
   position: absolute;
   inset: 0;
   pointer-events: none;

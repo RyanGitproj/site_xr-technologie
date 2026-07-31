@@ -34,6 +34,9 @@
 /* Conteneur des calques parallax du décor : il occupe tout le hero, le
    contenu (EnterRise) et les chips d'overlap restent hors calques. */
 .decorScene {
+  /* Custom property : gagne quel que soit l'ordre des chunks CSS (voir
+     ParallaxScene.module.css, incident prod du 31/07). */
+  --parallax-scene-position: absolute;
   position: absolute;
   inset: 0;
   pointer-events: none;

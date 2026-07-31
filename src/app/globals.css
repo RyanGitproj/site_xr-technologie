@@ -440,6 +440,19 @@ header[data-subnav] {
   --geo-halo: var(--section-accent);
 }
 
+/* Rendu paresseux des sections SOUS la ligne de flottaison (perf mobile,
+   31/07) : le navigateur saute layout/paint tant que la section est loin de
+   l'écran (le poste « Style & Layout » pesait 2,7 s sur mobile lent), et la
+   rend en approche. SSR et SEO intacts (le HTML est complet), Safari < 18
+   ignore la propriété sans dommage. `auto` mémorise la taille réellement
+   rendue ; l'estimation ne sert qu'avant le premier rendu (anti-saut de
+   scrollbar). À ne PAS poser sur un héros, une section épinglée (ScrollStage)
+   ni une scène interactive gated. */
+[data-below-fold] {
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--below-fold-size, 48rem);
+}
+
 /* Reset minimal (remplace le preflight Tailwind) : uniquement ce sur quoi
    le code s'appuie, à savoir marges/paddings à zéro, border-style par défaut,
    médias en block, titres neutres, listes et liens nus. */

@@ -12,7 +12,7 @@ import styles from "./FinalCta360.module.css";
     la demande, poster + contrôles sous prefers-reduced-motion. */
 export function FinalCta360() {
   return (
-    <section className={`fx-section ${styles.section}`}>
+    <section data-below-fold="" className={`fx-section ${styles.section}`}>
       <RevealGroup className={styles.inner}>
         <RevealItem>
           <h2 className={styles.title}>

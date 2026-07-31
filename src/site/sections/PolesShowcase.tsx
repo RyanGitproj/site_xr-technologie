@@ -18,7 +18,7 @@ import styles from "./PolesShowcase.module.css";
     pages pôles, la bande donne l'envie et la porte d'entrée. */
 export function PolesShowcase() {
   return (
-    <section id={polesSection.id} className={styles.section}>
+    <section id={polesSection.id} data-below-fold="" className={styles.section}>
       {/* Les 3 objets se téléchargent pendant que le lecteur est encore en
           haut : ils sont là quand la bande arrive, sans passage par le halo. */}
       <ScenePreloader scenes={POLE_SCENES} />

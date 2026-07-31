@@ -7,7 +7,7 @@ import styles from "./Process360.module.css";
     panoramique, du premier échange à la diffusion. */
 export function Process360() {
   return (
-    <section id={process360.id} className={styles.section}>
+    <section id={process360.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={process360.kicker}
         title={process360.title}

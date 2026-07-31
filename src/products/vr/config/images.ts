@@ -29,8 +29,8 @@ export const casqueVideo: VideoSlot = {
 export const logoImage: ImageSlot = {
   src: "/images/logo-xr-vr-discovery.webp",
   alt: "XR VR Discovery, Antananarivo",
-  width: 567,
-  height: 144,
+  width: 378,
+  height: 96,
 };
 
 export const argumentImage: ImageSlot = {

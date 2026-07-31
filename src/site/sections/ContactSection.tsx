@@ -15,7 +15,7 @@ export function ContactSection() {
     contactSection.whatsappMessage,
   );
   return (
-    <section id={contactSection.id} className={styles.section}>
+    <section id={contactSection.id} data-below-fold="" className={styles.section}>
       <Reveal className={styles.inner}>
         <GlassPanel className={styles.panel}>
           <p className={styles.kicker}>{contactSection.kicker}</p>

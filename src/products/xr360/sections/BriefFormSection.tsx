@@ -8,7 +8,7 @@ import styles from "./BriefFormSection.module.css";
 /** Le brief projet : la conversion du funnel 360, sur verre. */
 export function BriefFormSection() {
   return (
-    <section id={briefFormSection.id} className={styles.section}>
+    <section id={briefFormSection.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={briefFormSection.kicker}
         title={briefFormSection.title}

@@ -16,7 +16,7 @@ import styles from "./Series360.module.css";
     parallax par-dessus. */
 export function Series360() {
   return (
-    <section id={series360.id} className={styles.section}>
+    <section id={series360.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={series360.kicker}
         title={series360.title}

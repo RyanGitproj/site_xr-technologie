@@ -17,7 +17,7 @@ export function Offers360() {
   const lidar = PRODUCTS.find((product) => product.id === "lidar");
 
   return (
-    <section id={offers360.id} className={styles.section}>
+    <section id={offers360.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={offers360.kicker}
         title={offers360.title}

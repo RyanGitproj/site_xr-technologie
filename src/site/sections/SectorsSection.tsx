@@ -13,7 +13,7 @@ import styles from "./SectorsSection.module.css";
     arrive deux sections plus bas, on ne le sollicite plus trois fois). */
 export function SectorsSection() {
   return (
-    <section id={sectorsSection.id} className={styles.section}>
+    <section id={sectorsSection.id} data-below-fold="" className={styles.section}>
       <SectionHeading kicker={sectorsSection.kicker} title={sectorsSection.title} />
       <RevealGroup className={styles.grid}>
         {sectorsSection.items.map((sector, index) => (

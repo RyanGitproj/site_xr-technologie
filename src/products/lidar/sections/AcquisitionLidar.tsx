@@ -12,7 +12,7 @@ import styles from "./AcquisitionLidar.module.css";
     zone sombre). Vague de profondeur légère au scroll (±0.10). */
 export function AcquisitionLidar() {
   return (
-    <section id={acquisitionLidar.id} className={styles.section}>
+    <section id={acquisitionLidar.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={acquisitionLidar.kicker}
         title={acquisitionLidar.title}

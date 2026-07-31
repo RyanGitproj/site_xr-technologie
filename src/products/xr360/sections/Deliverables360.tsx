@@ -11,7 +11,7 @@ import styles from "./Deliverables360.module.css";
     livrables détaillés vivent avec leur famille de prestation. */
 export function Deliverables360() {
   return (
-    <section id={deliverables360.id} className={styles.section}>
+    <section id={deliverables360.id} data-below-fold="" className={styles.section}>
       <SectionHeading kicker={deliverables360.kicker} title={deliverables360.title} />
       <RevealGroup className={styles.inner}>
         <RevealItem className={styles.mockups}>

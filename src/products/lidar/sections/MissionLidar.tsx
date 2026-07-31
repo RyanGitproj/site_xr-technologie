@@ -10,7 +10,7 @@ import styles from "./MissionLidar.module.css";
     un engagement, pas un détail), texte fidèle à la brochure. */
 export function MissionLidar() {
   return (
-    <section id={missionLidar.id} className={styles.section}>
+    <section id={missionLidar.id} data-below-fold="" className={styles.section}>
       <SectionHeading kicker={missionLidar.kicker} title={missionLidar.title} />
       <RevealGroup className={styles.timeline}>
         {missionLidar.steps.map((step, index) => (

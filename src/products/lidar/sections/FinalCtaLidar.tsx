@@ -15,7 +15,7 @@ import styles from "./FinalCtaLidar.module.css";
     Aucun parallax : section porteuse d'un contenu contractuel. */
 export function FinalCtaLidar() {
   return (
-    <section className={`fx-section ${styles.section}`}>
+    <section data-below-fold="" className={`fx-section ${styles.section}`}>
       <RevealGroup className={styles.inner}>
         <RevealItem>
           <p className={styles.kicker}>{finalCtaLidar.kicker}</p>

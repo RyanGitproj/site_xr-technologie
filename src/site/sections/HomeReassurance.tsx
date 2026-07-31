@@ -6,7 +6,11 @@ import styles from "./HomeReassurance.module.css";
     bandes pôles en paragraphes. */
 export function HomeReassurance() {
   return (
-    <section aria-label={homeReassurance.ariaLabel} className={`fx-section ${styles.section}`}>
+    <section
+      aria-label={homeReassurance.ariaLabel}
+      data-below-fold=""
+      className={`fx-section ${styles.section}`}
+    >
       <ul className={styles.list}>
         {homeReassurance.items.map((item) => (
           <li key={item.label} className={styles.item}>

@@ -34,8 +34,8 @@ import type { ImageSlot, VideoSlot } from "@/lib/images";
 export const logoLidar: ImageSlot = {
   src: "/images/logo-xr-lidar.webp",
   alt: "XR LiDAR, reality capture",
-  width: 503,
-  height: 144,
+  width: 335,
+  height: 96,
 };
 
 /* Navigation interne par scrollTo (aucune ancre d'URL) : id = id de section. */

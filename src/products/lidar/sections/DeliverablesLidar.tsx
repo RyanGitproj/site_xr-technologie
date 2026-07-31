@@ -52,7 +52,7 @@ export function DeliverablesLidar() {
   }
 
   return (
-    <section id={deliverablesLidar.id} className={styles.section}>
+    <section id={deliverablesLidar.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={deliverablesLidar.kicker}
         title={deliverablesLidar.title}

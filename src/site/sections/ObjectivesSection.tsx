@@ -14,7 +14,7 @@ import styles from "./ObjectivesSection.module.css";
     En repli, le lecteur qui hésite est envoyé vers le contact. */
 export function ObjectivesSection() {
   return (
-    <section id={objectivesSection.id} className={styles.section}>
+    <section id={objectivesSection.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={objectivesSection.kicker}
         title={objectivesSection.title}

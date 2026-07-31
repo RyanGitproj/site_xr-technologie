@@ -8,7 +8,7 @@ import styles from "./BriefFormSectionLidar.module.css";
 /** Le brief mission : la conversion du funnel LiDAR, sur verre. */
 export function BriefFormSectionLidar() {
   return (
-    <section id={briefFormSection.id} className={styles.section}>
+    <section id={briefFormSection.id} data-below-fold="" className={styles.section}>
       <SectionHeading
         kicker={briefFormSection.kicker}
         title={briefFormSection.title}

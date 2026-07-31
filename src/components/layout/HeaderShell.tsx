@@ -42,21 +42,22 @@ export function HeaderShell({ brand, nav, actions, subBar }: HeaderShellProps) {
   const [menuHost, setMenuHost] = useState<HTMLDivElement | null>(null);
 
   return (
-    <header className={styles.header} data-subnav={subBar ? "" : undefined}>
+    <header
+      className={cx(styles.header, compact && styles.compact)}
+      data-subnav={subBar ? "" : undefined}
+    >
       <MenuHostContext.Provider value={menuHost}>
-        <GlassPanel
-          thin
-          degradeOffscreen={false}
-          className={cx(styles.panel, compact && styles.compact)}
-        >
+        {/* Le verre ne couvre QUE la barre : la rangée du sous-menu est
+            transparente, seule la capsule (PoleSubBar) y flotte. */}
+        <GlassPanel thin degradeOffscreen={false} className={styles.panel}>
           <div className={styles.bar}>
             <div className={styles.brand}>{brand}</div>
             <div className={styles.nav}>{nav}</div>
             {actions ? <div className={styles.actions}>{actions}</div> : null}
           </div>
-          {subBar ? <div className={styles.subRow}>{subBar}</div> : null}
           <ScrollProgress />
         </GlassPanel>
+        {subBar ? <div className={styles.subRow}>{subBar}</div> : null}
         <div ref={setMenuHost} />
       </MenuHostContext.Provider>
     </header>

@@ -7,6 +7,7 @@
   display: none;
   align-items: center;
   gap: clamp(1rem, 2.5vw, 2rem);
+  height: 100%;
 }
 
 .link {
@@ -54,6 +55,58 @@
   transform: scaleX(1);
   box-shadow: 0 0 8px color-mix(in srgb, var(--pole-accent, var(--color-accent)) 45%, transparent);
   animation: indicator-in var(--dur-med) var(--ease-out) both;
+}
+
+/* Onglet actif fusionné à la capsule du sous-menu (pages produit uniquement,
+   l'invariant fait tout : une entrée produit n'est aria-current que sur sa
+   page, qui porte toujours la sous-barre ; Accueil, sans data-pole-accent,
+   garde le filet). Même remplissage que la capsule (--subnav-tint), pleine
+   hauteur, coins hauts arrondis, forme pleine sans contour comme les
+   maquettes : le sous-menu émane visuellement de cet onglet. */
+.inlineNav .link[aria-current="page"][data-pole-accent] {
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 1.1rem;
+  background: var(--subnav-tint);
+  border-radius: var(--radius-tight) var(--radius-tight) 0 0;
+}
+
+/* Congés « round-out » (réf. CSS-Tricks) : les deux pseudos deviennent des
+   quarts de cercle concaves à la base de l'onglet, qui le déversent dans la
+   capsule. Toutes les propriétés du filet (transform, opacity, animation)
+   sont neutralisées. */
+.inlineNav .link[aria-current="page"][data-pole-accent]::before,
+.inlineNav .link[aria-current="page"][data-pole-accent]::after {
+  content: "";
+  position: absolute;
+  inset-block: auto 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0;
+  opacity: 1;
+  transform: none;
+  box-shadow: none;
+  animation: none;
+  transition: none;
+}
+
+.inlineNav .link[aria-current="page"][data-pole-accent]::before {
+  inset-inline: -0.75rem auto;
+  background: radial-gradient(
+    circle at top left,
+    transparent 0.75rem,
+    var(--subnav-tint) calc(0.75rem + 0.5px)
+  );
+}
+
+.inlineNav .link[aria-current="page"][data-pole-accent]::after {
+  inset-inline: auto -0.75rem;
+  background: radial-gradient(
+    circle at top right,
+    transparent 0.75rem,
+    var(--subnav-tint) calc(0.75rem + 0.5px)
+  );
 }
 
 @keyframes indicator-in {

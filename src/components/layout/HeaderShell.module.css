@@ -18,6 +18,13 @@
   border-top: none;
 }
 
+/* Barre à onglets : l'onglet actif interrompt l'arête basse en plongeant
+   dans la capsule ; on retire donc le bord bas plutôt que de tracer une
+   couture sous l'onglet. */
+.header[data-subnav] .panel {
+  border-bottom: none;
+}
+
 /* Le contenu reste dans la colonne de lecture. Mobile : lockup à gauche,
    action puis hamburger à droite (le menu des pôles vit dans le panneau
    déroulant) ; desktop : le menu s'intercale au centre. */
@@ -39,6 +46,8 @@
   height: var(--header-bar-h-compact);
 }
 
+/* Rangée du sous-menu : simple gabarit de hauteur, le fond vit sur la BULLE
+   (PoleSubBar), qui pend de l'onglet actif et laisse le verre nu autour. */
 .subRow {
   height: var(--subnav-h);
   transition: height 300ms var(--ease-out);
@@ -53,8 +62,13 @@
   min-width: 0;
 }
 
+/* Étiré en hauteur : l'onglet actif du menu descend jusqu'à l'arête basse
+   de la barre pour fusionner avec la bande du sous-menu. */
 .nav {
   grid-area: nav;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
 }
 
 .actions {

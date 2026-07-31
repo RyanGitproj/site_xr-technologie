@@ -137,6 +137,8 @@
      neutre 1px : la recette iOS 26 sur fond sombre. */
   --glass-tint: rgba(255, 255, 255, 0.06);
   --glass-edge: rgba(255, 255, 255, 0.16);
+  /* Ombre portée des surfaces de verre flottantes (capsule du sous-menu). */
+  --shadow-float: 0 12px 30px rgba(4, 8, 18, 0.35);
   --glass-stroke: rgba(255, 150, 90, 0.24);
   --edge-lit: rgba(245, 102, 30, 0.62);
   --glass-blur: 12px; /* plage DA 12-20px, 12 retenu après mesure FPS (chap. 8) */
@@ -176,8 +178,8 @@
      synchro HeaderShell.module.css (.bar / .subRow). */
   --header-bar-h: 4rem;
   --header-bar-h-compact: 3.25rem;
-  --subnav-h: 3rem;
-  --subnav-h-compact: 2.5rem;
+  --subnav-h: 3.25rem;
+  --subnav-h-compact: 2.75rem;
   --header-h: var(--header-bar-h);
   --section-pad-y: clamp(3rem, 7svh, 5.5rem);
   --stack-gap: clamp(1.75rem, 4svh, 3.5rem); /* heading → grille */
@@ -225,6 +227,15 @@
    scroll-padding-top (saut natif + Lenis) et tous les consommateurs. */
 html:has(header[data-subnav]) {
   --header-h: calc(var(--header-bar-h) + var(--subnav-h));
+}
+
+/* Teinte du sous-menu de pôle : PARTAGÉE par l'onglet actif (ProductNav) et
+   la bande (.subRow, HeaderShell) pour fusionner sans couture. Définie sur
+   le header (PAS sur :root) : un color-mix se fige au point de définition,
+   et le header vit dans le wrapper [data-theme] de sa page, où
+   --color-accent vaut la couleur du pôle. */
+header[data-subnav] {
+  --subnav-tint: color-mix(in srgb, var(--color-accent) 14%, transparent);
 }
 
 /* Socle corporate « site » (accueil, et pages transverses à terme) : bleu

@@ -10,6 +10,13 @@
   width: auto;
 }
 
+/* Halo clair statique : lisibilité des lockups pensés pour fond blanc
+   (le « XR 360° » bleu nuit se perdrait sur la navbar sombre). */
+.logoHalo {
+  filter: drop-shadow(0 0 1px color-mix(in srgb, var(--color-ink) 55%, transparent))
+    drop-shadow(0 0 10px color-mix(in srgb, var(--color-ink) 30%, transparent));
+}
+
 @media (min-width: 768px) {
   .logoImg {
     height: 2.5rem;

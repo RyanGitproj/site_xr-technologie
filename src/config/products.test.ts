@@ -91,6 +91,8 @@ describe("catalogue des pôles", () => {
     expect(globalsCss).toContain("--subnav-h:");
     expect(globalsCss).toContain("html:has(header[data-subnav])");
     expect(globalsCss).toContain("scroll-padding-top: var(--header-h)");
+    // Teinte partagée onglet actif ↔ bande : la fusion sans couture en dépend.
+    expect(globalsCss).toContain("--subnav-tint:");
   });
 
   it("le thème socle « site » (accueil) existe dans globals.css", () => {

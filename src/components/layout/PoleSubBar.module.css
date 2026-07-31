@@ -1,22 +1,37 @@
-/* Sous-barre de pôle : mobile [ancres défilables | CTA épinglé], desktop
-   [logo pôle | ancres | CTA]. La hauteur vient de .subRow (HeaderShell), la
-   colonne de lecture est la même que la barre principale. */
+/* Sous-menu de pôle en BULLE (référence boss) : une capsule teintée qui
+   pend de l'onglet actif — top collé à l'arête de la barre (fusion via
+   --subnav-tint partagé), bouts arrondis, respiration dessous et sur les
+   côtés, verre nu autour. [Ancres défilables | CTA épinglé] : l'identité du
+   pôle vit dans la barre (lockup) et la teinte de la capsule. */
 
 .subBar {
+  --subbar-pad: clamp(1.4rem, 2.5vw, 1.75rem);
+
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 0.75rem;
-  height: 100%;
-  max-width: 72rem;
+  height: calc(100% - 0.45rem);
+  /* La capsule ÉPOUSE son contenu (ancres + CTA) et se centre sous la
+     barre : pas de vide mort aux extrémités. Bornée à la colonne moins une
+     respiration ; au-delà, les ancres défilent dans la rangée interne. */
+  width: fit-content;
+  max-width: min(72rem, calc(100% - 1.5rem));
   margin-inline: auto;
-  padding-inline: clamp(0.75rem, 2.5vw, 1.5rem);
-}
-
-/* Mobile : la rangée 390px est aux ancres + CTA ; l'identité du pôle passe
-   par le thème ambiant et le hero. */
-.logo {
-  display: none;
+  padding-inline: var(--subbar-pad);
+  border-radius: var(--radius-pill);
+  /* Overrides du GlassPanel porteur : teinte du pôle PAR-DESSUS la recette
+     verre (sous-couche sombre = lisibilité au-dessus du hero), pas de
+     bordure (l'arête haute casserait la fusion avec l'onglet), ombre
+     portée + arête lumineuse en bas seulement. */
+  border: none;
+  background:
+    linear-gradient(0deg, var(--subnav-tint), var(--subnav-tint)),
+    linear-gradient(180deg, var(--glass-tint), transparent 45%),
+    var(--glass-fill);
+  box-shadow:
+    var(--shadow-float),
+    inset 0 -1px 0 var(--glass-edge);
 }
 
 /* Rangée d'ancres défilable au doigt : scrollbar masquée, fondu de
@@ -26,6 +41,9 @@
 .scroller {
   display: flex;
   align-items: center;
+  /* « Un peu centré » (référence boss) : centré quand la rangée tient,
+     retombe sur start quand elle déborde (mobile défilable intact). */
+  justify-content: safe center;
   gap: clamp(1rem, 2.5vw, 1.75rem);
   height: 100%;
   overflow-x: auto;
@@ -65,34 +83,27 @@
   color: var(--color-accent);
 }
 
+/* Le CTA est l'embout droit de la bulle (le renflement du croquis boss) :
+   hauteur calée sur la capsule, y compris en mode compact. */
 .cta {
   flex: none;
+  height: 100%;
 }
 
-/* Le CTA tient sur une ligne dans la rangée mobile (la plus longue
-   signature, « Créer une visite virtuelle », cale à cette taille). */
-@media (max-width: 767px) {
-  .cta :global(.shimmer-cta) {
-    padding: 0.4rem 0.875rem;
-    font-size: 0.8125rem;
-    white-space: nowrap;
-  }
+.cta :global(.shimmer-cta) {
+  height: 100%;
+  min-height: 0; /* le min-height 2.75rem de la recette dépasserait la capsule compactée */
+  display: inline-flex;
+  align-items: center;
+  padding-block: 0;
+  padding-inline: 1.25rem;
+  font-size: 0.8125rem;
+  white-space: nowrap;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .subBar {
-    grid-template-columns: auto 1fr auto;
     gap: 1rem;
-  }
-
-  .logo {
-    display: block;
-  }
-
-  /* Lockup du pôle : la hauteur pilote, la largeur suit le ratio. */
-  .logoImg {
-    height: 1.75rem;
-    width: auto;
   }
 }
 

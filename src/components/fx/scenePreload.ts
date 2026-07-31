@@ -26,13 +26,17 @@ export type NetworkHint = { saveData?: boolean; effectiveType?: string };
 const SLOW_NETWORKS: readonly string[] = ["slow-2g", "2g"];
 
 /**
- * Précharger coûte plusieurs centaines de ko : on s'en abstient quand
- * l'utilisateur a demandé l'économie de données ou quand le lien est trop
- * lent pour l'absorber sans gêner le reste de la page (le repli 2D reste
- * beau). Pas d'info = on précharge : l'absence d'API n'est pas un signal de
- * lenteur.
+ * Précharger coûte plusieurs centaines de ko (three.js + GLB) : on s'en
+ * abstient sur tactile (mesure Lighthouse mobile du 31/07 : ~1,4 Mo tirés
+ * pour des scènes que le lecteur n'atteint pas forcément, TBT et LCP
+ * plombés ; le repli 2D couvre l'approche, la porte `useSceneGate` charge
+ * la scène près du viewport), quand l'utilisateur a demandé l'économie de
+ * données ou quand le lien est trop lent pour l'absorber sans gêner le
+ * reste de la page. Pas d'info réseau = on précharge : l'absence d'API
+ * n'est pas un signal de lenteur.
  */
-export function shouldPreloadScenes(hint: NetworkHint | undefined): boolean {
+export function shouldPreloadScenes(hint: NetworkHint | undefined, finePointer: boolean): boolean {
+  if (!finePointer) return false;
   if (hint === undefined) return true;
   if (hint.saveData === true) return false;
   return !SLOW_NETWORKS.includes(hint.effectiveType ?? "");

@@ -5,6 +5,6 @@ import type { ImageSlot } from "@/lib/images";
 export const siteLogo: ImageSlot = {
   src: "/images/logo-xr-technologie.webp",
   alt: "XR Technologie, Antananarivo",
-  width: 800,
-  height: 194,
+  width: 594,
+  height: 144,
 };

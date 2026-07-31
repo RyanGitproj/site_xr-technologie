@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePointerFine } from "@/lib/motion/usePointerFine";
 import { useReducedMotionPref } from "@/lib/motion/useReducedMotion";
 import {
   readNetworkHint,
@@ -60,18 +61,19 @@ type ScenePreloaderProps = {
  * rien : il occupe le temps mort entre la fin du chargement et l'arrivée du
  * lecteur sur la section, pour que la 3D soit déjà là quand la porte de
  * `useSceneGate` s'ouvre. Se tait quand la scène ne serait de toute façon pas
- * montée (mouvement réduit, WebGL absent) ou quand le réseau demande la
- * sobriété.
+ * montée (mouvement réduit, WebGL absent), sur tactile (budget mobile : la
+ * porte chargera à l'approche) ou quand le réseau demande la sobriété.
  */
 export function ScenePreloader({ scenes }: ScenePreloaderProps) {
   const reduce = useReducedMotionPref();
   const webgl = useWebGLSupport();
+  const fine = usePointerFine();
 
   useEffect(() => {
     if (reduce || !webgl) return;
-    if (!shouldPreloadScenes(readNetworkHint())) return;
+    if (!shouldPreloadScenes(readNetworkHint(), fine)) return;
     return scheduleScenePreload(() => void preloadScenes(scenes));
-  }, [reduce, webgl, scenes]);
+  }, [reduce, webgl, fine, scenes]);
 
   return null;
 }

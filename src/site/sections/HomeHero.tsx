@@ -39,8 +39,11 @@ function HeroBackdrop() {
         <picture>
           <source media="(min-width: 768px)" srcSet={desktop.props.srcSet} />
           <source media="(max-width: 767px)" srcSet={mobileSrcSet} />
+          {/* fetchPriority explicite : c'est l'image LCP mobile, et
+              getImageProps ne pose pas l'attribut dans le HTML servi
+              (checklist « LCP request discovery » de Lighthouse). */}
           {/* eslint-disable-next-line jsx-a11y/alt-text -- alt vient de imgProps */}
-          <img {...imgProps} className={styles.bgImg} />
+          <img {...imgProps} fetchPriority="high" className={styles.bgImg} />
         </picture>
         <div aria-hidden="true" className={styles.veil} />
       </ParallaxLayer>

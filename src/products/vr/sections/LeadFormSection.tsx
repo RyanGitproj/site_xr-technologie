@@ -1,7 +1,7 @@
 import { GlassPanel } from "@/components/fx/GlassPanel";
 import { Reveal } from "@/components/fx/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { LeadForm } from "@/products/vr/forms/LeadForm";
+import { LeadFormLazy } from "@/products/vr/forms/LeadFormLazy";
 import styles from "./LeadFormSection.module.css";
 
 /**
@@ -20,7 +20,7 @@ export function LeadFormSection() {
         />
         <Reveal className={styles.formWrap}>
           <GlassPanel className={styles.panel}>
-            <LeadForm />
+            <LeadFormLazy />
           </GlassPanel>
         </Reveal>
       </div>

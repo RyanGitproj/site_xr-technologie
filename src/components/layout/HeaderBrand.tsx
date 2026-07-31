@@ -20,12 +20,14 @@ type HeaderBrandProps = {
 export function HeaderBrand({ logo = siteLogo, href = "/", halo = false }: HeaderBrandProps) {
   return (
     <Link href={href} className={styles.logo}>
+      {/* Pas de `priority` : le preload du lockup passait AVANT l'image LCP
+          du hero (mesure Lighthouse 31/07). Eager suffit, la navbar est
+          au-dessus de la ligne de flottaison de toute façon. */}
       <Image
         src={logo.src}
         alt={logo.alt}
         width={logo.width}
         height={logo.height}
-        priority
         unoptimized
         className={cx(styles.logoImg, halo && styles.logoHalo)}
       />

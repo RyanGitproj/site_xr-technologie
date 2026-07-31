@@ -38,8 +38,8 @@ import type { ImageSlot, VideoSlot } from "@/lib/images";
 export const logo360: ImageSlot = {
   src: "/images/logo-xr-360.webp",
   alt: "XR 360, visite virtuelle",
-  width: 800,
-  height: 215,
+  width: 536,
+  height: 144,
 };
 
 /* Navigation interne par scrollTo (aucune ancre d'URL) : id = id de section. */

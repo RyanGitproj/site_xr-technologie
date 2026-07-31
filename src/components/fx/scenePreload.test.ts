@@ -36,11 +36,16 @@ describe("préchargement des scènes 3D", () => {
   });
 
   it("s'abstient sur lien lent ou économie de données, précharge sans info", () => {
-    expect(shouldPreloadScenes(undefined)).toBe(true);
-    expect(shouldPreloadScenes({ effectiveType: "4g" })).toBe(true);
-    expect(shouldPreloadScenes({ effectiveType: "3g" })).toBe(true);
-    expect(shouldPreloadScenes({ effectiveType: "4g", saveData: true })).toBe(false);
-    expect(shouldPreloadScenes({ effectiveType: "2g" })).toBe(false);
-    expect(shouldPreloadScenes({ effectiveType: "slow-2g" })).toBe(false);
+    expect(shouldPreloadScenes(undefined, true)).toBe(true);
+    expect(shouldPreloadScenes({ effectiveType: "4g" }, true)).toBe(true);
+    expect(shouldPreloadScenes({ effectiveType: "3g" }, true)).toBe(true);
+    expect(shouldPreloadScenes({ effectiveType: "4g", saveData: true }, true)).toBe(false);
+    expect(shouldPreloadScenes({ effectiveType: "2g" }, true)).toBe(false);
+    expect(shouldPreloadScenes({ effectiveType: "slow-2g" }, true)).toBe(false);
+  });
+
+  it("s'abstient toujours sur tactile, quel que soit le réseau", () => {
+    expect(shouldPreloadScenes(undefined, false)).toBe(false);
+    expect(shouldPreloadScenes({ effectiveType: "4g" }, false)).toBe(false);
   });
 });

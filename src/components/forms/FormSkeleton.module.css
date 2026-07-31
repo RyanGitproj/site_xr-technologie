@@ -1,0 +1,20 @@
+/* Fantôme du formulaire pendant le chargement de son chunk : réserve un
+   encombrement proche du formulaire monté (étape 1 : grille de choix +
+   navigation) pour éviter le saut de layout au montage. */
+.skeleton {
+  min-height: 26rem;
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+
+.bar {
+  height: 2.75rem;
+  border-radius: var(--radius-tight);
+  background: var(--glass-fill);
+}
+
+.bar:first-child {
+  height: 1.25rem;
+  max-width: 60%;
+}

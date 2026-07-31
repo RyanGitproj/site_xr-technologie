@@ -2,7 +2,7 @@ import { GlassPanel } from "@/components/fx/GlassPanel";
 import { Reveal } from "@/components/fx/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { briefFormSection } from "@/products/xr360/config/briefForm";
-import { BriefForm } from "@/products/xr360/forms/BriefForm";
+import { BriefFormLazy } from "@/products/xr360/forms/BriefFormLazy";
 import styles from "./BriefFormSection.module.css";
 
 /** Le brief projet : la conversion du funnel 360, sur verre. */
@@ -16,7 +16,7 @@ export function BriefFormSection() {
       />
       <Reveal className={styles.inner}>
         <GlassPanel className={styles.panel}>
-          <BriefForm />
+          <BriefFormLazy />
         </GlassPanel>
       </Reveal>
     </section>

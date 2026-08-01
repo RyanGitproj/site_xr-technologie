@@ -454,9 +454,7 @@ export const offersLidar = {
   },
 } as const;
 
-/** CTA final : ABSORBE la zone d'intervention (la portée géographique au
-    moment de la décision) ; la mention légale devient un renvoi vers le
-    bloc limites (une seule occurrence du texte fidèle, dans la mission). */
+/** CTA final avant le brief. */
 export const finalCtaLidar = {
   /** Vitrine vidéo (docs/Video, montage promo portrait 4:5) : le nuage de
       points au moment de la décision. Convertie par ffmpeg (VP9/WebM +
@@ -478,24 +476,6 @@ export const finalCtaLidar = {
   title: "De votre site aux données, il n'y a qu'un brief.",
   subtitle:
     "Présentez-nous votre site, vos objectifs et les livrables attendus. Notre équipe évalue votre besoin et prépare une intervention adaptée : le formulaire est juste en dessous.",
-  zonesTitle: "Zone d'intervention",
-  zones: [
-    "Madagascar",
-    "Réunion",
-    "Maurice",
-    "Mayotte",
-    "Comores",
-    "Seychelles",
-    "Afrique de l'Est",
-    "Afrique australe",
-    "France",
-    "Indonésie",
-  ],
-  zonesNote: "Selon la nature et la faisabilité du projet.",
-  cta: "Présenter mon site",
-  ctaTargetId: "brief",
-  limitsNote: "Les limites et précisions de la prestation sont détaillées dans la section mission.",
-  limitsTargetId: "limites",
 } as const;
 
 export const footerLidar = {

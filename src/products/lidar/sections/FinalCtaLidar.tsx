@@ -1,17 +1,11 @@
 import { GeoFrame } from "@/components/fx/GeoFrame";
 import { GlassPanel } from "@/components/fx/GlassPanel";
 import { RevealGroup, RevealItem } from "@/components/fx/Reveal";
-import { ShimmerCTA } from "@/components/fx/ShimmerCTA";
 import { AmbientVideo } from "@/components/ui/AmbientVideo";
 import { finalCtaLidar } from "@/products/lidar/config/content";
 import styles from "./FinalCtaLidar.module.css";
 
-/** Dernier appel avant le brief : la vitrine vidéo du nuage de points en
-    carte HUD (même système que la vitrine VR : autoplay muet pausé hors
-    écran/onglet, son à la demande, poster + contrôles sous
-    prefers-reduced-motion), la portée géographique (ex-section zone) au
-    moment de la décision, puis le CTA signature. La mention légale complète
-    vit UNE fois dans la mission (bloc limites) : ici, un simple renvoi.
+/** Vitrine vidéo finale du nuage de points avant le brief.
     Aucun parallax : section porteuse d'un contenu contractuel. */
 export function FinalCtaLidar() {
   return (
@@ -36,23 +30,6 @@ export function FinalCtaLidar() {
               />
             </GlassPanel>
           </GeoFrame>
-        </RevealItem>
-        <RevealItem className={styles.zones}>
-          <p className={styles.zonesTitle}>{finalCtaLidar.zonesTitle}</p>
-          <div className={styles.zoneChips}>
-            {finalCtaLidar.zones.map((zone) => (
-              <span key={zone} className={styles.zoneChip}>
-                {zone}
-              </span>
-            ))}
-          </div>
-          <p className={styles.zonesNote}>{finalCtaLidar.zonesNote}</p>
-        </RevealItem>
-        <RevealItem>
-          <ShimmerCTA scrollTo={finalCtaLidar.ctaTargetId}>{finalCtaLidar.cta}</ShimmerCTA>
-        </RevealItem>
-        <RevealItem>
-          <p className={styles.mention}>{finalCtaLidar.limitsNote}</p>
         </RevealItem>
       </RevealGroup>
     </section>

@@ -13,7 +13,10 @@ export const mainNav = {
 } as const;
 
 /** Sous-barre des pages produit (PoleSubBar) : sommaire interne du pôle
-    (scrollTo, aucune ancre d'URL) + CTA. */
+    (scrollTo, aucune ancre d'URL) + CTA. Sur mobile, les ancres au-delà des
+    deux premières se replient dans un menu déroulant (bouton chevron). */
 export const subNav = {
   navLabel: "Sections de la page",
+  moreOpenLabel: "Afficher les autres sections",
+  moreCloseLabel: "Masquer les autres sections",
 } as const;

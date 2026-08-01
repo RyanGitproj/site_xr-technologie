@@ -51,7 +51,7 @@ export function Footer() {
             </li>
             <li>
               <a href={`tel:+${siteConfig.whatsappNumber}`} className={styles.link}>
-                {siteConfig.legal.phoneDisplay}
+                {siteConfig.phone.display}
               </a>
             </li>
             <li>

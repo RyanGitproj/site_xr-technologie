@@ -1,5 +1,6 @@
 import { GlassPanel } from "@/components/fx/GlassPanel";
 import { Reveal } from "@/components/fx/Reveal";
+import { PhoneLink } from "@/components/tracking/PhoneLink";
 import { WhatsAppFooterLink } from "@/components/tracking/WhatsAppFooterLink";
 import { OutlineButton } from "@/components/ui/OutlineButton";
 import { siteConfig } from "@/config/site";
@@ -7,8 +8,8 @@ import { buildWhatsAppLink } from "@/lib/format/whatsapp";
 import { contactSection } from "@/site/config/content";
 import styles from "./ContactSection.module.css";
 
-/** Contact général léger : email + WhatsApp. Les formulaires restent la
-    propriété des funnels (le pôle VR est mis en avant vers son devis). */
+/** Contact général léger : email + appel direct + WhatsApp. Les formulaires
+    restent la propriété des funnels (le pôle VR est mis en avant vers son devis). */
 export function ContactSection() {
   const whatsappHref = buildWhatsAppLink(
     siteConfig.whatsappNumber,
@@ -25,7 +26,10 @@ export function ContactSection() {
             <OutlineButton href={`mailto:${siteConfig.contactEmail}`}>
               {contactSection.emailLabel}
             </OutlineButton>
-            <WhatsAppFooterLink href={whatsappHref} className={styles.whatsapp}>
+            <PhoneLink e164={siteConfig.phone.e164} className={styles.channel}>
+              {contactSection.phoneLabel} {siteConfig.phone.display}
+            </PhoneLink>
+            <WhatsAppFooterLink href={whatsappHref} className={styles.channel}>
               {contactSection.whatsappLabel}
             </WhatsAppFooterLink>
           </div>

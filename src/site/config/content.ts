@@ -383,8 +383,10 @@ export const contactSection = {
   id: "contact",
   kicker: "Parlons de votre projet",
   title: "Une question ? Une idée à cadrer ?",
-  body: "Écrivez-nous ou passez par WhatsApp : nous orientons votre demande vers le bon pôle et revenons vers vous rapidement.",
+  body: "Écrivez-nous, appelez-nous ou passez par WhatsApp : nous orientons votre demande vers le bon pôle et revenons vers vous rapidement.",
   emailLabel: "Nous écrire",
+  /** Préfixe du canal d'appel : le numéro affiché vient de `siteConfig.phone`. */
+  phoneLabel: "Appeler le",
   whatsappLabel: "WhatsApp",
   whatsappMessage: "Bonjour XR Technologie ! J'ai une question sur vos prestations.",
 } as const;

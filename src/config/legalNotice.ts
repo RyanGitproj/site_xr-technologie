@@ -18,7 +18,7 @@ export const legalNotice = {
         `${siteConfig.name}, ${siteConfig.legal.legalForm}, immatriculée au registre du commerce et des sociétés d'Antananarivo sous le numéro ${siteConfig.legal.rcs}.`,
         `Siège social : ${siteConfig.legal.address}.`,
         `NIF : ${siteConfig.legal.nif} · STAT : ${siteConfig.legal.stat}.`,
-        `Téléphone : ${siteConfig.legal.phoneDisplay} · E-mail : ${siteConfig.contactEmail}.`,
+        `Téléphone : ${siteConfig.phone.display} · E-mail : ${siteConfig.contactEmail}.`,
       ],
     },
     {

@@ -58,7 +58,7 @@ export function SiteFooter() {
             </li>
             <li>
               <a href={`tel:+${siteConfig.whatsappNumber}`} className={styles.link}>
-                {siteConfig.legal.phoneDisplay}
+                {siteConfig.phone.display}
               </a>
             </li>
             <li>

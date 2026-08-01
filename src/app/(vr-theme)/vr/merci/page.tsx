@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Phone } from "lucide-react";
 import { GlassPanel } from "@/components/fx/GlassPanel";
 import { Meteors } from "@/components/fx/Meteors";
 import { LeadConversionTracker } from "@/components/tracking/LeadConversionTracker";
+import { PhoneLink } from "@/components/tracking/PhoneLink";
+import { siteConfig } from "@/config/site";
 import styles from "@/components/ui/merciShell.module.css";
 
 export const metadata: Metadata = {
@@ -29,7 +31,12 @@ export default async function MerciPage() {
           Merci pour votre confiance. Notre équipe vous recontacte rapidement par téléphone
           ou par email avec la solution adaptée à votre projet.
         </p>
+        <p className={styles.callHint}>Besoin d&apos;une réponse immédiate ?</p>
         <div className={styles.actions}>
+          <PhoneLink e164={siteConfig.phone.e164} className={styles.call}>
+            <Phone aria-hidden="true" className={styles.callIcon} />
+            Appeler le {siteConfig.phone.display}
+          </PhoneLink>
           <Link href="/vr" className={styles.back}>
             ← Retour à l&apos;accueil
           </Link>

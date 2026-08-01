@@ -35,7 +35,7 @@ export const privacyPolicy = {
       heading: "Responsable du traitement",
       paragraphs: [
         `Le responsable du traitement est ${siteConfig.name}, ${siteConfig.legal.legalForm}, dont le siège est situé ${siteConfig.legal.address} (NIF ${siteConfig.legal.nif}, RCS ${siteConfig.legal.rcs}).`,
-        `Vous pouvez la joindre par e-mail à ${siteConfig.contactEmail} ou par téléphone au ${siteConfig.legal.phoneDisplay}.`,
+        `Vous pouvez la joindre par e-mail à ${siteConfig.contactEmail} ou par téléphone au ${siteConfig.phone.display}.`,
       ],
     },
     {

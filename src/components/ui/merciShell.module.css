@@ -36,8 +36,42 @@
   color: var(--color-ink-muted);
 }
 
-.actions {
+/* Relance d'appel direct : invite courte + numéro cliquable bien visible. */
+.callHint {
   margin-top: 2rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.call {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-cta);
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.call:hover,
+.call:focus-visible {
+  border-color: var(--edge-lit);
+  color: var(--color-accent-hot);
+}
+
+.callIcon {
+  width: 1.05rem;
+  height: 1.05rem;
+  color: var(--color-accent-hot);
+}
+
+.actions {
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;

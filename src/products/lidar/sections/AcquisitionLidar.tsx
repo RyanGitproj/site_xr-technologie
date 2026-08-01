@@ -6,6 +6,17 @@ import { cx } from "@/lib/cx";
 import { acquisitionLidar } from "@/products/lidar/config/content";
 import styles from "./AcquisitionLidar.module.css";
 
+/** Coordonnées du produit dans l'ESPACE DE L'IMAGE (fractions de la photo
+    source), consommées par le CSS de la loupe via custom properties. */
+type SpotlightStyle = React.CSSProperties & {
+  "--spot-x": string;
+  "--spot-y": string;
+};
+
+function spotlightStyle(spot: { readonly x: string; readonly y: string }): SpotlightStyle {
+  return { "--spot-x": spot.x, "--spot-y": spot.y };
+}
+
 /** Les trois modes d'acquisition, matériel nommé (arbitrage 28/07), la
     mention drone reprise fidèlement. Dès livraison du lot I, chaque fiche
     devient une carte PHOTO (l'image est le fond, le texte se pose sur la
@@ -37,18 +48,14 @@ export function AcquisitionLidar() {
                       <span
                         aria-hidden="true"
                         className={styles.spotlight}
-                        style={{
-                          left: mode.spotlight.x,
-                          top: mode.spotlight.y,
-                        }}
+                        style={spotlightStyle(mode.spotlight)}
                       >
                         <Image
                           src={mode.image.src}
                           alt=""
                           fill
-                          sizes="7rem"
+                          sizes="13rem"
                           className={styles.spotlightPhoto}
-                          style={{ objectPosition: `${mode.spotlight.x} ${mode.spotlight.y}` }}
                         />
                       </span>
                     )}

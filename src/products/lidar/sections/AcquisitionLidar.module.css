@@ -51,9 +51,17 @@
   );
 }
 
+/* Loupe produit : le cercle est posé au point (--spot-x, --spot-y) et son
+   contenu est un zoom NET et CENTRÉ sur ce même point de la photo. Le zoom
+   pilote aussi le sizes de l'Image intérieure (7rem × 1.8 ≈ 13rem) : les
+   deux doivent évoluer ensemble, sinon le flou revient. */
 .spotlight {
+  --spot-zoom: 1.8;
+
   position: absolute;
   z-index: 1;
+  left: var(--spot-x);
+  top: var(--spot-y);
   width: clamp(5.5rem, 25%, 7rem);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
@@ -76,10 +84,17 @@
   content: "";
 }
 
+/* Centrage exact du point visé : avec object-position à (x, y), le point
+   (x, y) de la PHOTO se trouve à (x, y) de la boîte. Le scale autour de ce
+   même point le laisse en place, puis la translation (50% - x, 50% - y)
+   l'amène au centre du cercle. Valable quel que soit le recadrage cover. */
 .spotlightPhoto {
   object-fit: cover;
-  transform: scale(1.8);
-  filter: brightness(1.42) contrast(1.2) saturate(1.12);
+  object-position: var(--spot-x) var(--spot-y);
+  transform: translate(calc(50% - var(--spot-x)), calc(50% - var(--spot-y)))
+    scale(var(--spot-zoom));
+  transform-origin: var(--spot-x) var(--spot-y);
+  filter: brightness(1.2) contrast(1.08) saturate(1.08);
 }
 
 .modePhoto .icon,

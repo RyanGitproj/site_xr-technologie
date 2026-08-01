@@ -130,7 +130,7 @@ export const acquisitionLidar = {
         width: 1600,
         height: 1067,
       } as ImageSlot | null,
-      spotlight: { x: "76%", y: "39%" },
+      spotlight: { x: "74%", y: "35%" },
     },
     {
       icon: Smartphone,
@@ -144,7 +144,7 @@ export const acquisitionLidar = {
         width: 1600,
         height: 1067,
       } as ImageSlot | null,
-      spotlight: { x: "72%", y: "47%" },
+      spotlight: { x: "65%", y: "48%" },
     },
     {
       icon: Plane,
@@ -158,7 +158,7 @@ export const acquisitionLidar = {
         width: 1600,
         height: 1067,
       } as ImageSlot | null,
-      spotlight: { x: "73%", y: "25%" },
+      spotlight: { x: "69%", y: "32%" },
     },
   ] satisfies readonly {
     icon: LucideIcon;
@@ -167,6 +167,8 @@ export const acquisitionLidar = {
     note: string | null;
     body: string;
     image: ImageSlot | null;
+    /** Position du produit dans la PHOTO (pourcentages de l'image source),
+        pas dans la carte : la loupe centre ce point (AcquisitionLidar). */
     spotlight?: { x: string; y: string };
   }[],
 } as const;

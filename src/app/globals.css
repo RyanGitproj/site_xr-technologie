@@ -51,6 +51,9 @@
   --palette-xr360-accent-deep: #1268a8;
   --palette-lidar-bg-deep: #091117;
   --palette-lidar-accent-deep: #00a8c6;
+  /* Pouce de la scrollbar lidar : le vert officiel, pas le cyan scan
+     (accent-deep), réservé à la scène LiDAR et aux dégradés profonds. */
+  --palette-lidar-accent: #008e3a;
 
   /* Palette v3 « INFINITE V.RETAIL » : chaude orange/rouge sur fond sombre
      chaud (bascule depuis le froid cyan/bleu v1.2). */
@@ -307,7 +310,7 @@ header[data-subnav] {
   --color-bg-raised: #0b2638;
   --color-ink: #edf3f2;
   --color-ink-muted: #94a5ae;
-  --color-accent: #008e3a;
+  --color-accent: var(--palette-lidar-accent);
   --color-accent-hot: #2ddc74;
   --color-accent-deep: var(--palette-lidar-accent-deep);
   --color-fx-1: #2ddc74;
@@ -555,7 +558,7 @@ header[data-subnav] {
   }
 
   html:has([data-page-theme="lidar"]) {
-    scrollbar-color: var(--palette-lidar-accent-deep) var(--palette-lidar-bg-deep);
+    scrollbar-color: var(--palette-lidar-accent) var(--palette-lidar-bg-deep);
   }
 
   /* Zones défilantes INTERNES (bandes snap) : elles héritent normalement du
